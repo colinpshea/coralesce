@@ -18,7 +18,7 @@ readGeneticData <- function(fileloc) {
     fileloc,
     stringsAsFactors = FALSE,
     colClasses = c("character"),
-    na.strings = ""
+    na.strings = c("", " ")
   )
   raw <- map(raw, stri_replace_all_regex," ", "") %>%
     as.data.frame

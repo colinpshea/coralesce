@@ -9,7 +9,7 @@ handleError_CoralID <- function(dataset) {
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   identifyProhibitedData <- function (x) {x %in% acceptableData$Allelepairs}
   if (length(names(dataset)[colSums(apply(dataset[,2:ncol(dataset)], 2, identifyProhibitedData))==0])>1) {
-    message("Columns that do not adhere to the required base pair format were removed from this file prior to genet assignment and kinship/gene diversity calculations")}
+    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., site name) were removed from this file prior to genet assignment and kinship/gene diversity calculations")}
  }
 
 #' find colonies with all NA values and report a warning
@@ -29,6 +29,3 @@ handleError_allZeros <- function(dataset){
       return(allNA)
   }
 }
-
-
-
