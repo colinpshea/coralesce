@@ -1,0 +1,29 @@
+Package: MatchMakeR
+Title: Group coral colonies based on genetic relatedness
+Version: 1.0.0.0
+Authors@R: c(
+    person("Shea", "Colin", email="Colin.Shea@MyFWC.com", role = c("aut", "cre")),
+    person("Gentry", "Lauren", email="Lauren.Gentry@MyFWC.com", role="aut"),
+    person("Sauby", "Kristen", email="Kristen.Sauby@MyFWC.com", role="aut"))
+Description: What the package does (one paragraph). ADD INFO FROM AGENDA.
+License: use_mit_license()
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+LazyData: true
+Imports:
+    Rdpack
+    ,Matrix
+    ,igraph
+    ,magrittr
+    ,matrixStats
+    ,purrr
+    ,stringi
+    ,stringr
+Depends: dplyr, tidyr
