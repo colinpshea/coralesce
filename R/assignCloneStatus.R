@@ -80,9 +80,11 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
   genetAssignment <- finalYesClonesAdequateYes %>%
     left_join(groupedGenets, by = "obs") %>% 
-    select(coral1, coral2, genet, pctNotNull, AdequateData) %>%
+    select(coral1, coral2, genet, AdequateData) %>%
     pivot_longer(-c(genet, AdequateData), names_to = NULL, values_to = "Coral_ID") %>% 
-    select(Coral_ID, genet, AdequateData) %>% distinct(.) 
-    arrange(genet) %>% add_row(finalYesClonesAdequateNo)
+    select(Coral_ID, genet, AdequateData) %>%
+    distinct(.) %>%  
+    arrange(genet) %>%
+    add_row(finalYesClonesAdequateNo)
     return(genetAssignment)
 }
