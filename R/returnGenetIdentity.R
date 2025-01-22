@@ -2,13 +2,7 @@
 #'
 #' @description For each coral pair, return the identity of the genet to which the pair belongs..
 #' @param obs a dataframe of three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.
-#' @examples
-#' example <- data.frame(
-#'   coral1=c(1,2,3,3,4,5,6),
-#'   coral2=c(1,2,2,3,4,5,6),
-#'   CoralPair=c("1.1","2.2","3.2","3.3","4.4","5.5","6.6")
-#' )
-#' returnGenetIdentity(example)
+#' @examples None yet
 #' @importFrom igraph graph_from_adjacency_matrix components
 #' @importFrom Matrix sparseMatrix tcrossprod
 #' @export
@@ -27,7 +21,7 @@ returnGenetIdentity <- function(obs) {
     matchList <- grep(paste0("([[:punct:]]|^)", indList[i], "([[:punct:]]|$)"), obs$CoralPair)
     grpList[[i]] <- sort(c(matchList, grpList[[i]]))
   }
-  ## Some network/graph analysis magic happens here: result is assigment of individuals to genets based on relatedness (i.e., all clones are identified and placed in unique groups).
+  ## Some network/graph analysis magic happens here: result is assignment of individuals to genets based on relatedness (i.e., all clones are identified and placed in unique groups called genets)
   ii <- rep(1:length(grpList), lengths(grpList))
   jj <- factor(unlist(grpList))
   tab <- sparseMatrix(
