@@ -2,10 +2,10 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_CoralID}
 \alias{handleError_CoralID}
-\title{Notify user that Coral_ID had to be changed}
+\title{Notify user that Coral_ID had to be changed. This is just a message and the presence of a name other than Coral_ID doesn't cause any problems.}
 \usage{
 handleError_CoralID(dataset)
 }
 \description{
-Notify user that Coral_ID had to be changed
+Notify user that Coral_ID had to be changed. This is just a message and the presence of a name other than Coral_ID doesn't cause any problems.
 }

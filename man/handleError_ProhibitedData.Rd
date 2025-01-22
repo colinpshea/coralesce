@@ -2,10 +2,10 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_ProhibitedData}
 \alias{handleError_ProhibitedData}
-\title{Notify user that non-conforming fields were omitted from the data set}
+\title{Notify user that non-conforming fields such as site name were omitted from the data set. This is just a message as extraneous columns (i.e., those that aren't either locus data or Coral_ID) are removed for the genet classification and kinship calculation.}
 \usage{
 handleError_ProhibitedData(dataset, acceptableData)
 }
 \description{
-Notify user that non-conforming fields were omitted from the data set
+Notify user that non-conforming fields such as site name were omitted from the data set. This is just a message as extraneous columns (i.e., those that aren't either locus data or Coral_ID) are removed for the genet classification and kinship calculation.
 }

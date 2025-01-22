@@ -13,12 +13,16 @@ groupByGenets(
 )
 }
 \arguments{
-\item{PctMatchThreshold}{Defaults to 99.}
+\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific pctNull values to the genet assignment file created by this function}
 
-\item{finalResultsWide}{the results to return in "wide" format}
+\item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
+
+\item{PctMatchThreshold}{Defaults to NULL}
+
+\item{PctNotNullThreshold}{Defaults to NULL}
 }
 \description{
 The function calculates the percentage match and percentage not
 null and uses this information to determine if the pairwise comparison
-indicates that the two individuals are from the same genet.
+indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity} for the genet classification.
 }

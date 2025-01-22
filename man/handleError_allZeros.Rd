@@ -2,16 +2,10 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_allZeros}
 \alias{handleError_allZeros}
-\title{find colonies with all NA values and report a warning}
+\title{Find colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.}
 \usage{
 handleError_allZeros(dataset)
 }
 \description{
-We import our initial data that's got paired alleles (e.g., C:G,
-A:T, etc.). This function names the first column "Coral_ID", makes sure that
-R interprets "T" as a character rather than the logical "TRUE", which would be problematic.
-The function also omits any potential whitespace (e.g., " C:T"). Lastly,
-"NA" values are converted to "?" because we need to keep track of allele
-combos that couldn't be compared, and NA could be problematic when
-converting allele pairs to single letters with our cipher.
+This function finds colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.
 }
