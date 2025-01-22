@@ -62,60 +62,29 @@ returnGenetIdentity <- function(obs) {
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
-  # pivot wider so dataframe is now one row per coral pair and loci matches are
-  #   columns
-  # create CoralPair variable
-  temp <- AlleleMatchResults %>%
-    mutate(CoralPair = interaction(coral1, coral2)) %>%
-    select(CoralPair, coral1, coral2, locus, match) %>%
-    arrange(CoralPair, locus) %>%
-    pivot_wider(names_from = locus, values_from = match)
-  temp$pctMatch = rowMeans(temp[,4:(ncol(temp))], na.rm = T)*100
-  temp$pctNotNull <- apply(
-    subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)),
-    1, calcPercentNotNull)
-  temp %<>%
-    mutate(
-      PartOfGenet = ifelse(pctMatch>=PctMatchThreshold, "Yes", "No")
-    ) %>%
+  temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
+  temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
+  temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
+  temp %<>% mutate(PartOfGenet = ifelse(pctMatch >= PctMatchThreshold, "Yes", "No")) %>%
     select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet)
-  PartOfGenet_No <- temp %>% filter(PartOfGenet=="No")
-  PartOfGenet_Yes <- temp %>%
-    filter(PartOfGenet =="Yes") %>%
-    mutate(flag = if_else(
-      coral1!=coral2 & pctNotNull<PctNotNullThreshold,
-      "drop",
-      "keep"
-    )) %>%
-    filter(flag=="keep") %>%
-    select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet) %>%
-    mutate(AdequateData = if_else(
-      coral1==coral2 & pctNotNull<PctNotNullThreshold,
-      "No",
-      "Yes"
-    ))
-    finalYesClonesAdequateYes <- PartOfGenet_Yes %>%
-    filter(AdequateData=="Yes") %>%
-    mutate(obs = 1:n())
-  finalYesClonesAdequateNo <- PartOfGenet_Yes %>%
-    filter(AdequateData=="No") %>% mutate(genet = NA) %>%
+  PartOfGenet_No <- temp %>% filter(PartOfGenet == "No")
+  PartOfGenet_Yes <- temp %>% filter(PartOfGenet == "Yes") %>% 
+    mutate(flag = if_else(coral1 != coral2 & pctNotNull < PctNotNullThreshold, "drop", "keep")) %>%
+    filter(flag == "keep") %>% select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet) %>%
+    mutate(AdequateData = if_else(coral1 == coral2 & pctNotNull < PctNotNullThreshold, "No", "Yes"))
+  finalYesClonesAdequateYes <- PartOfGenet_Yes %>% filter(AdequateData == "Yes") %>% mutate(obs = 1:n())
+  finalYesClonesAdequateNo <- PartOfGenet_Yes %>% filter(AdequateData == "No") %>%
+    mutate(genet = NA) %>%
     select(coral1, genet, AdequateData, pctMatch, pctNotNull) %>%
     rename(Coral_ID = coral1, mnpctMatch = pctMatch, mnpctNotNull = pctNotNull)
-  
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
-    genetAssignment <- finalYesClonesAdequateYes %>%
-    left_join(groupedGenets, by = "obs") %>%
+  genetAssignment <- finalYesClonesAdequateYes %>%
+    left_join(groupedGenets, by = "obs") %>% 
     select(coral1, coral2, genet, pctMatch, pctNotNull, AdequateData) %>%
-    pivot_longer(
-      -c(genet,AdequateData),
-      names_to = NULL,
-      values_to = "Coral_ID"
-    ) %>% 
-      group_by(Coral_ID, genet, AdequateData, pctMatch, pctNotNull) %>% 
-      summarize(mnpctMatch = mean(pctMatch), mnpctNotNull = mean(pctNotNull))
-      select(Coral_ID, genet, AdequateData, mnpctMatch, mnpctNotNull) %>%
-      distinct(.) %>%
-    arrange(genet) %>%
-    add_row(finalYesClonesAdequateNo)
+    pivot_longer(-c(genet, AdequateData, pctMatch, pctNotNull), names_to = NULL, values_to = "Coral_ID") %>% 
+    group_by(Coral_ID, genet, AdequateData) %>% 
+    summarize(mnpctMatch = mean(pctMatch), mnpctNotNull = mean(pctNotNull)) %>% 
+    select(Coral_ID, genet, AdequateData, mnpctMatch, mnpctNotNull) %>% 
+    arrange(genet) %>% ungroup() %>% add_row(finalYesClonesAdequateNo)
     return(genetAssignment)
 }
