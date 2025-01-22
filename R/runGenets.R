@@ -3,7 +3,7 @@
 #' @description Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
 #' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
 #' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
-#' @importFrom stringr str_detect
+#' @importFrom stringr str_detect str_pad
 #' @export
 runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL){
   #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
@@ -22,7 +22,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL){
     b1 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
     b2 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[2]]
     c <- determineAllAlleleMatches(dataset = b1)
-    d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold)
+    d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
     d2 <- d1 %>% add_row(b2) %>% arrange(genet, Coral_ID)
     write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", PctMatchThreshold,"_", PctNotNullThreshold, "_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
   }

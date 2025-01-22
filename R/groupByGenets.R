@@ -12,24 +12,35 @@
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
+  
   CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, select = -Coral_ID), 1, calcPercentNotNull)
+  
   CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
   temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
+  
   temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
+  
   temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
+  
   temp %<>% mutate(PartOfGenet = ifelse(pctMatch >= PctMatchThreshold, "Yes", "No")) %>%
     select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet)
+  
   PartOfGenet_No <- temp %>% filter(PartOfGenet == "No")
+  
   PartOfGenet_Yes <- temp %>% filter(PartOfGenet == "Yes") %>% 
     mutate(flag = if_else(coral1 != coral2 & pctNotNull < PctNotNullThreshold, "drop", "keep")) %>%
     filter(flag == "keep") %>% select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet) %>%
     mutate(AdequateData = if_else(coral1 == coral2 & pctNotNull < PctNotNullThreshold, "No", "Yes"))
+  
   finalYesClonesAdequateYes <- PartOfGenet_Yes %>% filter(AdequateData == "Yes") %>% mutate(obs = 1:n())
+  
   finalYesClonesAdequateNo <- PartOfGenet_Yes %>% filter(AdequateData == "No") %>%
     mutate(genet = NA, pctNull = 100 - pctNotNull) %>%
     select(coral1, genet, pctNull, AdequateData) %>%
     rename(Coral_ID = coral1)
+  
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
+  
   genetAssignment <- finalYesClonesAdequateYes %>%
     left_join(groupedGenets, by = "obs") %>% 
     select(coral1, coral2, genet, AdequateData) %>%
