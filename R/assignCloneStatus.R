@@ -94,14 +94,14 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
       "No",
       "Yes"
     ))
-## Below I dropped pctMatch and pctNotNull because if we want to keep pctMatch and pctNotNull, we *must* average them for each coral because those values differ depending on which corals were being compared so it results in duplicate values. We already know there are adequate data (>=99 and >=78 in this example) so it's just a matter of whther we want the calculated values (I think they are generally useless)
     finalYesClonesAdequateYes <- PartOfGenet_Yes %>%
     filter(AdequateData=="Yes") %>%
     mutate(obs = 1:n())
   finalYesClonesAdequateNo <- PartOfGenet_Yes %>%
     filter(AdequateData=="No") %>% mutate(genet = NA) %>%
     select(coral1, genet, AdequateData, pctMatch, pctNotNull) %>%
-    rename(Coral_ID = coral1)
+    rename(Coral_ID = coral1, mnpctMatch = pctMatch, mnpctNotNull = pctNotNull)
+  
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
     genetAssignment <- finalYesClonesAdequateYes %>%
     left_join(groupedGenets, by = "obs") %>%
@@ -111,7 +111,9 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
       names_to = NULL,
       values_to = "Coral_ID"
     ) %>% 
-      select(Coral_ID, genet, AdequateData) %>%
+      group_by(Coral_ID, genet, AdequateData, pctMatch, pctNotNull) %>% 
+      summarize(mnpctMatch = mean(pctMatch), mnpctNotNull = mean(pctNotNull))
+      select(Coral_ID, genet, AdequateData, mnpctMatch, mnpctNotNull) %>%
       distinct(.) %>%
     arrange(genet) %>%
     add_row(finalYesClonesAdequateNo)
