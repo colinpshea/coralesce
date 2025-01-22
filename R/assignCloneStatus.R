@@ -86,7 +86,8 @@ groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold
     distinct(.) %>%  
     arrange(genet) %>%
     add_row(finalYesClonesAdequateNo)
-  CoralAlleleData$pctNull <- 100 - apply(CoralAlleleData[,2:(ncol(CoralAlleleData))], 1, pctNotNull) %>% select(Coral_ID, pctNull)
+  temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
+    CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, -c(Coral_ID)), 1, calcPercentNotNull) %>% select(Coral_ID, pctNull)
   genetAssignment <- left_join(genetAssignment, CoralAlleleData, by = "Coral_ID") %>% select(Coral_ID, genet, pctNull, AdequateData)
     return(genetAssignment)
 }

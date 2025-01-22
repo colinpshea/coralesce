@@ -6,6 +6,7 @@
 same genet}
 \usage{
 groupByGenets(
+  CoralAlleleData,
   AlleleMatchResults,
   PctMatchThreshold = NULL,
   PctNotNullThreshold = NULL
