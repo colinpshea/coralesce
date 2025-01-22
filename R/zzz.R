@@ -1,3 +1,3 @@
-.onAttach <- function(libname, pkgname) {
-  packageStartupMessage("This is version ", packageVersion(pkgname)," of ", pkgname.)
+.onAttach <- function() {
+  packageStartupMessage("This is version")
 }
