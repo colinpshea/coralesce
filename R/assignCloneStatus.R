@@ -53,12 +53,14 @@ returnGenetIdentity <- function(obs) {
 #' Determine if the two individuals in the pairwise comparison come from the
 #' same genet
 #'
-#'@param finalResultsWide the results to return in "wide" format
-#'@param PctMatchThreshold Defaults to 99.
+#'@param CoralAlleleData Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific pctNull values to the genet assignment file created by this function
+#'@param AlleleMatchResults data set with results of pairwise matching of alleles at each locus for all individuals and loci
+#'@param PctMatchThreshold Defaults to NULL
+#'@param PctNotNullThreshold Defaults to NULL
 #'
 #' @description The function calculates the percentage match and percentage not
 #' null and uses this information to determine if the pairwise comparison
-#' indicates that the two individuals are from the same genet.
+#' indicates that the two individuals are from the same genet. Uses `returnGenetIdentity` for the genet classification. 
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {

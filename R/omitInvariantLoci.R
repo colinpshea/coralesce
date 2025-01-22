@@ -9,6 +9,5 @@ omitInvariantLoci <- function(dataset){
 locus_names <- colnames(dataset[-1])
 variant_invariant_loci <- as.data.frame(t(dataset)[-1,]) %>% rowwise() %>% mutate(numAlleles =  n_distinct(c_across(everything()), na.rm = TRUE)) %>% ungroup() %>% mutate(locus = locus_names) %>% select(locus, numAlleles) 
 invariant_loci <- variant_invariant_loci %>% filter(numAlleles==1) %>% pull(locus)
-#datNoInvar <- dater %>% select(-all_of(invariant_loci))
 dataset %>% select(-all_of(invariant_loci))
 }
