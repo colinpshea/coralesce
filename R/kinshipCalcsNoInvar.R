@@ -27,7 +27,7 @@ kinshipCalcsNoInvar <- function(dataset, targetN){
     dat3 <- kinshipCalcs(dataset = dat2) 
     highest_individual <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% slice(1) %>% pull(Coral_ID)
   }
- #### Calculate mean kinship for each of the least related colonies
+  #### Calculate mean kinship for each of the least related colonies
   MK_final <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
   
   return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = MK_final))
