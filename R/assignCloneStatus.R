@@ -100,20 +100,20 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
     mutate(obs = 1:n())
   finalYesClonesAdequateNo <- PartOfGenet_Yes %>%
     filter(AdequateData=="No") %>% mutate(genet = NA) %>%
-    select(coral1, genet, AdequateData) %>%
+    select(coral1, genet, AdequateData, pctMatch, pctNotNull) %>%
     rename(Coral_ID = coral1)
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
     genetAssignment <- finalYesClonesAdequateYes %>%
     left_join(groupedGenets, by = "obs") %>%
-    select(coral1, coral2, genet, AdequateData) %>%
+    select(coral1, coral2, genet, pctMatch, pctNotNull, AdequateData) %>%
     pivot_longer(
       -c(genet,AdequateData),
       names_to = NULL,
       values_to = "Coral_ID"
-    ) %>%
-    distinct(.) %>%
+    ) %>% 
+      select(Coral_ID, genet, AdequateData) %>%
+      distinct(.) %>%
     arrange(genet) %>%
-    select(Coral_ID, genet, AdequateData) %>%
     add_row(finalYesClonesAdequateNo)
     return(genetAssignment)
 }
