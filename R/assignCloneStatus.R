@@ -2,7 +2,6 @@
 #'
 #' @description For each coral pair, return the identity of the genet to which the pair belongs..
 #' @param obs a dataframe of three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.
-#' @export
 #' @examples
 #' example <- data.frame(
 #'   coral1=c(1,2,3,3,4,5,6),
@@ -12,7 +11,7 @@
 #' returnGenetIdentity(example)
 #' @importFrom igraph graph_from_adjacency_matrix components
 #' @importFrom Matrix sparseMatrix tcrossprod
-
+#' @export
 returnGenetIdentity <- function(obs) {
   ## Create a list of names for each individual in the data set
   indList <- as.character(sort(unique(c(
@@ -60,8 +59,8 @@ returnGenetIdentity <- function(obs) {
 #' @description The function calculates the percentage match and percentage not
 #' null and uses this information to determine if the pairwise comparison
 #' indicates that the two individuals are from the same genet.
-#' @export
 #' @importFrom dplyr arrange if_else n rename add_row distinct
+#' @export
 groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
   # pivot wider so dataframe is now one row per coral pair and loci matches are
   #   columns
@@ -71,14 +70,10 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
     select(CoralPair, coral1, coral2, locus, match) %>%
     arrange(CoralPair, locus) %>%
     pivot_wider(names_from = locus, values_from = match)
-  # calculate number of loci
-  n_loci <- dim(temp[,4:(ncol(temp))])[2]
   temp$pctMatch = rowMeans(temp[,4:(ncol(temp))], na.rm = T)*100
   temp$pctNotNull <- apply(
     subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)),
-    1,
-    calcPercentNotNull
-  )
+    1, calcPercentNotNull)
   temp %<>%
     mutate(
       PartOfGenet = ifelse(pctMatch>=PctMatchThreshold, "Yes", "No")
@@ -99,28 +94,26 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
       "No",
       "Yes"
     ))
-  finalYesClonesAdequateYes <- PartOfGenet_Yes %>%
+## Below I dropped pctMatch and pctNotNull because if we want to keep pctMatch and pctNotNull, we *must* average them for each coral because those values differ depending on which corals were being compared so it results in duplicate values. We already know there are adequate data (>=99 and >=78 in this example) so it's just a matter of whther we want the calculated values (I think they are generally useless)
+    finalYesClonesAdequateYes <- PartOfGenet_Yes %>%
     filter(AdequateData=="Yes") %>%
     mutate(obs = 1:n())
   finalYesClonesAdequateNo <- PartOfGenet_Yes %>%
     filter(AdequateData=="No") %>% mutate(genet = NA) %>%
-    select(coral1, genet, pctMatch, pctNotNull, AdequateData) %>%
+    select(coral1, genet, AdequateData) %>%
     rename(Coral_ID = coral1)
-
   groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
-  ## Merge data frame of all clones with genet assigmnents
-  genetAssignment <- finalYesClonesAdequateYes %>%
+    genetAssignment <- finalYesClonesAdequateYes %>%
     left_join(groupedGenets, by = "obs") %>%
-    select(coral1, coral2, genet, AdequateData, pctMatch, pctNotNull) %>%
+    select(coral1, coral2, genet, AdequateData) %>%
     pivot_longer(
-      -c(genet,AdequateData, pctMatch, pctNotNull),
+      -c(genet,AdequateData),
       names_to = NULL,
       values_to = "Coral_ID"
     ) %>%
     distinct(.) %>%
     arrange(genet) %>%
-    select(Coral_ID, genet, pctMatch, pctNotNull, AdequateData) %>%
+    select(Coral_ID, genet, AdequateData) %>%
     add_row(finalYesClonesAdequateNo)
-
-#  return(genetAssignment)
+    return(genetAssignment)
 }
