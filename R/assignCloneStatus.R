@@ -62,7 +62,7 @@ returnGenetIdentity <- function(obs) {
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
-  CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, -c(Coral_ID)), 1, calcPercentNotNull)
+  CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, -Coral_ID), 1, calcPercentNotNull)
   CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
   temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
   temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
