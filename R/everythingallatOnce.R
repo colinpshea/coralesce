@@ -56,8 +56,8 @@ runKinship <- function(targetN = NULL){
     b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN)
-    write.csv(c[[1]], paste0(resultsLocation,"/","popAvgMKGD_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
-    write.csv(c[[2]], paste0(resultsLocation,"/","mnKinshipALL_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
+    write.csv(c[[1]], paste0(resultsLocation,"/","popAvgMKGD_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
+    write.csv(c[[2]], paste0(resultsLocation,"/","mnKinshipALL_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
     write.csv(c[[3]], paste0(resultsLocation,"/","mnKinshipTargetN_", targetN, "_", paste0(fileList[[i]])), row.names = F)
   }
   return(list(kinshipCalculations = d))

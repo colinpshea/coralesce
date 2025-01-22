@@ -25,7 +25,7 @@ handleError_allZeros <- function(dataset){
   testData <- dataset
   testData$allNA <- rowSums(is.na(testData[,2:ncol(testData)]))==length(2:ncol(testData))
   allNA <- testData %>% filter(allNA==TRUE) %>% mutate(genet = NA, AdequateData = "No") 
-  if (nrow(allNA) > 0) {message("At least one colony has NA values at all loci and has been assigned genet = NA and adequateData = `No`")
-      return(allNA)
   }
+if (nrow(allNA) > 0) {message("At least one colony has NA values at all loci and has been assigned genet = NA and adequateData = `No`")
+  return(allNA)
 }
