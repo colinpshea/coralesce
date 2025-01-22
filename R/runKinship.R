@@ -1,8 +1,6 @@
 #' Run all kinship and  gene diversity calculations in a single function
 #'
-#' @description Calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
-#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
-#' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
+#' @description Calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available. 
 #' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.
 #' @importFrom stringr str_detect
 #' @export
@@ -29,4 +27,3 @@ runKinship <- function(targetN = NULL){
   }
   return(list(kinshipCalculations = d))
 }
-

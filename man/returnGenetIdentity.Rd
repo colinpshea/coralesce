@@ -13,10 +13,5 @@ returnGenetIdentity(obs)
 For each coral pair, return the identity of the genet to which the pair belongs..
 }
 \examples{
-example <- data.frame(
-  coral1=c(1,2,3,3,4,5,6),
-  coral2=c(1,2,2,3,4,5,6),
-  CoralPair=c("1.1","2.2","3.2","3.3","4.4","5.5","6.6")
-)
-returnGenetIdentity(example)
+None yet
 }

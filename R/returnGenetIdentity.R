@@ -8,19 +8,20 @@
 #' @export
 returnGenetIdentity <- function(obs) {
   ## Create a list of names for each individual in the data set
-  indList <- as.character(sort(unique(c(
-    obs$coral1,
-    obs$coral2
-  ))))
+  indList <- as.character(sort(unique(c(obs$coral1, obs$coral2))))
+  
   ## Create empty list for storing results
   grpList <- vector("list", length(indList))
+  
   ## Create another empty list for storing results
   matchList <- list()
+  
   ## Loop through each individual and determine all pairwise comparisons for which it was determined to be a clone
   for (i in 1:length(indList)){
     matchList <- grep(paste0("([[:punct:]]|^)", indList[i], "([[:punct:]]|$)"), obs$CoralPair)
     grpList[[i]] <- sort(c(matchList, grpList[[i]]))
   }
+  
   ## Some network/graph analysis magic happens here: result is assignment of individuals to genets based on relatedness (i.e., all clones are identified and placed in unique groups called genets)
   ii <- rep(1:length(grpList), lengths(grpList))
   jj <- factor(unlist(grpList))
