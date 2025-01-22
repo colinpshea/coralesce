@@ -62,6 +62,8 @@ returnGenetIdentity <- function(obs) {
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
+  CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, -c(Coral_ID)), 1, calcPercentNotNull)
+  CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
   temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
   temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
   temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
@@ -84,10 +86,9 @@ groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold
     pivot_longer(-c(genet, AdequateData), names_to = NULL, values_to = "Coral_ID") %>% 
     select(Coral_ID, genet, AdequateData) %>%
     distinct(.) %>%  
-    arrange(genet) %>%
+    arrange(genet) %>% 
+    left_join(genetAssignment, CoralAlleleData, by = "Coral_ID") %>%
+    select(Coral_ID, genet, pctNull, AdequateData) %>% 
     add_row(finalYesClonesAdequateNo)
-    CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, -c(Coral_ID)), 1, calcPercentNotNull)
-    CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
-  genetAssignment <- left_join(genetAssignment, CoralAlleleData, by = "Coral_ID") %>% select(Coral_ID, genet, pctNull, AdequateData)
     return(genetAssignment)
 }
