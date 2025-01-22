@@ -30,7 +30,6 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL){
   return(list(genetAssignments = d2))
 }
 
-
 #' Run all kinship and  gene diversity calculations in a single function
 #'
 #' @description Calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
