@@ -61,7 +61,7 @@ returnGenetIdentity <- function(obs) {
 #' indicates that the two individuals are from the same genet.
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
-groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
+groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
   temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
   temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
   temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
@@ -86,5 +86,7 @@ groupByGenets <- function(AlleleMatchResults, PctMatchThreshold = NULL, PctNotNu
     distinct(.) %>%  
     arrange(genet) %>%
     add_row(finalYesClonesAdequateNo)
+  CoralAlleleData$pctNull <- 100 - apply(CoralAlleleData[,2:(ncol(CoralAlleleData))], 1, pctNotNull) %>% select(Coral_ID, pctNull)
+  genetAssignment <- left_join(genetAssignment, CoralAlleleData, by = "Coral_ID") %>% select(Coral_ID, genet, pctNull, AdequateData)
     return(genetAssignment)
 }
