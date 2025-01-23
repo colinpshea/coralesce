@@ -14,6 +14,8 @@ runGenets(
 \item{PctMatchThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
 
 \item{PctNotNullThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
+
+\item{getPairwiseAlleleMatches}{Do you want to return a data frame with all pairwise comparisons}
 }
 \description{
 Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.

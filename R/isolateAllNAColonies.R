@@ -1,14 +1,7 @@
-# isolate all NA colonies
-#' Convert to long format and then convert base pairs to IUPAC codes
-#' @description This function replaces the base pairs with IUPAC codes and
-#' converts the data to wide format so that there is a column per code.
-#' # Make sure that the data we're using are ONLY either the
-#' Coral_ID OR one of the character strings included in OnlyDataAllowed. If
-#' there are no such columns then nothing happens. There's probably a more
-#' elegant way to do this but it works fine.
-#' @param initdata A dataset containing a column "Coral_ID" with unique value per row, as well as at least one column containing base pair data with at least one value matching base pair data in IUPAC.
-#' @importFrom dplyr select left_join
-#' @importFrom tidyr pivot_longer pivot_wider
+#' Isolate all NA colonies
+#' @description This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with at an allele at at least one locus. 
+#' @param dataset A dataset containing a column "Coral_ID" base pair data at each of N loci.
+#' @returns A data frame called allNA and version of the input data frame that excludes the allNA colonies. If there are no allNA colonies then the original data frame is returned and the allNA data frame is set to NULL. 
 #' @export
 isolateAllNAColonies <- function(dataset){
   allNA <- handleError_allZeros(dataset)

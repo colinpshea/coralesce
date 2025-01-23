@@ -3,4 +3,4 @@
 #' by the convertBasePairstoAlleles function. DOESNT THIS JUST RETURN THE ALLELEPAIRS?
 #' @param x the dataset to use
 #' @export
-filterOnlyDataAllowed <- function(x) {x %in% IUPAC$Allelepairs}
+checkforAllowableData <- function(x) {x %in% IUPAC$Allelepairs}
