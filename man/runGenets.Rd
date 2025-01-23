@@ -7,7 +7,7 @@
 runGenets(
   PctMatchThreshold = NULL,
   PctNotNullThreshold = NULL,
-  getPairwiseAlleleMatches = NULL
+  getPairwiseAlleleMatches = FALSE
 )
 }
 \arguments{
