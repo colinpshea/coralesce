@@ -1,8 +1,9 @@
 #' Run all genet assignments in a single function
 #'
 #' @description Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
-#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
+#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
 #' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
+#' @param getPairwiseAlleleMatches Do you want to return a data frame with all pairwise comparisons 
 #' @importFrom stringr str_detect str_pad
 #' @export
 runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE){
@@ -28,6 +29,6 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     if (getPairwiseAlleleMatches==TRUE){write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", PctMatchThreshold,"_", PctNotNullThreshold, "_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
     }
   }
-  if (getPairwiseAlleleMatches==TRUE){ return(list(genetAssignments = d2, pairwiseAlleleMatches = c))}
+  if (getPairwiseAlleleMatches==TRUE){ return(list(genetAssignments = d2, pairwiseAlleleMatches = d1))}
   if (getPairwiseAlleleMatches==FALSE){ return(list(genetAssignments = d2))}
 }
