@@ -4,7 +4,11 @@
 \alias{runGenets}
 \title{Run all genet assignments in a single function}
 \usage{
-runGenets(PctMatchThreshold = NULL, PctNotNullThreshold = NULL)
+runGenets(
+  PctMatchThreshold = NULL,
+  PctNotNullThreshold = NULL,
+  getPairwiseAlleleMatches = NULL
+)
 }
 \arguments{
 \item{PctMatchThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}

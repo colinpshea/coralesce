@@ -22,7 +22,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     b1 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
     b2 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[2]]
     c <- determineAllAlleleMatches(dataset = b1)
-    d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold)
+    d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPariwsieAlleleMatches = getPairwiseAlleleMatches)
     d2 <- d1 %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
     write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", PctMatchThreshold,"_", PctNotNullThreshold, "_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
   }

@@ -9,7 +9,8 @@ groupByGenets(
   CoralAlleleData,
   AlleleMatchResults,
   PctMatchThreshold = NULL,
-  PctNotNullThreshold = NULL
+  PctNotNullThreshold = NULL,
+  getPariwsieAlleleMatches = FALSE
 )
 }
 \arguments{
