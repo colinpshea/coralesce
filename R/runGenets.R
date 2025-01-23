@@ -14,7 +14,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
   dataLocation <- folderPaths[which(str_detect(folderPaths, "Data")==TRUE)]
   resultsLocation <- folderPaths[which(str_detect(folderPaths, "Results")==TRUE)]
   
-  #### Create a list of file names to be processed for genet assignment/kinship etc. If there is more than one file, they will each be processed separately.  
+  #### Create a list of file names to be processed for genet assignment/kinship etc. If there is more than one file, they will each be processed separately, and if there's only one file this does nothing special.  
   fileList <- as.list(list.files(path = dataLocation, pattern = "\\.csv$"))
   
   #### Loop through all available data files

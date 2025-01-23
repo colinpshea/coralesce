@@ -1,14 +1,15 @@
 #' Run all kinship and  gene diversity calculations in a single function
 #'
-#' @description Calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available. 
-#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.
+#' @description This function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. 
+#' @param subset Do you want to subset the data and calculate kinship for the `targetN` least-related colonies? Default is FALSE; if changed to TRUE, then you must specify `targetN` individuals (i.e., some value less than or equal to the total number of colonies in the data set).
+#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if `subset = FALSE`. If `subset = TRUE` then `targetN` must specified and can be ≤ the number of individuals in a data set. If `targetN` is equal to the number of individuals in the data set, then MK_init and MK_final will be identical; if this value is smaller than the number of individuals in the data set, MK_final will differ because kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until `targetN` individuals remain.
 #' @importFrom stringr str_detect
 #' @export
-runKinship <- function(targetN = NULL, subset = FALSE){
+runKinship <- function(subset = FALSE, targetN = NULL){
   #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
   folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
   
-  #### Specify locations of data and results folders: changed this is bit so we're not hard-wiring folderPaths[1] and folderPaths[2] but instead matching "Data" and "Results" strings. This is case sensitive so it's got to be Data and Results. Note that you don't want to have any other folders with "Data" or "Results" in the name in your working directory because it will just muddle things up (and the script will crash). 
+  #### Specify locations of data and results folders
   dataLocation <- folderPaths[which(str_detect(folderPaths, "Data")==TRUE)]
   resultsLocation <- folderPaths[which(str_detect(folderPaths, "Results")==TRUE)]
   
@@ -22,8 +23,8 @@ runKinship <- function(targetN = NULL, subset = FALSE){
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
     write.csv(c[[1]], paste0(resultsLocation,"/","popAvgMKGD_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
-    write.csv(c[[2]], paste0(resultsLocation,"/","mnKinshipALL_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
-    write.csv(c[[3]], paste0(resultsLocation,"/","mnKinshipTargetN_", targetN, "_", paste0(fileList[[i]])), row.names = F)
+    write.csv(c[[2]], paste0(resultsLocation,"/","kinshipInit_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
+    write.csv(c[[3]], paste0(resultsLocation,"/","kinshipTargetN_", targetN, "_", paste0(fileList[[i]])), row.names = F)
   }
   return(list(kinshipCalculations = d))
 }
