@@ -5,7 +5,7 @@
 #' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
 #' @importFrom stringr str_detect str_pad
 #' @export
-runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL){
+runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = NULL){
   #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
   folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
   
@@ -26,5 +26,6 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL){
     d2 <- d1 %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
     write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", PctMatchThreshold,"_", PctNotNullThreshold, "_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
   }
-  return(list(genetAssignments = d2, pairwiseAlleleMatches = c))
+#  return(list(genetAssignments = d2, pairwiseAlleleMatches = c))
+  return(list(genetAssignments = d2))
 }

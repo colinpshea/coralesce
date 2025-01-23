@@ -11,7 +11,7 @@
 #' indicates that the two individuals are from the same genet. Uses `returnGenetIdentity` for the genet classification. 
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
-groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL) {
+groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPariwsieAlleleMatches = FALSE) {
   
   CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, select = -Coral_ID), 1, calcPercentNotNull)
   
@@ -24,6 +24,8 @@ groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold
   
   temp %<>% mutate(PartOfGenet = ifelse(pctMatch >= PctMatchThreshold, "Yes", "No")) %>%
     select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet)
+  
+  if (getPairwiseAlleleMatches==TRUE) {return(pairwiseAlleleMatches = temp)}
   
   PartOfGenet_No <- temp %>% filter(PartOfGenet == "No")
   
