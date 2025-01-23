@@ -26,6 +26,6 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     d2 <- d1 %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
     write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", PctMatchThreshold,"_", PctNotNullThreshold, "_", nrow(b1), "_", paste0(fileList[[i]])), row.names = F)
   }
-#  return(list(genetAssignments = d2, pairwiseAlleleMatches = c))
+  if (getPairwiseAlleleMatches==TRUE){ return(list(genetAssignments = d2, pairwiseAlleleMatches = c))}
   return(list(genetAssignments = d2))
 }

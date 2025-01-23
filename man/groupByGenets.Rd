@@ -10,7 +10,7 @@ groupByGenets(
   AlleleMatchResults,
   PctMatchThreshold = NULL,
   PctNotNullThreshold = NULL,
-  getPariwsieAlleleMatches = FALSE
+  getPairwiseAlleleMatches = FALSE
 )
 }
 \arguments{
