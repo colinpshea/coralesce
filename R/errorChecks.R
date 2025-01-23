@@ -7,7 +7,7 @@ handleError_CoralID <- function(dataset) {
 #' Notify user that non-conforming fields such as site name were omitted from the data set. This is just a message as extraneous columns (i.e., those that aren't either locus data or Coral_ID) are removed for the genet classification and kinship calculation. 
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
-#  identifyProhibitedData <- function (x) {x %in% acceptableData$Allelepairs}
+  checkforAllowableData <- function(x) {x %in% acceptableData$Allelepairs}
   if (length(names(dataset)[colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData))==0])>1) {
     message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., site name or a base pair combination that is invalid) were removed from this file prior to genet assignment and kinship/gene diversity calculations")}
  }
