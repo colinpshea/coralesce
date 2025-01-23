@@ -4,11 +4,13 @@
 \alias{runKinship}
 \title{Run all kinship and  gene diversity calculations in a single function}
 \usage{
-runKinship(targetN = NULL, subset = FALSE)
+runKinship(subset = FALSE, targetN = NULL)
 }
 \arguments{
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.}
+\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least-related colonies? Default is FALSE; if changed to TRUE, then you must specify \code{targetN} individuals (i.e., some value less than or equal to the total number of colonies in the data set).}
+
+\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if \code{subset = FALSE}. If \code{subset = TRUE} then \code{targetN} must specified and can be ≤ the number of individuals in a data set. If \code{targetN} is equal to the number of individuals in the data set, then MK_init and MK_final will be identical; if this value is smaller than the number of individuals in the data set, MK_final will differ because kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals remain.}
 }
 \description{
-Calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
+This function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci.
 }

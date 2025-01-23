@@ -12,7 +12,7 @@ handleError_allZeros <- function(dataset){
   testData <- dataset
   testData$allNA <- rowSums(is.na(testData[,2:ncol(testData)]))==length(2:ncol(testData))
   allNA <- testData %>% filter(allNA==TRUE) %>% mutate(genet = NA, AdequateData = "No") 
-  if (nrow(allNA) > 0) {message("At least one colony has NA values at all loci. These colonies have been added to the genetAssignment data frame and have been genet = NA, pctNull = 100, and adequateData = `No`.
+  if (nrow(allNA) > 0) {message("At least one colony has NA values at all loci. These colonies have been added to the genetAssignment data frame and have been assigned genet = NA, pctNull = 100, and adequateData = `No`.
                                 ")
   }
   if (nrow(allNA) > 0) {message(cat("The offending colonies are:", allNA$Coral_ID, sep = "\n"))
