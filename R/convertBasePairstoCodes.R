@@ -5,7 +5,8 @@
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @export
 convertBasePairstoCodes <- function(initdata) {
-  raw <- initdata %>%
+  # create file raw and select only columns that (1) contain valid allele pairing data as listed in the IUPAC data file and (2) are named Coral_ID.
+    raw <- initdata %>%
     select(
       names(initdata)[colSums(apply(initdata, 2, checkforAllowableData)) == nrow(initdata)|names(initdata)=="Coral_ID"]
     )

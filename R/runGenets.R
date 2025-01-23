@@ -19,9 +19,10 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
   
   #### Loop through all available data files
   for (i in 1:length(fileList)){
-    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]])) 
-    b1 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
-    b2 <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[2]]
+    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
+    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))
+    b1 <- b[[1]] # data frame with colonies that DO NOT have NA values at all loci
+    b2 <- b[[2]] # data frame with colonies that DO have NA values at all loci
     c <- determineAllAlleleMatches(dataset = b1)
     d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPairwiseAlleleMatches = getPairwiseAlleleMatches)
     d2 <- d1$genetAssignment %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
