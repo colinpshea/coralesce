@@ -7,7 +7,8 @@
 #' 
 #' @importFrom matrixStats rowProds
 #' @export
-kinshipCalcsNoInvar <- function(dataset, targetN){
+kinshipCalcsNoInvar <- function(dataset, targetN = NULL, subset = FALSE){
+  if (subset == FALSE){
   dat1 <- omitInvariantLoci(dataset = dataset)
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
   dat3 <- kinshipCalcs(dataset = dat2)
@@ -16,8 +17,21 @@ kinshipCalcsNoInvar <- function(dataset, targetN){
   
   #### Calculate mean kinship for each colony
   MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
-  
-  #### Set "highest_individual to "none" yet because it needs a value for the while loop below but we don't want to omit anyone (yet) and in the event that we want to keep ALL individuals (i.e., targetN = total number of individuals), this will ensure that we can do that; otherwise, we could only ever return total number - 1 individuals becuase one will always be the highest, and in the while look below that individual would be identified and omitted straight away. 
+
+return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
+    }  
+  if (subset==TRUE){
+    dat1 <- omitInvariantLoci(dataset = dataset)
+    dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
+    dat3 <- kinshipCalcs(dataset = dat2)
+    
+    #### Calculate Population averaged mean kinship and GD
+    PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(mn_avg_kinship), PopAvgGD = 1 - PopAvgMK)
+    
+    #### Calculate mean kinship for each colony
+    MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
+    
+    #### Set "highest_individual to "none" yet because it needs a value for the while loop below but we don't want to omit anyone (yet) and in the event that we want to keep ALL individuals (i.e., targetN = total number of individuals), this will ensure that we can do that; otherwise, we could only ever return total number - 1 individuals becuase one will always be the highest, and in the while look below that individual would be identified and omitted straight away. 
   highest_individual <- "none yet"
   
   #### Then run the above kinship calculations over and over, each time identifying and removing the individual with the highest mean kinship until we're left with targetN individuals. As long as the number of rows in coralAlleleDataRed is > targetN, the process will repeat until target N is reached  
@@ -29,6 +43,6 @@ kinshipCalcsNoInvar <- function(dataset, targetN){
   }
   #### Calculate mean kinship for each of the least related colonies
   MK_final <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
-  
   return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = MK_final))
-} 
+  } 
+}

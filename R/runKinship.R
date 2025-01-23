@@ -4,7 +4,7 @@
 #' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.
 #' @importFrom stringr str_detect
 #' @export
-runKinship <- function(targetN = NULL){
+runKinship <- function(targetN = NULL, subset = FALSE){
   #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
   folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
   
@@ -20,7 +20,7 @@ runKinship <- function(targetN = NULL){
     a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]])) 
     b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
     c <- omitInvariantLoci(b)
-    d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN)
+    d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
     write.csv(c[[1]], paste0(resultsLocation,"/","popAvgMKGD_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
     write.csv(c[[2]], paste0(resultsLocation,"/","mnKinshipALL_", nrow(b), "_", paste0(fileList[[i]])), row.names = F)
     write.csv(c[[3]], paste0(resultsLocation,"/","mnKinshipTargetN_", targetN, "_", paste0(fileList[[i]])), row.names = F)

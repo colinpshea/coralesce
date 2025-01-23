@@ -4,7 +4,7 @@
 \alias{kinshipCalcsNoInvar}
 \title{Calculate average individual-level and population-level kinship and gene diversity}
 \usage{
-kinshipCalcsNoInvar(dataset, targetN)
+kinshipCalcsNoInvar(dataset, targetN = NULL, subset = FALSE)
 }
 \arguments{
 \item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  \code{convertBasePairstoCodes} function.}

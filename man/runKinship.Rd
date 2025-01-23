@@ -4,7 +4,7 @@
 \alias{runKinship}
 \title{Run all kinship and  gene diversity calculations in a single function}
 \usage{
-runKinship(targetN = NULL)
+runKinship(targetN = NULL, subset = FALSE)
 }
 \arguments{
 \item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.}
