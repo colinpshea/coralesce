@@ -18,9 +18,9 @@ groupByGenets(
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 
-\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} function)}
+\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} wrapper function)}
 
-\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} function)}
+\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} wrapper function)}
 }
 \description{
 The function calculates the percentage match and percentage not

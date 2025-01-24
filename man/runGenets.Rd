@@ -11,9 +11,9 @@ runGenets(
 )
 }
 \arguments{
-\item{PctMatchThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
+\item{PctMatchThreshold}{The desired threshold for \verb{percent match} of alleles across all loci between individuals for identifying pairings as matches or clones.}
 
-\item{PctNotNullThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
+\item{PctNotNullThreshold}{The desired threshold for \verb{percent not null values} (i.e., the percentage of locus values **WITH" allele data) across all loci between individuals for identifying pairings as matches or clones.}
 
 \item{getPairwiseAlleleMatches}{Set to \code{TRUE} if you want to return a data frame with all pairwise comparisons and their corresponding \verb{percent match} and \verb{percent not null} values. The default value is \code{FALSE}.}
 }
@@ -25,7 +25,7 @@ The first object, \code{genetAssignment} is a data frame with a single row for e
 The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating \verb{percent match} and \verb{percent not null} (i.e., 100 - \verb{percent null values}). These are typically very large files and are only saved to the working directory if \code{getPairwiseAlleleMatches = TRUE}.
 }
 \description{
-This wrapper fucntion assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
+This wrapper function assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NA observations for SNP loci or all values are NA) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
 
 Note that for this function to work properly (or at all), you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save results to the \code{Results} folder. If there is more than one file in \code{Data}, this function will cycle through each file and save results for each data file to the \code{Results} folder; each file in the \code{Results} folder will include the name of the original data file.
 }
