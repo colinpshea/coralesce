@@ -11,6 +11,15 @@ runKinship(subset = FALSE, targetN = NULL)
 
 \item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if \code{subset = FALSE}. If \code{subset = TRUE} then \code{targetN} must specified and can be ≤ the number of individuals in a data set. If \code{targetN} is equal to the number of individuals in the data set, then MK_init and MK_final will be identical; if this value is smaller than the number of individuals in the data set, MK_final will differ because kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals remain.}
 }
+\value{
+This function returns up to three objects depending on user inputs:
+
+The first object, \code{PopAvgMKGD} is a data frame with a single row and two values, mean population-level kinship and mean population-level gene diversity (1 - mean population level kinship).
+
+The second object, \code{MK_init}, is a data frame with a row for each coral colony and an average kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci.
+
+The third object, \code{MK_final} is simular to \code{MK_init} except it only has targetN rows.
+}
 \description{
 This function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci.
 }

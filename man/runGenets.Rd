@@ -17,6 +17,13 @@ runGenets(
 
 \item{getPairwiseAlleleMatches}{Set to TRUE if you want to return a data frame with all pairwise comparisons and percent match (pctMatch) and percent not null (pctNotNull) values? The default value is FALSE.}
 }
+\value{
+This function returns up to two objects depending on user inputs:
+
+The first object, \code{genetAssignment} is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined \code{PctMatchThreshold} and \code{PctNotNullThreshold} values.
+
+The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null (i.e., 100 - percent null values). These are typically very large files and are only saved to the working directory if \code{getPairwiseAlleleMatches} = TRUE.
+}
 \description{
 Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
 }

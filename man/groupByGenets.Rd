@@ -14,13 +14,13 @@ groupByGenets(
 )
 }
 \arguments{
-\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific pctNull values to the genet assignment file created by this function}
+\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function}
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 
-\item{PctMatchThreshold}{Defaults to NULL}
+\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} function)}
 
-\item{PctNotNullThreshold}{Defaults to NULL}
+\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} function)}
 }
 \description{
 The function calculates the percentage match and percentage not
