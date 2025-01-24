@@ -1,11 +1,11 @@
 #' Run all genet assignments in a single function
 #'
-#' @description This wrapper fucntion assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
+#' @description This wrapper function assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NA observations for SNP loci or all values are NA) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
 #' 
 #' Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; each file in the `Results` folder will include the name of the original data file. 
 #' 
-#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
-#' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
+#' @param PctMatchThreshold The desired threshold for `percent match` of alleles across all loci between individuals for identifying pairings as matches or clones.
+#' @param PctNotNullThreshold The desired threshold for `percent not null values` (i.e., the percentage of locus values **WITH" allele data) across all loci between individuals for identifying pairings as matches or clones. 
 #' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding `percent match` and `percent not null` values. The default value is `FALSE`.
 #' @return This function returns up to two objects depending on user inputs: 
 #' 
