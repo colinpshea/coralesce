@@ -1,14 +1,17 @@
 #' Run all genet assignments in a single function
 #'
-#' @description Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
+#' @description This wrapper fucntion assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.
+#' 
+#' Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; each file in the `Results` folder will include the name of the original data file. 
+#' 
 #' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
 #' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
-#' @param getPairwiseAlleleMatches Set to TRUE if you want to return a data frame with all pairwise comparisons and percent match (pctMatch) and percent not null (pctNotNull) values? The default value is FALSE.
+#' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding `percent match` and `percent not null` values. The default value is `FALSE`.
 #' @return This function returns up to two objects depending on user inputs: 
 #' 
 #' The first object, `genetAssignment` is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
 #' 
-#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null (i.e., 100 - percent null values). These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches` = TRUE. 
+#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating `percent match` and `percent not null` (i.e., 100 - `percent null values`). These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
 #'  
 #' @importFrom stringr str_detect str_pad
 #' @export

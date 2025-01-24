@@ -1,15 +1,15 @@
 #' Run all kinship and  gene diversity calculations in a single function
 #'
-#' @description This function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. 
-#' @param subset Do you want to subset the data and calculate kinship for the `targetN` least-related colonies? Default is FALSE; if changed to TRUE, then you must specify `targetN` individuals (i.e., some value less than or equal to the total number of colonies in the data set).
-#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if `subset = FALSE`. If `subset = TRUE` then `targetN` must specified and can be ≤ the number of individuals in a data set. If `targetN` is equal to the number of individuals in the data set, then MK_init and MK_final will be identical; if this value is smaller than the number of individuals in the data set, MK_final will differ because kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until `targetN` individuals remain.
+#' @description This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you MUST have folders called Data and Results in your working directory. This function will looks for a genetics data file in Data and save results to the Results folder. If there is more than one file in Data, the function will cycle through each file and save results to the Results folder; each file in the Results folder will include the name of the original data file. 
+#' @param subset Do you want to subset the data and calculate kinship for the `targetN` least related colonies in the data set? The default value is FALSE, in which case `targetN` is ignored and defaults to NULL. If `subset = TRUE` then you MUST enter a value for `targetN`; otherwise the function will quit and print an error message.
+#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as `NULL` or if its value is greater than or equal to `nrow(dataset)` i.e., the number of individuals in a data set. If this value is < `nrow(dataset)`, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until `targetN` individuals with the lowest average kinship remain.
 #' @return This function returns up to three objects depending on user inputs: 
 #' 
 #' The first object, `PopAvgMKGD` is a data frame with a single row and two values, mean population-level kinship and mean population-level gene diversity (1 - mean population level kinship). 
 #' 
 #' The second object, `MK_init`, is a data frame with a row for each coral colony and an average kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci.
 #' 
-#' The third object, `MK_final` is simular to `MK_init` except it only has targetN rows. 
+#' The third object, `MK_final` is simular to `MK_init` except it only has `targetN` rows. 
 #'  
 #' @importFrom stringr str_detect
 #' @export
