@@ -9,9 +9,9 @@ kinshipCalcsNoInvar(dataset, subset = FALSE, targetN = NULL)
 \arguments{
 \item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  \code{convertBasePairstoCodes} function.}
 
-\item{subset}{Do you want to subset the data and calculate kinship for the targetN least related colonies in the data set? The default value is \code{FALSE}, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will fail.}
+\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
 
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set, nothing happens. If this value is smaller than \code{nrow(dataset)}, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals with the lowest average kinship remain.}
+\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is < \code{nrow(dataset)}, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals with the lowest average kinship remain.}
 }
 \value{
 This function returns three objects, \code{PopAvgMKGD}, \code{MK_init}, and \code{MK_final}. \code{PopAvgMKGD} contains the population-level average kinship and gene diversity; \code{MK_init} contains average kinship for each individual in dataset (i.e., now(dataset) individuals), and \code{MK_final} contains average kinship for the \code{targetN} individuals with the lowest average kinship.

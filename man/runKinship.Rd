@@ -7,9 +7,9 @@
 runKinship(subset = FALSE, targetN = NULL)
 }
 \arguments{
-\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least-related colonies? Default is FALSE; if changed to TRUE, then you must specify \code{targetN} individuals (i.e., some value less than or equal to the total number of colonies in the data set).}
+\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
 
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if \code{subset = FALSE}. If \code{subset = TRUE} then \code{targetN} must specified and can be ≤ the number of individuals in a data set. If \code{targetN} is equal to the number of individuals in the data set, then MK_init and MK_final will be identical; if this value is smaller than the number of individuals in the data set, MK_final will differ because kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals remain.}
+\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is < \code{nrow(dataset)}, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals with the lowest average kinship remain.}
 }
 \value{
 This function returns up to three objects depending on user inputs:
@@ -18,8 +18,8 @@ The first object, \code{PopAvgMKGD} is a data frame with a single row and two va
 
 The second object, \code{MK_init}, is a data frame with a row for each coral colony and an average kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci.
 
-The third object, \code{MK_final} is simular to \code{MK_init} except it only has targetN rows.
+The third object, \code{MK_final} is simular to \code{MK_init} except it only has \code{targetN} rows.
 }
 \description{
-This function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci.
+This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you MUST have folders called Data and Results in your working directory. This function will looks for a genetics data file in Data and save results to the Results folder. If there is more than one file in Data, the function will cycle through each file and save results to the Results folder; each file in the Results folder will include the name of the original data file.
 }
