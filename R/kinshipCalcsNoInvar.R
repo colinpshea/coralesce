@@ -2,12 +2,13 @@
 #'
 #' @description Calculates average individual-level and population-level kinship and gene diversity (1 - kinship) across all individuals and loci, excluding invariant loci, based on all possible among-locus pairwise comparisons at each of N loci. Within-individual comparisons and invariant loci are excluded from these calculations. 
 #' @param dataset A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  `convertBasePairstoCodes` function.
-#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to nrow(dataset) i.e., the number of individuals in a data set, nothing happens. If this value is smaller than nrow(), then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until targetN individuals with the lowest averge kinship remain.
-#' @return This function returns three objects, PopAvgMKGD, MK_init, and MK_final. PopAvgMKGD contains the population-level average kinship and gene diversity; MK_init contains average kinship for each individual in dataset (i.e., now(dataset) individuals), and MK_final contains average kinship for the targetN individuals with the lowest average kinship. 
+#' @param subset Do you want to subset the data and calculate kinship for the targetN least related colonies in the data set? The default value is `FALSE`, in which case `targetN` is ignored and defaults to NULL. If `subset = TRUE` then you MUST enter a value for `targetN`; otherwise the function will fail. 
+#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as NULL or if its value is greater than or equal to `nrow(dataset)` i.e., the number of individuals in a data set, nothing happens. If this value is smaller than `nrow(dataset)`, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until `targetN` individuals with the lowest average kinship remain.
+#' @return This function returns three objects, `PopAvgMKGD`, `MK_init`, and `MK_final`. `PopAvgMKGD` contains the population-level average kinship and gene diversity; `MK_init` contains average kinship for each individual in dataset (i.e., now(dataset) individuals), and `MK_final` contains average kinship for the `targetN` individuals with the lowest average kinship. 
 #' 
 #' @importFrom matrixStats rowProds
 #' @export
-kinshipCalcsNoInvar <- function(dataset, targetN = NULL, subset = FALSE){
+kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
   if (subset == FALSE){
   dat1 <- omitInvariantLoci(dataset = dataset)
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
@@ -21,6 +22,7 @@ kinshipCalcsNoInvar <- function(dataset, targetN = NULL, subset = FALSE){
 return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     }  
   if (subset==TRUE){
+    if (is.null(targetN)==TRUE) {stop() message("You forgot to specify a value for targetN")}
     dat1 <- omitInvariantLoci(dataset = dataset)
     dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
     dat3 <- kinshipCalcs(dataset = dat2)

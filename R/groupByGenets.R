@@ -1,10 +1,10 @@
 #' Determine if the two individuals in the pairwise comparison come from the
 #' same genet
 #'
-#'@param CoralAlleleData Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific pctNull values to the genet assignment file created by this function
+#'@param CoralAlleleData Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific `pctNull` values to the genet assignment file created by this function
 #'@param AlleleMatchResults data set with results of pairwise matching of alleles at each locus for all individuals and loci
-#'@param PctMatchThreshold Defaults to NULL
-#'@param PctNotNullThreshold Defaults to NULL
+#'@param PctMatchThreshold Defaults to NULL but must be specified (can be specified in `runGenets` function)
+#'@param PctNotNullThreshold Defaults to NULL but must be specified (can be specified in `runGenets` function)
 #'
 #' @description The function calculates the percentage match and percentage not
 #' null and uses this information to determine if the pairwise comparison

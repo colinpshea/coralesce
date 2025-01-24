@@ -3,14 +3,20 @@
 #' @description Assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many NULL observations for SNP loci or none a all) are classified as such and assigned to genet = NA; these colonies can be re-assigned to existing or new colonies should additional data become available.  
 #' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
 #' @param PctNotNullThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones. 
-#' @param getPairwiseAlleleMatches Set to TRUE if you want to return a data frame with all pairwise comparisons and percent match (pctMatch) and percent not null (pctNotNull) values? The default value is FALSE.  
+#' @param getPairwiseAlleleMatches Set to TRUE if you want to return a data frame with all pairwise comparisons and percent match (pctMatch) and percent not null (pctNotNull) values? The default value is FALSE.
+#' @return This function returns up to two objects depending on user inputs: 
+#' 
+#' The first object, `genetAssignment` is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
+#' 
+#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null (i.e., 100 - percent null values). These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches` = TRUE. 
+#'  
 #' @importFrom stringr str_detect str_pad
 #' @export
 runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE){
   #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
   folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
   
-  #### Specify locations of data and results folders: changed this is bit so we're not hard-wiring folderPaths[1] and folderPaths[2] but instead matching "Data" and "Results" strings. This is case sensitive so it's got to be Data and Results. Note that you don't want to have any other folders with "Data" or "Results" in the name in your working directory because it will just muddle things up (and the script will crash). 
+  #### Specify locations of data and results folders 
   dataLocation <- folderPaths[which(str_detect(folderPaths, "Data")==TRUE)]
   resultsLocation <- folderPaths[which(str_detect(folderPaths, "Results")==TRUE)]
   

@@ -35,7 +35,5 @@ kinshipCalcs <- function(dataset){
   dataset$mult_probG <- rowProds(as.matrix(dataset[, c("Gprob1","Gprob2")]))
   dataset$mult_probT <- rowProds(as.matrix(dataset[, c("Tprob1","Tprob2")]))
   
-  #dataset <- dataset %>% filter(NumAlleles==4) %>% mutate(combo = interaction(coral1, coral2)) %>% group_by(combo) %>% mutate(totalProbLoci = sum(mult_probA, mult_probC, mult_probG, mult_probT), totalScorable = n()) %>% select(combo, totalProbLoci, totalScorable) %>% mutate(avg_kinship = totalProbLoci/totalScorable) %>% separate(combo, into = c("coral1", "coral2"), remove = T, sep = "[.]") %>% distinct(.)
-  
   dataset %>% filter(NumAlleles==4) %>% mutate(combo = interaction(coral1, coral2)) %>% group_by(combo) %>% mutate(totalProbLoci = sum(mult_probA, mult_probC, mult_probG, mult_probT), totalScorable = n()) %>% select(combo, totalProbLoci, totalScorable) %>% mutate(avg_kinship = totalProbLoci/totalScorable) %>% separate(combo, into = c("coral1", "coral2"), remove = T, sep = "[.]") %>% distinct(.)
 } 
