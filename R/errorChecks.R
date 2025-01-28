@@ -23,7 +23,7 @@ handleError_allZeros <- function(dataset){
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {
-    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed from this file prior to genet assignment and/or kinship/gene diversity calculations.
+    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed from this file prior to genet assignment and/or kinship calculations.
             ")
     message(cat("The offending column(s) are:", names(dataset[2:ncol(dataset)])[colSums(apply(dataset[2:ncol(dataset)], 2, checkforAllowableData)) != nrow(dataset)], sep = "\n"))
   }
