@@ -1,4 +1,5 @@
 #' Notify user that Coral_ID field name had to be changed.
+#' @description This function notifies users that the Coral_ID column name was changed. 
 #' @export
 handleError_CoralID <- function(dataset) {
   if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and kinship calculations.
@@ -20,7 +21,7 @@ handleError_allZeros <- function(dataset){
 }
 
 #' Notify user that non-conforming fields were found and omitted. 
-#' @description Notification that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the IUPAC reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
+#' @description This function notifies users that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the IUPAC reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {

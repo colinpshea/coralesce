@@ -1,5 +1,5 @@
 #' Classify allele pairs
-#' @description Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. This function is only for comparisons with other colonies, not comparisons with others AND themelves (that's what classifyAllelePairs does).
+#' @description This function creates a data frame of all possible pairwise combinations of individuals and determines, for each  single locus, whether two individuals have the same allele or not. This function only returns comparisons for colonies with other colonies, and not comparisons of colonies with themselves (the classifyAllelePairs() function does both). This function works on one locus (i.e., dataset column) at a time. 
 #' @param dataset A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.
 #' @param locus The column number containing allele data for a single locus
 #' @importFrom magrittr %>% %<>%

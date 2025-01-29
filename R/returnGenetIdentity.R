@@ -1,10 +1,10 @@
 #' Determine the genet identity of each coral colony based on pairwise comparisons of SNPs
 #'
-#' @description Assigns coral colonies to genets based on all possible comparisons (i.e., comparing colonies to themselves and other colonies) genetic similarity of SNPs at each of N loci.
+#' @description This function assigns coral colonies to genets based on all possible comparisons (i.e., comparing colonies to themselves and other colonies) genetic similarity of SNPs at each of N loci.
 #' @param obs a data frame with three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.
 #' @importFrom igraph graph_from_adjacency_matrix components
 #' @importFrom Matrix sparseMatrix tcrossprod
-#' @returns A data frame with each colony assigned to a numeric genet number. Multiply colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as clones by default, and occupy their own genet if they are not realted to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with genet = NA. 
+#' @returns A data frame with each colony assigned to a numeric genet number. Multiple colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as a clone of itself by default, provided it had adequate SNP data. and they therefore occupy their own genet abd are unrelated to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with genet = NA.
 #' @export
 returnGenetIdentity <- function(obs) {
   ## Create a list of names for each individual in the data set

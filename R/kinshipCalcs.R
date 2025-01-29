@@ -1,5 +1,5 @@
 #' Calculate pairwise kinship for all possible pairwise comparisons.
-#' @description Calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
+#' @description This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
 #' @param dataset A data frame containing...
 #' @importFrom matrixStats rowProds
 #' @export

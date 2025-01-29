@@ -1,6 +1,6 @@
 #' Identify and omit invariant loci for subsequent kinship calculations.
 #'
-#' @description Omits invariant loci for subsequent population- and individual-level kinship calculations.
+#' @description This function omits invariant loci for subsequent population- and individual-level kinship calculations.
 #' @param dataset A data frame with individual colonies as rows and loci with SNP data as columns. 
 #' @importFrom matrixStats rowProds
 #' @return The supplied data frame with invariant loci (i.e., columns) removed.
