@@ -1,6 +1,6 @@
-#' Run all genet assignments in a single function
+#' Calculate genet assignments and pariwise comparisons in a single function
 #'
-#' @description This wrapper function assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many `NA` observations for SNP loci or all values are `NA`) are classified as such and assigned to `genet = NA`; these colonies can be re-assigned to existing or new colonies should additional data become available.
+#' @description This wrapper function assigns colonies to genets and (optionally) summarizes pariwise comparisons of alleles for all possible pairwise comparisons.
 #' 
 #' Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
 #' 

@@ -1,7 +1,7 @@
 #' Isolate all NA colonies
-#' @description This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with at an allele at at least one locus. 
-#' @param dataset A dataset containing a column "Coral_ID" base pair data at each of N loci.
-#' @returns A data frame called allNA and version of the input data frame that excludes the allNA colonies. If there are no allNA colonies then the original data frame is returned and the allNA data frame is set to NULL. 
+#' @description This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with SNP data at, at the very least, one locus. 
+#' @param dataset A data frame containing a `Coral_ID` column for each of N colonies and SNP data at each of N loci.
+#' @returns A data frame called `allNA` and version of the input data frame that excludes the `allNA` colonies. If there are no `allNA` colonies then the original data frame is returned and the `allNA` data frame is set to `NULL`. 
 #' @export
 isolateAllNAColonies <- function(dataset){
   allNA <- handleError_allZeros(dataset)

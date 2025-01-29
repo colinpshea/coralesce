@@ -1,7 +1,6 @@
-#' Calculate pairwise kinship for all pairwise comparisons across all individuals (selves and others) and loci (variant and invariant)
-#'
-#' @description Calculates pairwise kinship across all individuals and loci and does not exclude invariant loci
-#' @param dataset data resulting from determineAllAlleleMatches, which itself uses classifyAllelePairs
+#' Calculate pairwise kinship for all possible pairwise comparisons.
+#' @description Calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
+#' @param dataset A data frame containing...
 #' @importFrom matrixStats rowProds
 #' @export
 kinshipCalcs <- function(dataset){

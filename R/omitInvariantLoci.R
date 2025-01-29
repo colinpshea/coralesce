@@ -1,9 +1,9 @@
-#' Calculate pairwise kinship for all pairwise comparisons across all individuals (only others) and loci (only invariant)
+#' Identify and omit invariant loci for subsequent kinship calculations.
 #'
-#' @description Calculates pairwise kinship across all individuals and loci and but excludes invariant loci
-#' @param dataset uses result of convertBasePairstoCodes, which is the product of this code is used in classifyAllelePairsOthers and then determineAllAlleleMatchesOthers
+#' @description Omits invariant loci for subsequent population- and individual-level kinship calculations.
+#' @param dataset A data frame with individual colonies as rows and loci with SNP data as columns. 
 #' @importFrom matrixStats rowProds
-#' @return the supplied data frame with invariant loci (i.e., columns removed)
+#' @return The supplied data frame with invariant loci (i.e., columns) removed.
 #' @export
 omitInvariantLoci <- function(dataset){
   locus_names <- colnames(dataset[-1])

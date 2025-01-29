@@ -1,12 +1,12 @@
-#' Notify user that Coral_ID had to be changed. This is just a message and the presence of a name other than Coral_ID doesn't cause any problems. 
+#' Notify user that Coral_ID field name had to be changed.
 #' @export
 handleError_CoralID <- function(dataset) {
   if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and kinship calculations.
                                                   ")}
 }
 
-#' Find colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.
-#' @description This function finds colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.
+#' Notify user that colonies with no valid SNP data were found. 
+#' @description This function finds colonies with all NA values, report with a message, and separates the `allNA` individuals from the rest of the data. These `all NA`individuals are appended to the genet classification file and assigned genet = NA, pctNULL = 100, and adequateData = No.
 #' @export
 handleError_allZeros <- function(dataset){
   testData <- dataset
@@ -19,7 +19,8 @@ handleError_allZeros <- function(dataset){
     }
 }
 
-#' Notify user that non-conforming fields such as site name or - more importantly - allele pairs that are not included in the IUPAC reference file, were omitted from the data set. This is just a message as extraneous columns (i.e., those that aren't either locus data or Coral_ID) are removed for the genet classification and kinship calculation; however, the input file should be checked carefully because invalid allele pairs will cause entire loci to be dropped from the file. 
+#' Notify user that non-conforming fields were found and omitted. 
+#' @description Notification that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the IUPAC reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {
