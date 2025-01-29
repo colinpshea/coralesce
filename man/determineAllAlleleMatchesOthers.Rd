@@ -10,5 +10,5 @@ determineAllAlleleMatchesOthers(dataset)
 \item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
 \description{
-For each pairwise combination of individuals, classify allele pairs at each locus as either matching or not. This works one column (locus) at a time, by looping through all loci. This function ignores matches of colonies with themselves i.e., it only compares to other colonies.
+For each pairwise combination of individuals, classify allele pairs at each locus as either matching or not. This works one column or locus at a time by looping sequentially through all of N loci. This function ignores allele matches of colonies with themselves i.e., it only compares and assess allele matches at an individual's loci to those of other colonies.
 }
