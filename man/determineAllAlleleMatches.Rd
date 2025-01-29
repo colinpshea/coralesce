@@ -2,12 +2,12 @@
 % Please edit documentation in R/determineAlleleMatches.R
 \name{determineAllAlleleMatches}
 \alias{determineAllAlleleMatches}
-\title{Classify allele pairs at all loci for all pairwise combinations of individuals}
+\title{Classify allele pairs at all loci for all pairwise combinations of individuals (colonies with themselves and colonies with others).}
 \usage{
 determineAllAlleleMatches(dataset)
 }
 \arguments{
-\item{dataset}{A dataframe, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
+\item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
 \description{
 For each pairwise combination of individuals, classify allele pairs at each locus as either matching or not. This works one column (locus) at a time, by looping through all loci

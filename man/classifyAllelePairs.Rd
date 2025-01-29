@@ -7,10 +7,10 @@
 classifyAllelePairs(dataset, locus)
 }
 \arguments{
-\item{dataset}{A dataframe, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
+\item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 
-\item{locus}{the column number containing allele data for a single locus}
+\item{locus}{The column number containing allele data for a single locus}
 }
 \description{
-Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not.
+Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies.
 }

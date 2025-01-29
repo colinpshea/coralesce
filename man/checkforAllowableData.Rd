@@ -4,12 +4,11 @@
 \alias{checkforAllowableData}
 \title{Filter valid base pair combinations}
 \usage{
-checkforAllowableData(x)
+checkforAllowableData(dataset)
 }
 \arguments{
-\item{x}{the dataset to use}
+\item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
 \description{
 This function is used to select only only columns that contain allowable characters (those listed in IUPAC)
-by the convertBasePairstoAlleles function. DOESNT THIS JUST RETURN THE ALLELEPAIRS?
 }
