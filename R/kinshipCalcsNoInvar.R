@@ -16,10 +16,10 @@ kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
   dat3 <- kinshipCalcs(dataset = dat2)
   #### Calculate Population-level mean kinship and GD
-  PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(mn_avg_kinship), PopAvgGD = 1 - PopAvgMK)
+  PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(ind_mean_kinship), PopAvgGD = 1 - PopAvgMK)
   
   #### Calculate individual-level mean kinship
-  MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
+  MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship))
 
 return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     }  
@@ -31,10 +31,10 @@ return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     dat3 <- kinshipCalcs(dataset = dat2)
     
     #### Calculate Population averaged mean kinship and GD
-    PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(mn_avg_kinship), PopAvgGD = 1 - PopAvgMK)
+    PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(pop_mean_kinship), PopAvgGD = 1 - PopAvgMK)
     
     #### Calculate mean kinship for each colony
-    MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
+    MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship))
     
     #### Set "highest_individual to "none" yet because it needs a value for the while loop below but we don't want to omit anyone (yet) and in the event that we want to keep ALL individuals (i.e., targetN = total number of individuals), this will ensure that we can do that; otherwise, we could only ever return total number - 1 individuals becuase one will always be the highest, and in the while look below that individual would be identified and omitted straight away. 
   highest_individual <- "none yet"
@@ -44,10 +44,10 @@ return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     dat1 <- dat1 %>% filter(!(Coral_ID %in% highest_individual))
     dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
     dat3 <- kinshipCalcs(dataset = dat2) 
-    highest_individual <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% slice(1) %>% pull(Coral_ID)
+    highest_individual <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship)) %>% slice(1) %>% pull(Coral_ID)
   }
   #### Calculate mean kinship for each of the least related colonies
-  MK_final <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
+  MK_final <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship))
   return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = MK_final))
   } 
 }
