@@ -2,7 +2,7 @@
 % Please edit documentation in R/runGenets.R
 \name{runGenets}
 \alias{runGenets}
-\title{Run all genet assignments in a single function}
+\title{Calculate genet assignments and pariwise comparisons in a single function}
 \usage{
 runGenets(
   PctMatchThreshold = NULL,
@@ -25,7 +25,7 @@ The first object, \code{genetAssignment} is a data frame with a single row for e
 The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating \verb{percent match} and \verb{percent not null} (i.e., 100 - \verb{percent null values}). These are typically very large files and are only saved to the working directory if \code{getPairwiseAlleleMatches = TRUE}.
 }
 \description{
-This wrapper function assigns colonies to genets and calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. Colonies for which data are inadequate (too many \code{NA} observations for SNP loci or all values are \code{NA}) are classified as such and assigned to \code{genet = NA}; these colonies can be re-assigned to existing or new colonies should additional data become available.
+This wrapper function assigns colonies to genets and (optionally) summarizes pariwise comparisons of alleles for all possible pairwise comparisons.
 
 Note that for this function to work properly (or at all), you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save results to the \code{Results} folder. If there is more than one file in \code{Data}, this function will cycle through each file and save results for each data file to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.
 }

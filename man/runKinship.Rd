@@ -2,7 +2,7 @@
 % Please edit documentation in R/runKinship.R
 \name{runKinship}
 \alias{runKinship}
-\title{Run all kinship and  gene diversity calculations in a single function}
+\title{Run all kinship calculations in a single function}
 \usage{
 runKinship(subset = FALSE, targetN = NULL)
 }
@@ -14,11 +14,11 @@ runKinship(subset = FALSE, targetN = NULL)
 \value{
 This function returns up to three objects depending on user inputs:
 
-The first object, \code{PopAvgMKGD} is a data frame with a single row and two values, mean population-level kinship and mean population-level gene diversity (1 - mean population level kinship).
+The first object, \code{PopAvgMKGD} is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship).
 
-The second object, \code{MK_init}, is a data frame with a row for each coral colony and an average kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci.
+The second object, \code{MK_init}, is a data frame with a row for each coral colony and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
 
-The third object, \code{MK_final} is simular to \code{MK_init} except it only has \code{targetN} rows.
+The third object, \code{MK_final} is simular to \code{MK_init} except it only has \code{targetN} rows/individuals.
 }
 \description{
 This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will looks for a genetics data file in \code{Data} and save results to the \code{Results} folder. If there is more than one file in \code{Data}, the function will cycle through each file and save results to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.

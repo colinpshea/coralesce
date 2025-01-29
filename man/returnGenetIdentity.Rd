@@ -7,7 +7,7 @@
 returnGenetIdentity(obs)
 }
 \arguments{
-\item{obs}{a dataframe of three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.}
+\item{obs}{a data frame with three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.}
 }
 \value{
 A data frame with each colony assigned to a numeric genet number. Multiply colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as clones by default, and occupy their own genet if they are not realted to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with genet = NA.
