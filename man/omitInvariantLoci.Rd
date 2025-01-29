@@ -13,5 +13,5 @@ omitInvariantLoci(dataset)
 The supplied data frame with invariant loci (i.e., columns) removed.
 }
 \description{
-Omits invariant loci for subsequent population- and individual-level kinship calculations.
+This function omits invariant loci for subsequent population- and individual-level kinship calculations.
 }

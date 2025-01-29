@@ -7,5 +7,5 @@
 handleError_CoralID(dataset)
 }
 \description{
-Notify user that Coral_ID field name had to be changed.
+This function notifies users that the Coral_ID column name was changed.
 }

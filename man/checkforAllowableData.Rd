@@ -10,5 +10,5 @@ checkforAllowableData(dataset)
 \item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
 \description{
-This function is used to select only only columns that contain allowable characters (those listed in IUPAC).
+This function is used to only select columns that contain allowable characters; specifically, the allele pairs listed in the IUPAC table.
 }

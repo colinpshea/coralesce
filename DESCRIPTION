@@ -9,7 +9,7 @@ Description: What the package does (one paragraph). ADD INFO FROM AGENDA.
 License: use_mit_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,

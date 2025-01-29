@@ -10,5 +10,5 @@ kinshipCalcs(dataset)
 \item{dataset}{A data frame containing...}
 }
 \description{
-Calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
+This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
 }

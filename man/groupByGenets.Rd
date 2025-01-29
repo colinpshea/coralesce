@@ -22,5 +22,5 @@ groupByGenets(
 \item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} wrapper function)}
 }
 \description{
-The function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity} for the genet classification.
+This function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity} for the genet classification.
 }

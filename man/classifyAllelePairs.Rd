@@ -12,5 +12,5 @@ classifyAllelePairs(dataset, locus)
 \item{locus}{The column number containing allele data for a single locus}
 }
 \description{
-Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies.
+This function creates a data frame of all possible pairwise combinations of individuals and determines, for each locus, whether two individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies. This function works on one locus (i.e., dataset column) at a time.
 }
