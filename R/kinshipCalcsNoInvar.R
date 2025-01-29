@@ -31,7 +31,7 @@ return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     dat3 <- kinshipCalcs(dataset = dat2)
     
     #### Calculate Population averaged mean kinship and GD
-    PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(pop_mean_kinship), PopAvgGD = 1 - PopAvgMK)
+    PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(ind_mean_kinship), PopAvgGD = 1 - PopAvgMK)
     
     #### Calculate mean kinship for each colony
     MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(ind_mean_kinship = mean(avg_kinship)) %>% arrange(desc(ind_mean_kinship))
