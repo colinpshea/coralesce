@@ -1,8 +1,6 @@
 #' Calculate genet assignments and pariwise comparisons in a single function
 #'
-#' @description This wrapper function assigns colonies to genets and (optionally) summarizes pariwise comparisons of alleles for all possible pairwise comparisons.
-#' 
-#' Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
+#' @description This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
 #' 
 #' @param PctMatchThreshold The desired threshold for `percent match` of alleles across all loci between individuals for identifying pairings as matches or clones.
 #' @param PctNotNullThreshold The desired threshold for `percent not null values` (i.e., the percentage of locus values **WITH" allele data) across all loci between individuals for identifying pairings as matches or clones. 

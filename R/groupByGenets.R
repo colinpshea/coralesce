@@ -3,8 +3,9 @@
 #'@param AlleleMatchResults data set with results of pairwise matching of alleles at each locus for all individuals and loci
 #'@param PctMatchThreshold Defaults to NULL but must be specified (can be specified in `runGenets` wrapper function)
 #'@param PctNotNullThreshold Defaults to NULL but must be specified (can be specified in `runGenets` wrapper function)
-#'
-#' @description The function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses `returnGenetIdentity` for the genet classification. #' @importFrom dplyr arrange if_else n rename add_row distinct
+#' @description The function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses `returnGenetIdentity` for the genet classification.
+#' 
+#' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE) {
   
