@@ -1,7 +1,7 @@
 #' Classify allele pairs at a single locus for all pairwise combinations of individuals
-#' @description Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not.
-#' @param dataset A dataframe, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.
-#' @param locus the column number containing allele data for a single locus
+#' @description Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies. 
+#' @param dataset A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.
+#' @param locus The column number containing allele data for a single locus
 #' @importFrom magrittr %>% %<>%
 #' @export
 classifyAllelePairs <- function(dataset, locus){
