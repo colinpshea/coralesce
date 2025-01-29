@@ -2,7 +2,7 @@
 % Please edit documentation in R/classifyAllelePairsOthers.R
 \name{classifyAllelePairsOthers}
 \alias{classifyAllelePairsOthers}
-\title{Classify allele pairs at a single locus for all pairwise combinations of individuals, but excluding pairings with selves}
+\title{Classify allele pairs}
 \usage{
 classifyAllelePairsOthers(dataset, locus)
 }
@@ -12,5 +12,5 @@ classifyAllelePairsOthers(dataset, locus)
 \item{locus}{The column number containing allele data for a single locus}
 }
 \description{
-Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. This function is only for comparisons with other colonies, not comparisons with others AND themelves (that's what classifyAllelePairs is for).
+Create a data frame of all possible pairwise combinations of individuals and determine for a single locus whether each pair of individuals have the same allele or not. This function is only for comparisons with other colonies, not comparisons with others AND themelves (that's what classifyAllelePairs does).
 }

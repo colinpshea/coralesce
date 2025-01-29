@@ -2,7 +2,7 @@
 % Please edit documentation in R/kinshipCalcsNoInvar.R
 \name{kinshipCalcsNoInvar}
 \alias{kinshipCalcsNoInvar}
-\title{Calculate average individual-level and population-level kinship and gene diversity}
+\title{Calculate population- and individual-level kinship (and gene diversity)}
 \usage{
 kinshipCalcsNoInvar(dataset, subset = FALSE, targetN = NULL)
 }
@@ -17,5 +17,5 @@ kinshipCalcsNoInvar(dataset, subset = FALSE, targetN = NULL)
 This function returns three objects, \code{PopAvgMKGD}, \code{MK_init}, and \code{MK_final}. \code{PopAvgMKGD} contains the population-level average kinship and gene diversity; \code{MK_init} contains average kinship for each individual in dataset (i.e., now(dataset) individuals), and \code{MK_final} contains average kinship for the \code{targetN} individuals with the lowest average kinship.
 }
 \description{
-Calculates average individual-level and population-level kinship and gene diversity (1 - kinship) across all individuals and loci, excluding invariant loci, based on all possible among-locus pairwise comparisons at each of N loci. Within-individual comparisons and invariant loci are excluded from these calculations.
+Calculates population- and individual-level mean kinship and gene diversity (1 - kinship) across all individuals and loci. These calculations exclude invariant loci and are based on all possible among-locus pairwise comparisons at each of N loci. Within-individual comparisons (i.e., comparisons of indivudals with themselves) are also excluded from these calculations. Optionally, individual-level kinship can be calculated for a subset of individuals using the targetN argument.
 }

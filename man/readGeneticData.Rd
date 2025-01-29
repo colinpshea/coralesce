@@ -2,7 +2,7 @@
 % Please edit documentation in R/readGeneticData.R
 \name{readGeneticData}
 \alias{readGeneticData}
-\title{Read in Genetic Data into R and Format Properly}
+\title{Read in genetic SNP data format for analysis}
 \usage{
 readGeneticData(fileloc)
 }

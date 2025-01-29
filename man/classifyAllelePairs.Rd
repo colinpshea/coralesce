@@ -2,7 +2,7 @@
 % Please edit documentation in R/classifyAllelePairs.R
 \name{classifyAllelePairs}
 \alias{classifyAllelePairs}
-\title{Classify allele pairs at a single locus for all pairwise combinations of individuals}
+\title{Classify allele pairs}
 \usage{
 classifyAllelePairs(dataset, locus)
 }

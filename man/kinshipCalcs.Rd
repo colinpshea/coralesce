@@ -2,13 +2,13 @@
 % Please edit documentation in R/kinshipCalcs.R
 \name{kinshipCalcs}
 \alias{kinshipCalcs}
-\title{Calculate pairwise kinship for all pairwise comparisons across all individuals (selves and others) and loci (variant and invariant)}
+\title{Calculate pairwise kinship for all possible pairwise comparisons.}
 \usage{
 kinshipCalcs(dataset)
 }
 \arguments{
-\item{dataset}{data resulting from determineAllAlleleMatches, which itself uses classifyAllelePairs}
+\item{dataset}{A data frame containing...}
 }
 \description{
-Calculates pairwise kinship across all individuals and loci and does not exclude invariant loci
+Calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
 }

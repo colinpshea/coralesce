@@ -2,7 +2,7 @@
 % Please edit documentation in R/determineAlleleMatches.R
 \name{determineAllAlleleMatches}
 \alias{determineAllAlleleMatches}
-\title{Classify allele pairs at all loci for all pairwise combinations of individuals (colonies with themselves and colonies with others).}
+\title{Assess matching of alleles, comparing to selves and other colonies.}
 \usage{
 determineAllAlleleMatches(dataset)
 }
@@ -10,5 +10,5 @@ determineAllAlleleMatches(dataset)
 \item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
 \description{
-For each pairwise combination of individuals, classify allele pairs at each locus as either matching or not. This works one column (locus) at a time, by looping through all loci
+For each pairwise combination of individuals, classify allele pairs at each locus as either matching or not. This works one column (locus) at a time, by looping through all loci. This function included matches of colonies with themselves and with other colonies.
 }

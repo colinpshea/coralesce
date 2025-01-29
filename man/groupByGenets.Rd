@@ -2,7 +2,7 @@
 % Please edit documentation in R/groupByGenets.R
 \name{groupByGenets}
 \alias{groupByGenets}
-\title{Determine if the two individuals in the pairwise comparison come from the same genet.}
+\title{Determine if individuals come from the same genet.}
 \usage{
 groupByGenets(
   CoralAlleleData,
@@ -13,7 +13,7 @@ groupByGenets(
 )
 }
 \arguments{
-\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and NA for ? or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function}
+\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and \code{NA} for \verb{?} or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function.}
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 

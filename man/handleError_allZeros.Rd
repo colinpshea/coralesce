@@ -2,10 +2,10 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_allZeros}
 \alias{handleError_allZeros}
-\title{Find colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.}
+\title{Notify user that colonies with no valid SNP data were found.}
 \usage{
 handleError_allZeros(dataset)
 }
 \description{
-This function finds colonies with all NA values, report with a message, and separate those individuals from the rest of the data.  with at least some genetic data (adequate or not). These "all NA" individuals are appended to the genet classification file and have genet = NA, pctNULL = 100, and adequateData = No.
+This function finds colonies with all NA values, report with a message, and separates the \code{allNA} individuals from the rest of the data. These \verb{all NA}individuals are appended to the genet classification file and assigned genet = NA, pctNULL = 100, and adequateData = No.
 }

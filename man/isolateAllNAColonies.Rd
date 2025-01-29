@@ -7,11 +7,11 @@
 isolateAllNAColonies(dataset)
 }
 \arguments{
-\item{dataset}{A dataset containing a column "Coral_ID" base pair data at each of N loci.}
+\item{dataset}{A data frame containing a \code{Coral_ID} column for each of N colonies and SNP data at each of N loci.}
 }
 \value{
-A data frame called allNA and version of the input data frame that excludes the allNA colonies. If there are no allNA colonies then the original data frame is returned and the allNA data frame is set to NULL.
+A data frame called \code{allNA} and version of the input data frame that excludes the \code{allNA} colonies. If there are no \code{allNA} colonies then the original data frame is returned and the \code{allNA} data frame is set to \code{NULL}.
 }
 \description{
-This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with at an allele at at least one locus.
+This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with SNP data at, at the very least, one locus.
 }

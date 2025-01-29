@@ -7,5 +7,5 @@
 calcPercentNotNull(x)
 }
 \description{
-This function calculated the percentage of columns (loci) that are NOT NA values i.e., that have valid SNP data.
+This function calculates the percentage of columns (loci) that are NOT NA values i.e., that have valid SNP data.
 }

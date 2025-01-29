@@ -2,7 +2,7 @@
 % Please edit documentation in R/convertBasePairstoCodes.R
 \name{convertBasePairstoCodes}
 \alias{convertBasePairstoCodes}
-\title{Convert to long format and then convert base pairs to IUPAC codes}
+\title{Convert base pairs to single character IUPAC codes}
 \usage{
 convertBasePairstoCodes(initdata)
 }
@@ -10,5 +10,5 @@ convertBasePairstoCodes(initdata)
 \item{initdata}{A data frame containing a column "Coral_ID" with unique value per row, as well as at least one column containing base pair data with at least one value matching base pair data in IUPAC.}
 }
 \description{
-This function replaces the base pairs with IUPAC codes and converts the data to wide format so that there is a column per code. Make sure that the data we're using are ONLY either the Coral_ID OR one of the character strings included in the IUPAC data frame (loaded with the package). If Aany invalid characters are present in a column, then the entire column is deleted and a warning is issued.
+This function replaces the base pairs with IUPAC codes and converts the data to wide format so that there is a column per code. Make sure that the data we're using are ONLY either the Coral_ID OR one of the character strings included in the IUPAC data frame (loaded with the package). If Any invalid characters are present in a column, then the entire column is deleted and a warning is issued.
 }

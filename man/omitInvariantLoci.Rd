@@ -2,16 +2,16 @@
 % Please edit documentation in R/omitInvariantLoci.R
 \name{omitInvariantLoci}
 \alias{omitInvariantLoci}
-\title{Calculate pairwise kinship for all pairwise comparisons across all individuals (only others) and loci (only invariant)}
+\title{Identify and omit invariant loci for subsequent kinship calculations.}
 \usage{
 omitInvariantLoci(dataset)
 }
 \arguments{
-\item{dataset}{uses result of convertBasePairstoCodes, which is the product of this code is used in classifyAllelePairsOthers and then determineAllAlleleMatchesOthers}
+\item{dataset}{A data frame with individual colonies as rows and loci with SNP data as columns.}
 }
 \value{
-the supplied data frame with invariant loci (i.e., columns removed)
+The supplied data frame with invariant loci (i.e., columns) removed.
 }
 \description{
-Calculates pairwise kinship across all individuals and loci and but excludes invariant loci
+Omits invariant loci for subsequent population- and individual-level kinship calculations.
 }
