@@ -1,7 +1,7 @@
 #' Notify user that Coral_ID had to be changed. This is just a message and the presence of a name other than Coral_ID doesn't cause any problems. 
 #' @export
 handleError_CoralID <- function(dataset) {
-  if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and kinship/gene diversity calculations.
+  if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and kinship calculations.
                                                   ")}
 }
 
@@ -23,7 +23,7 @@ handleError_allZeros <- function(dataset){
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {
-    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed from this file prior to genet assignment and/or kinship calculations.
+    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed from this file prior to genet assignment and kinship calculations.
             ")
     message(cat("The offending column(s) are:", names(dataset[2:ncol(dataset)])[colSums(apply(dataset[2:ncol(dataset)], 2, checkforAllowableData)) != nrow(dataset)], sep = "\n"))
   }
