@@ -37,7 +37,7 @@ runKinship <- function(subset = FALSE, targetN = NULL){
     if (subset==TRUE){
     write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
     write.csv(d$MK_init, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d$MK_final, paste0(resultsLocation,"/","kinship_TargetN_", paste0(fileList[[i]])), row.names = F)
+    write.csv(d$MK_final, paste0(resultsLocation,"/","kinship_targetN_", paste0(fileList[[i]])), row.names = F)
     }
   }
   return(list(kinshipCalculations = d))

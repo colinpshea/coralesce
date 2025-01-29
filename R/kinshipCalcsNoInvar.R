@@ -15,10 +15,10 @@ kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
   dat1 <- omitInvariantLoci(dataset = dataset)
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
   dat3 <- kinshipCalcs(dataset = dat2)
-  #### Calculate Population averaged mean kinship and GD
+  #### Calculate Population-level mean kinship and GD
   PopAvgMKGD <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship)) %>% ungroup() %>% summarise(PopAvgMK = mean(mn_avg_kinship), PopAvgGD = 1 - PopAvgMK)
   
-  #### Calculate mean kinship for each colony
+  #### Calculate individual-level mean kinship
   MK_init <- dat3 %>% pivot_longer(cols = c(coral1, coral2), values_to = "Coral_ID") %>% select(Coral_ID, avg_kinship) %>% arrange(Coral_ID, desc(avg_kinship)) %>% group_by(Coral_ID) %>% summarize(mn_avg_kinship = mean(avg_kinship)) %>% arrange(desc(mn_avg_kinship))
 
 return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
