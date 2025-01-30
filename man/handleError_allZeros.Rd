@@ -6,6 +6,9 @@
 \usage{
 handleError_allZeros(dataset)
 }
+\value{
+Returns a data frame of colonies with all NA values. If this is NULL, then nothing happens, but if this is a data frame with at least one observation, then isolateAllNAColonies() will remove the offending individuals and append to the genet assigment table.
+}
 \description{
 This function finds colonies with all NA values, report with a message, and separates the \code{allNA} individuals from the rest of the data. These \verb{all NA}individuals are appended to the genet classification file and assigned genet = NA, pctNULL = 100, and adequateData = No.
 }
