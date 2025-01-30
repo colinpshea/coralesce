@@ -8,6 +8,7 @@ handleError_CoralID <- function(dataset) {
 
 #' Notify user that colonies with no valid SNP data were found. 
 #' @description This function finds colonies with all NA values, report with a message, and separates the `allNA` individuals from the rest of the data. These `all NA`individuals are appended to the genet classification file and assigned genet = NA, pctNULL = 100, and adequateData = No.
+#' @returns Returns a data frame of colonies with all NA values. If this is NULL, then nothing happens, but if this is a data frame with at least one observation, then isolateAllNAColonies() will remove the offending individuals and append to the genet assigment table. 
 #' @export
 handleError_allZeros <- function(dataset){
   testData <- dataset
@@ -17,7 +18,8 @@ handleError_allZeros <- function(dataset){
                                 ")
   }
   if (nrow(allNA) > 0) {message(cat("The offending colonies are:", allNA$Coral_ID, sep = "\n"))
-    }
+  }
+  return(allNA)
 }
 
 #' Notify user that non-conforming fields were found and omitted. 
