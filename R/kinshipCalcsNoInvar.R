@@ -9,8 +9,8 @@
 #' @importFrom matrixStats rowProds
 #' @export
 kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
-  if (targetN <2) {stop(cat(paste("targetN must be ≥ 2",
-                                  sep = "\n")))}
+  if (subset == TRUE && targetN <2) {stop(cat("When subset = TRUE, targetN must be ≥ 2", sep = "\n"))
+    }
   if (subset == FALSE){
     if (is.null(targetN)==FALSE) {stop(cat(paste("subset = FALSE but you have entered a value for targetN."), paste("When subset = FALSE, any value for targetN is ignored."), paste("You either mistakenly entered a value for targetN or meant to specify subset = TRUE."), sep = "\n"))
       }
