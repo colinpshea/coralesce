@@ -10,7 +10,7 @@
 #' @export
 kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
   if (subset == FALSE){
-    if (is.null(targetN)==FALSE) {stop(cat(paste("subset = FALSE but you have entered a value for targetN."), paste("When subset = FALSE, any value for targetN is ignored."), paste("You either mistakenly entered a value for targetN or meant to specify subset = TRUE."), sep = "\n"))
+    if (is.null(targetN)==FALSE) {stop(cat(paste("subset = FALSE but you have entered a value for targetN."), paste("You either mistakenly entered a value for targetN or meant to specify subset = TRUE."), sep = "\n"))
       }
   dat1 <- omitInvariantLoci(dataset = dataset)
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
