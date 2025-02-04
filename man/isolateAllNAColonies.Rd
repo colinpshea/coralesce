@@ -13,5 +13,5 @@ isolateAllNAColonies(dataset)
 This function returns two objects: (1) if such individuals are present, a data frame called \code{allNA} is returned with the identify of \code{allNA} colonies, and (2) a version of the input data frame that excludes any \code{allNA} colonies. If there are no \code{allNA} colonies, then the original data frame is returned and the \code{allNA} data frame is a \code{NULL} object. Additionally, if \code{allNA} individuals are present, their identifies will be listed in a warning message issues by the \code{handleError_allZeros()} function.
 }
 \description{
-This function determines whether any colonies have NA values at all loci, in which case they are isolated in a new data frame called allNA. The remaining data frame contains colonies with SNP data at, at the very least, one locus.
+This function determines whether any colonies have \code{NA} values at all loci, in which case they are isolated in a new data frame called \code{allNA}. The remaining data frame contains colonies with SNP data at, at the very least, one locus.
 }

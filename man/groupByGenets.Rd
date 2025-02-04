@@ -17,9 +17,9 @@ groupByGenets(
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 
-\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets()} wrapper function)}
+\item{PctMatchThreshold}{Defaults to \code{NULL} but must be specified (can be specified in \code{runGenets()} wrapper function)}
 
-\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets()} wrapper function)}
+\item{PctNotNullThreshold}{Defaults to \code{NULL} but must be specified (can be specified in \code{runGenets()} wrapper function)}
 
 \item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is FALSE.}
 }
@@ -27,5 +27,5 @@ groupByGenets(
 This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when \code{getPairwiseAlleleMatches = TRUE}).
 }
 \description{
-This function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity} for the genet classification.
+This function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity()} for the genet classification.
 }
