@@ -16,7 +16,7 @@ Note that if using this function on its own outside of the \code{runGenets()} or
 if the genetics data are located (as they should be) in a working directory folder called \code{Data}.}
 }
 \value{
-This function returns a data frame with only: \code{Coral_ID} as column 1 and the remaining columns as valid SNP data (here, SNP data in the IUPAC table); columns with prohibited data are removed and their identifies are reported in an error message, where appropriate.
+This function returns a data frame with only: \code{Coral_ID} as column 1 and the remaining columns as loci with valid SNP data (here, valid SNP data are those allele combinations listed in the \code{IUPAC} table); columns with prohibited data are removed via the \code{handleError_ProhibitedData()} function, which identifies and removes such columns, if present, and reports their names in a warning message.
 }
 \description{
 With the \code{fileloc} specified, one can import the initial data that's got paired alleles (e.g., C:G, A:T, etc.) along with a \code{Coral_ID} columns and any other columns like site name. This function names the first column \code{Coral_ID} and ensures that R interprets "T" as a character rather than the logical \code{TRUE}. The function also omits any potential white space (e.g., " C:T"). Lastly, \code{NA} values are converted to \verb{?} because we need to keep track of allele combos that couldn't be compared, and \code{NA} could be problematic when converting allele pairs to single letters with the \code{IUPAC} cipher.

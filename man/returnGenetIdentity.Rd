@@ -7,10 +7,10 @@
 returnGenetIdentity(obs)
 }
 \arguments{
-\item{obs}{a data frame with three columns named coral1, coral2, and CoralPair. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period.}
+\item{obs}{a data frame created by \code{groupByGenets()} that has eight columns: coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet, AdequateData, and obs. coral1 identifies the first coral in the pair, coral2 identifies the second coral in the pair, and CoralPair identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period. pctMatch and pctNotNull summarize the alleles for the comparison being made, PartOfGenet means pctMatch exceeds a threshold for identifying individuals as a match or clone, AdequateData characterizes the frequency of NULL or NA values, and obs is simply a sequential observation number that is used to group genets.}
 }
 \value{
-This function returns a data frame with each colony assigned to a numeric genet number. Multiple colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as a clone of itself by default, provided it had adequate SNP data. and they therefore occupy their own genet and are unrelated to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with genet = NA.
+This function returns a data frame with each colony assigned to a numeric genet number. Multiple colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as a clone of itself by default, provided it had adequate SNP data. and they therefore occupy their own genet and are unrelated to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with \code{genet = NA}.
 }
 \description{
 This function assigns coral colonies to genets based on all possible comparisons (i.e., comparing colonies to themselves and other colonies) genetic similarity of SNPs at each of N loci.

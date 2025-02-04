@@ -17,9 +17,9 @@ groupByGenets(
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 
-\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} wrapper function)}
+\item{PctMatchThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets()} wrapper function)}
 
-\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets} wrapper function)}
+\item{PctNotNullThreshold}{Defaults to NULL but must be specified (can be specified in \code{runGenets()} wrapper function)}
 
 \item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is FALSE.}
 }

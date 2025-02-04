@@ -5,7 +5,7 @@
 #' @param PctMatchThreshold The desired threshold for `percent match` of alleles across all loci between individuals for identifying pairings as matches or clones.
 #' @param PctNotNullThreshold The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ `PctMatchThreshold`), `PctNotNullThreshold` is the minimum allowable percentage of loci with valid (i.e., not NULL or NA) allele data for making a genet assignment. Individuals with values ≥ `PctNotNullThreshold` that determined to be matches (with themselves or others) are classified as adequateData = No and appended to the genet assignment file.
 #' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding `percent match` and `percent not null` values. The default value is `FALSE`.
-#' @return This function returns up to two objects depending on user inputs: 
+#' @returns This function returns up to two objects depending on user inputs: 
 #' 
 #' The first object, `genetAssignment` is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
 #' 

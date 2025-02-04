@@ -9,7 +9,7 @@ runKinship(subset = FALSE, targetN = NULL)
 \arguments{
 \item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
 
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is < \code{nrow(dataset)}, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals with the lowest average kinship remain.}
+\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is \verb{< nrow(dataset)}, then kinship is recalculated, removing the individual with the highest average kinship, one individual at a time, until \code{targetN} individuals with the lowest average kinship remain.}
 }
 \value{
 This function returns up to three objects depending on user inputs:

@@ -7,7 +7,10 @@
 handleError_CoralID(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with some sort of coral colony identifier (ideally named Coral_ID)}
+\item{dataset}{A data frame with some sort of coral colony identifier (ideally named Coral_ID).}
+}
+\value{
+This function returns a warning message notifying users of the presence and identify of colonies with all NA SNP data (i.e., missing values at all loci, so no valid genetic data).
 }
 \description{
 This function notifies users that the Coral_ID column name was changed.

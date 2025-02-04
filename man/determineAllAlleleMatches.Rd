@@ -7,8 +7,11 @@
 determineAllAlleleMatches(dataset)
 }
 \arguments{
-\item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
+\item{dataset}{This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: TRUE or FALSE). All possible pairwise comparisons with selves and others are included here. The resulting file is used by \code{groupByGenets()} which assigns colonies to genets.}
+}
+\value{
+description
 }
 \description{
-For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the classifyAllelePairs function, one column or locus at a time, by looping sequentially through all of N loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies.
+For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the \code{classifyAllelePairs()} function, one column or locus at a time, by looping sequentially through all of N loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons.
 }

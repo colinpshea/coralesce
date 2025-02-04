@@ -7,7 +7,7 @@
 kinshipCalcsNoInvar(dataset, subset = FALSE, targetN = NULL)
 }
 \arguments{
-\item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  \code{convertBasePairstoCodes} function.}
+\item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  \code{convertBasePairstoCodes()} function.}
 
 \item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
 

@@ -9,6 +9,9 @@ determineAllAlleleMatchesOthers(dataset)
 \arguments{
 \item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 }
+\value{
+This function, like \code{determineAlleleMatches()} which uses \code{classifyAllelePairs()} for the genet assignment procedure, uses \code{classifyAllelePairsOthers()} to create and return a data frame with all possible comparisons of alleles at loci for all colonies; here, however, comparisons of colonies with themselves are excluded as those comparisons are not relevant for kinship calculations.
+}
 \description{
-For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the classifyAllelePairs function, one column or locus at a time, by looping sequentially through all of N loci. This function ignores allele matches of colonies with themselves i.e., it only compares and assess allele matches at an individual's loci to those of other colonies.
+For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the classifyAllelePairs function, one column or locus at a time, by looping sequentially through all of N loci. This function ignores allele matches of colonies with themselves i.e., it only compares and assess allele matches at an individual's loci to those of other colonies, and is specifically used for kinship calculations using the \code{kinshipCalcsNoInvar()} function, which requires only comparisons of colonies with other colonies, not themselves.
 }

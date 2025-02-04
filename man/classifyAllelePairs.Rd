@@ -9,7 +9,10 @@ classifyAllelePairs(dataset, locus)
 \arguments{
 \item{dataset}{A data frame, where the first column titled "Coral_ID" uniquely identifies each row, and the second through last column each contain allele data for a single locus.}
 
-\item{locus}{The column number containing allele data for a single locus}
+\item{locus}{The column number containing allele data for a single locus.}
+}
+\value{
+This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: TRUE or FALSE). All possible pairwise comparisons with selves and others are included here, and the resulting file is used by \code{determineAlleleMatches()} for subsequent genet assignments.
 }
 \description{
 This function creates a data frame of all possible pairwise combinations of individuals and determines, for each locus, whether two individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies. This function works on one locus (i.e., dataset column) at a time.
