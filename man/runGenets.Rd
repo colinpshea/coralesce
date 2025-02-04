@@ -13,7 +13,7 @@ runGenets(
 \arguments{
 \item{PctMatchThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
 
-\item{PctNotNullThreshold}{The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ \code{PctMatchThreshold}), \code{PctNotNullThreshold} is the minimum allowable percentage of loci with valid (i.e., not \code{NULL} or \code{NA}) allele data for making a genet assignment. Individuals with values \verb{≥ PctNotNullThreshold} that determined to be matches (with themselves or others) are classified as adequateData = No and appended to the genet assignment file.}
+\item{PctNotNullThreshold}{The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ \code{PctMatchThreshold}), \code{PctNotNullThreshold} is the minimum allowable percentage of loci with valid (i.e., not \code{NULL} or \code{NA}) allele data for making a genet assignment. Individuals with values \verb{≥ PctNotNullThreshold} that determined to be matches (with themselves or others) are classified as \code{adequateData = No} and appended to the genet assignment file.}
 
 \item{getPairwiseAlleleMatches}{Set to \code{TRUE} if you want to return a data frame with all pairwise comparisons and their corresponding percent match and percent not null values. The default value is \code{FALSE}.}
 }

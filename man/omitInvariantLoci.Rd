@@ -10,7 +10,7 @@ omitInvariantLoci(dataset)
 \item{dataset}{A data frame with individual colonies as rows and loci with SNP data as columns.}
 }
 \value{
-This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations (see \code{?runKinship()} and \code{?kinshipCalcsNoInvar()}) which must exclude invariant loci.
+This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations that must exclude invariant loci (see \code{runKinship()} and \code{kinshipCalcsNoInvar()}).
 }
 \description{
 This function omits invariant loci for subsequent population- and individual-level kinship calculations.

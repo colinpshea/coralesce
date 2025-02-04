@@ -13,5 +13,5 @@ checkforAllowableData(dataset)
 description
 }
 \description{
-This function is used to only select columns that contain allowable characters; specifically, the allele pairs listed in the IUPAC table.
+This function is used to only select columns that contain allowable characters; specifically, the allele pairs listed in the \code{IUPAC} table.
 }

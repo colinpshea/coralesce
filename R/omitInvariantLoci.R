@@ -3,7 +3,7 @@
 #' @description This function omits invariant loci for subsequent population- and individual-level kinship calculations.
 #' @param dataset A data frame with individual colonies as rows and loci with SNP data as columns. 
 #' @importFrom matrixStats rowProds
-#' @returns This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations (see `?runKinship()` and `?kinshipCalcsNoInvar()`) which must exclude invariant loci. 
+#' @returns This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations that must exclude invariant loci (see `runKinship()` and `kinshipCalcsNoInvar()`). 
 #' @export
 omitInvariantLoci <- function(dataset){
   locus_names <- colnames(dataset[-1])
