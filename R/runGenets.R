@@ -2,14 +2,14 @@
 #'
 #' @description This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
 #' 
-#' @param PctMatchThreshold The desired threshold for `percent match` of alleles across all loci between individuals for identifying pairings as matches or clones.
-#' @param PctNotNullThreshold The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ `PctMatchThreshold`), `PctNotNullThreshold` is the minimum allowable percentage of loci with valid (i.e., not NULL or NA) allele data for making a genet assignment. Individuals with values ≥ `PctNotNullThreshold` that determined to be matches (with themselves or others) are classified as adequateData = No and appended to the genet assignment file.
-#' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding `percent match` and `percent not null` values. The default value is `FALSE`.
+#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
+#' @param PctNotNullThreshold The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ `PctMatchThreshold`), `PctNotNullThreshold` is the minimum allowable percentage of loci with valid (i.e., not `NULL` or `NA`) allele data for making a genet assignment. Individuals with values `≥ PctNotNullThreshold` that determined to be matches (with themselves or others) are classified as adequateData = No and appended to the genet assignment file.
+#' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding percent match and percent not null values. The default value is `FALSE`.
 #' @returns This function returns up to two objects depending on user inputs: 
 #' 
 #' The first object, `genetAssignment` is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
 #' 
-#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating `percent match` and `percent not null` (i.e., 100 - `percent null values`). These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
+#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
 #'  
 #' @importFrom stringr str_detect str_pad
 #' @export

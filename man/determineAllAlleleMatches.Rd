@@ -13,5 +13,5 @@ determineAllAlleleMatches(dataset)
 description
 }
 \description{
-For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the \code{classifyAllelePairs()} function, one column or locus at a time, by looping sequentially through all of N loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons.
+For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the \code{classifyAllelePairs()} function, one column or locus at a time, by looping sequentially through all of \code{N} loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons.
 }

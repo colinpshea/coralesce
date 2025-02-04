@@ -13,5 +13,5 @@ convertBasePairstoCodes(initdata)
 This function returns a data frame identical to the input data frame except the paired alleles (e.g., G:) are replace by single allele codes (e.g., G).Note that only "allowable data" are included in the resulting data frame, and any columns not adhering to the data formatting requirements are omitted by the \code{checkforAllowableData()} function and listed in a warning issued by the \code{handleError_ProhibitedData()} function.
 }
 \description{
-This function replaces the base pairs with IUPAC codes and converts the data to wide format so that there is a column per locus. If Any invalid characters are present in a column, then the entire column is deleted, a warning is issued, and the column names are reported.
+This function replaces the base pairs with \code{IUPAC} codes and converts the data to wide format so that there is a column per locus. If any invalid characters are present in a column, then the entire column is deleted, a warning is issued, and the column names are reported.
 }
