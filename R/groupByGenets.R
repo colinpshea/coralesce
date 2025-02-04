@@ -5,7 +5,8 @@
 #' @param AlleleMatchResults data set with results of pairwise matching of alleles at each locus for all individuals and loci
 #' @param PctMatchThreshold Defaults to NULL but must be specified (can be specified in `runGenets` wrapper function)
 #' @param PctNotNullThreshold Defaults to NULL but must be specified (can be specified in `runGenets` wrapper function)
-#' @param getPairwiseAlleleMatches Do you want the function to return all pairwise comparisons of colonies? The default is FALSE. 
+#' @param getPairwiseAlleleMatches Do you want the function to return all pairwise comparisons of colonies? The default is FALSE.
+#' @returns This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when `getPairwiseAlleleMatches = TRUE`).
 #' @importFrom dplyr arrange if_else n rename add_row distinct
 #' @export
 groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE) {

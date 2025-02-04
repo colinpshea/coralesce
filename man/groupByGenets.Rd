@@ -23,6 +23,9 @@ groupByGenets(
 
 \item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is FALSE.}
 }
+\value{
+This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when \code{getPairwiseAlleleMatches = TRUE}).
+}
 \description{
 This function calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity} for the genet classification.
 }

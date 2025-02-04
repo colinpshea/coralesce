@@ -9,6 +9,7 @@
 #' 
 #'  if the genetics data are located (as they should be) in a working directory folder called `Data`.
 #' 
+#' @returns This function returns a data frame with only: `Coral_ID` as column 1 and the remaining columns as valid SNP data (here, SNP data in the IUPAC table); columns with prohibited data are removed and their identifies are reported in an error message, where appropriate.
 #' @importFrom stringi stri_replace_all_regex
 #' @importFrom purrr map
 #' @importFrom magrittr %>%

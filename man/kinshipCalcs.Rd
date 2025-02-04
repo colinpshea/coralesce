@@ -7,7 +7,7 @@
 kinshipCalcs(dataset)
 }
 \arguments{
-\item{dataset}{A data frame containing...}
+\item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from the convertBasePairstoCodes function.}
 }
 \description{
 This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
