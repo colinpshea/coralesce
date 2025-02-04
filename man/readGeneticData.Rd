@@ -7,9 +7,9 @@
 readGeneticData(fileloc)
 }
 \arguments{
-\item{fileloc}{The location of the data file, specified as a path (see documentation for \code{runGenets} and \code{runKinship} for information about \code{fileloc}).
+\item{fileloc}{The location of the data file, specified as a path (see documentation for \code{runGenets()} and \code{runKinship()} for information about \code{fileloc}).
 
-Note that if using this function on its own outside of the \code{runGenets} or \code{runKinship} wrapper functions, you must specify the path to the genetics data file manually e.g.,
+Note that if using this function on its own outside of the \code{runGenets()} or \code{runKinship()} wrapper functions, you must specify the path to the genetics data file manually e.g.,
 
 \code{readGeneticData(fileloc = paste0(getwd(),"/Data/", paste0(list.files(paste0(getwd(),"/Data/")))))}
 

@@ -6,6 +6,9 @@
 \usage{
 handleError_allZeros(dataset)
 }
+\arguments{
+\item{dataset}{Takes a file with SNP data with a Coral_ID column as the first column and SNP data in the remaining columns.}
+}
 \value{
 Returns a data frame of colonies with all NA values. If this is NULL, then nothing happens, but if this is a data frame with at least one observation, then isolateAllNAColonies() will remove the offending individuals and append to the genet assigment table.
 }

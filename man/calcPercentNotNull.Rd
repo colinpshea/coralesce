@@ -6,6 +6,9 @@
 \usage{
 calcPercentNotNull(x)
 }
+\arguments{
+\item{x}{Takes data (usually a vector) and calculated the percentage of observations that are not NA values. This is used to calculate the percentage of loci with valid SNP data.}
+}
 \description{
 This function calculates the percentage of columns (loci) that are NOT NA values i.e., that have valid SNP data.
 }

@@ -6,6 +6,9 @@
 \usage{
 handleError_CoralID(dataset)
 }
+\arguments{
+\item{dataset}{A data frame with some sort of coral colony identifier (ideally named Coral_ID)}
+}
 \description{
 This function notifies users that the Coral_ID column name was changed.
 }

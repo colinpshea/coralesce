@@ -6,6 +6,11 @@
 \usage{
 handleError_ProhibitedData(dataset, acceptableData)
 }
+\arguments{
+\item{dataset}{A data frame to be tested with a Coral_ID column and SNP data, along with other fields such as site name etc.}
+
+\item{acceptableData}{A data frame with acceptable data that is allowable; here, these are IUPAC SNP data.}
+}
 \description{
 This function notifies users that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the IUPAC reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
 }
