@@ -7,7 +7,7 @@
 omitInvariantLoci(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with individual colonies as rows and loci with SNP data as columns.}
+\item{dataset}{A data frame with \code{1:nrow(dataset)} individual colonies as rows and loci with SNP data in \code{2:ncol(dataset)} columns.}
 }
 \value{
 This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations that must exclude invariant loci (see \code{runKinship()} and \code{kinshipCalcsNoInvar()}).

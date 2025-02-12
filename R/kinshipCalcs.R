@@ -1,7 +1,7 @@
 #' Calculate pairwise kinship for all possible pairwise comparisons.
 #' @description This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
-#' @param dataset A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from `convertBasePairstoCodes()`.
-#' @returns This function calculates pairwise kinship for all possible comparisons of alleles among individuals. Note that these are simply calculation and this function does not exclude invariant loci (`omitInvariantLoci()`, used by `kinshipCalcsNoInvar()` for additional kinship calculations, does that). 
+#' @param dataset A data frame with `Coral_ID` column as unique identifier for `1:nrow(dataset)` colonies and SNP data at `2:ncol(dataset)` loci; this is a data frame resulting from `convertBasePairstoCodes()`.
+#' @returns This function calculates pairwise kinship for all possible comparisons of alleles among individuals. Note that these are simply kinship calculations and this function does *not* exclude invariant loci (`kinshipCalcsNoInvar()` uses `omitInvariantLoci()`and `kinshipCalcs()`). 
 #' @importFrom matrixStats rowProds
 #' @export
 kinshipCalcs <- function(dataset){

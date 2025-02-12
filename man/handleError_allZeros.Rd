@@ -10,8 +10,8 @@ handleError_allZeros(dataset)
 \item{dataset}{Takes a file with SNP data with a \code{Coral_ID} column as the first column and SNP data in the remaining columns.}
 }
 \value{
-This function returns a data frame of colonies with all NA values, which is then evaluated by \code{isolateAllNAColonies()}. If this is \code{NULL}, then nothing happens, but if a data frame with at least one observation is returned, then \code{isolateAllNAColonies()} will remove the offending individuals and append their data to the genet assignment table. These functions also issue a warning message notifying users of the identity of the offending colonies.
+This function returns a data frame of colonies with all NA values, which is then evaluated by \code{isolateAllNAColonies()}. If this is \code{NULL}, then nothing happens, but if a data frame with at least one observation is returned, then \code{isolateAllNAColonies()} will remove the offending individuals and append their data to the genet assignment table. If any \code{allNA} colonies are identified, this function also issues a warning message notifying users of the identity of the offending colonies.
 }
 \description{
-This function finds colonies with all \code{NA} values, report with a message, and separates the \code{allNA} individuals from the rest of the data. These \code{allNA} individuals are appended to the genet classification file and assigned \code{genet = NA}, \code{pctNULL = 100}, and \code{AdequateData = No}.
+This function finds colonies with all \code{NA} values, report with a message, and separates the \code{allNA} individuals from the rest of the data. These \code{allNA} individuals are appended to the genet classification file and assigned \code{genet = XXXX_NA}, \code{pctNULL = 100}, and \code{AdequateData = No}.
 }

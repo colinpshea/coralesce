@@ -7,11 +7,11 @@
 determineAllAlleleMatches(dataset)
 }
 \arguments{
-\item{dataset}{This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: TRUE or FALSE). All possible pairwise comparisons with selves and others are included here. The resulting file is used by \code{groupByGenets()} which assigns colonies to genets.}
+\item{dataset}{A data frame with \code{Coral_ID} as the first column and single-letter \code{IUPAC} allele data for \code{nrow(dataset)} colonies at each of \code{2:ncol(dataset)} loci.}
 }
 \value{
-This function returns a data frame with all possible comparisons of alleles at loci for all colonies in in comparison with themselves (i.e., so they can be classified to their own genet if they are the only member).
+This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: \code{TRUE} or \code{FALSE}). All possible pairwise comparisons with selves and others are included here. The resulting file is used by \code{groupByGenets()}, which assigns colonies to genets.
 }
 \description{
-For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies \code{classifyAllelePairs()}, one column or locus at a time, by looping sequentially through all of \code{N} loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons.
+For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies \code{classifyAllelePairs()}, one column or locus at a time, by looping sequentially through all of \code{2:ncol(dataset)} loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons.
 }

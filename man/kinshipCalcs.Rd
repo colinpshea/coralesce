@@ -7,10 +7,10 @@
 kinshipCalcs(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with Coral_ID column as unique identifier (rows) and loci as columns; this is a data frame resulting from \code{convertBasePairstoCodes()}.}
+\item{dataset}{A data frame with \code{Coral_ID} column as unique identifier for \code{1:nrow(dataset)} colonies and SNP data at \code{2:ncol(dataset)} loci; this is a data frame resulting from \code{convertBasePairstoCodes()}.}
 }
 \value{
-This function calculates pairwise kinship for all possible comparisons of alleles among individuals. Note that these are simply calculation and this function does not exclude invariant loci (\code{omitInvariantLoci()}, used by \code{kinshipCalcsNoInvar()} for additional kinship calculations, does that).
+This function calculates pairwise kinship for all possible comparisons of alleles among individuals. Note that these are simply kinship calculations and this function does \emph{not} exclude invariant loci (\code{kinshipCalcsNoInvar()} uses \code{omitInvariantLoci()}and \code{kinshipCalcs()}).
 }
 \description{
 This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.

@@ -2,15 +2,15 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_CoralID}
 \alias{handleError_CoralID}
-\title{Notify user that Coral_ID field name had to be changed.}
+\title{Notify user that \code{Coral_ID} field name had to be changed.}
 \usage{
 handleError_CoralID(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with some sort of coral colony identifier (ideally named \code{Coral_ID}).}
+\item{dataset}{A data frame with some sort of coral colony identifier (ideally named \code{Coral_ID}) and SNP genetic data (and perhaps other fields) in the remaining columns.}
 }
 \value{
-This function returns a warning message notifying users of the presence and identify of colonies with all \code{NA} SNP data (i.e., missing values at all loci, so no valid genetic data).
+This function returns a warning message notifying users that the colony identifier field was changed to \code{Coral_ID} prior to any genet assignment or kinship calculations. If the column is already called \code{Coral_ID} then nothing happens and no warning message is issued.
 }
 \description{
 This function notifies users that the \code{Coral_ID} column name was changed.

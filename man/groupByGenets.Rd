@@ -13,7 +13,7 @@ groupByGenets(
 )
 }
 \arguments{
-\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = loci; with one-letter codes for allele combinations and \code{NA} for \verb{?} or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function.}
+\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = SNP data at loci; with one-letter codes for allele combinations and \code{NA} for \verb{?} or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function.}
 
 \item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
 
@@ -21,7 +21,7 @@ groupByGenets(
 
 \item{PctNotNullThreshold}{Defaults to \code{NULL} but must be specified (can be specified in \code{runGenets()} wrapper function)}
 
-\item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is FALSE.}
+\item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is \code{FALSE}.}
 }
 \value{
 This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when \code{getPairwiseAlleleMatches = TRUE}).
