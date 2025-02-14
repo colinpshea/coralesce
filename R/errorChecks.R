@@ -4,7 +4,7 @@
 #' @returns This function returns a warning message notifying users that the colony identifier field was changed to `Coral_ID` prior to any genet assignment or kinship calculations. If the column is already called `Coral_ID` then nothing happens and no warning message is issued.  
 #' @export
 handleError_CoralID <- function(dataset) {
-  if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and kinship calculations.
+  if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and/or kinship calculations.
                                                   ")}
 }
 
@@ -33,7 +33,7 @@ handleError_allZeros <- function(dataset){
 #' @export
 handleError_ProhibitedData <- function(dataset, acceptableData) {
   if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {
-    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed from this file prior to genet assignment and kinship calculations.
+    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed prior to genet assignment and/or kinship calculations.
             ")
     message(cat("The offending columns are:", names(dataset[2:ncol(dataset)])[colSums(apply(dataset[2:ncol(dataset)], 2, checkforAllowableData)) != nrow(dataset)], sep = "\n"))
   }
