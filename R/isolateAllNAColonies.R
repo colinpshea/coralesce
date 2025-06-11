@@ -5,8 +5,8 @@
 #' @export
 isolateAllNAColonies <- function(dataset){
   allNA <- handleError_allZeros(dataset)
-  if (is.null(allNA)==TRUE){return(list(dataset, NULL))}
-  if (is.null(allNA)==FALSE){
+  if (is.null(allNA)){return(list(dataset, NULL))}
+  if (!(is.null(allNA))){
     allNA <- allNA %>% mutate(pctNull = 100) %>% select(Coral_ID, genet, pctNull, AdequateData)
     dataset <- dataset %>% filter(!(Coral_ID %in% allNA$Coral_ID))
     return(list(dataset, allNA))

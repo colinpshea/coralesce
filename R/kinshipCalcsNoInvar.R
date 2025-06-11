@@ -10,7 +10,7 @@
 #' @export
 kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
   if (subset == FALSE){
-    if (is.null(targetN)==FALSE) {stop(cat(paste("subset = FALSE but you have entered a value for targetN."), paste("You either mistakenly entered a value for targetN or meant to specify subset = TRUE."), sep = "\n"))
+    if (!(is.null(targetN))) {stop(cat(paste("subset = FALSE but you have entered a value for targetN."), paste("You either mistakenly entered a value for targetN or meant to specify subset = TRUE."), sep = "\n"))
       }
   dat1 <- omitInvariantLoci(dataset = dataset)
   dat2 <- determineAllAlleleMatchesOthers(dataset = dat1)
@@ -24,7 +24,7 @@ kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL){
 return(list(PopAvgMKGD = PopAvgMKGD, MK_init = MK_init, MK_final = NULL))
     }  
   if (subset==TRUE){
-    if (is.null(targetN)==TRUE) {stop(cat(paste("subset = TRUE but you have not entered a value for targetN."), paste("When subset = TRUE, a targetN value must be entered for this function to work properly."), paste("You either meant to enter subset = FALSE or forgot to enter a value for targetN."), sep = "\n"))
+    if (is.null(targetN)) {stop(cat(paste("subset = TRUE but you have not entered a value for targetN."), paste("When subset = TRUE, a targetN value must be entered for this function to work properly."), paste("You either meant to enter subset = FALSE or forgot to enter a value for targetN."), sep = "\n"))
     }
     
   if (targetN <2) {stop(cat("When subset = TRUE, targetN must be ≥ 2", sep = "\n"))
