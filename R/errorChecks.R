@@ -38,3 +38,14 @@ handleError_ProhibitedData <- function(dataset, acceptableData) {
     message(cat("The offending columns are:", names(dataset[2:ncol(dataset)])[colSums(apply(dataset[2:ncol(dataset)], 2, checkforAllowableData)) != nrow(dataset)], sep = "\n"))
   }
 }
+
+#' Notify user that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted. 
+#' @description This function notifies users that that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted because downstream functions involve a pivot that requires unique row (colony) names. The process is stopped and the offending colonies are identified for the user.  
+#' @param dataset A data frame to be tested with a `Coral_ID` column and SNP data, along with other fields such as site name etc. 
+#' @param acceptableData A data frame with acceptable data that is allowable; here, these are `IUPAC` SNP data. 
+#' @returns This function returns a warning message notifying users of the presence and identity of columns in their data that do not adhere to formatting requirements. This is used in conjunction with `handleError_ProhibitedData()` in the `readGeneticData()`, which uses this function and also omits the offending columns.
+#' @export
+find_dups <- function(df){
+  IDs <- df %>% group_by(Coral_ID) %>% summarise(N = n()) %>% filter(N>1) %>% pull(Coral_ID)
+  if(length(IDs)>0) {message(cat("At least one colony has multiple versions of SNP data which is not permitted. The offending colonies are:", IDs, sep = "\n"))}
+}
