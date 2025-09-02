@@ -27,6 +27,6 @@ readGeneticData <- function(fileloc) {
   names(raw)[1] <- "Coral_ID"
   raw[is.na(raw)] <- "?"
   handleError_ProhibitedData(raw, acceptableData = IUPAC)
-  stopifnot(find_dups(raw))  
+  find_dups(raw)
   return(raw)
 }

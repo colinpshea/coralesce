@@ -47,5 +47,5 @@ handleError_ProhibitedData <- function(dataset, acceptableData) {
 #' @export
 find_dups <- function(df){
   IDs <- df %>% group_by(Coral_ID) %>% summarise(N = n()) %>% filter(N>1) %>% pull(Coral_ID)
-  if(length(IDs)>0) {message(cat("At least one colony has multiple versions of SNP data which is not permitted. The offending colonies are:", IDs, sep = "\n"))}
+  if(length(IDs)>0) {stop(cat("At least one colony has multiple versions of SNP data which is not permitted. The offending colonies are:", IDs, sep = "\n"))}
 }
