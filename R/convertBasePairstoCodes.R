@@ -26,7 +26,7 @@ convertBasePairstoCodes <- function(initdata) {
     )
   #removes the column with the 3 character alleles (colin deleted .data$Allelepairs because apparently it's deprecated 01/16/25)
   clean <- translated %>%
-    select(-.data$Allelepairs)
+    select(-Allelepairs)
   #pivots the table back out to wide form with each locus as a column
   wideclean <- clean %>%
     pivot_wider(
