@@ -26,4 +26,4 @@ Imports:
     ,stringi
     ,stringr
 Depends: dplyr, tidyr
-VignetteBuilder: knitr, quarto
+VignetteBuilder: quarto
