@@ -24,9 +24,12 @@ readGeneticData <- function(fileloc) {
   raw <- map(raw, stri_replace_all_regex," ", "") %>%
     as.data.frame
   handleError_CoralID(raw)
+  handleError_MatchMakerIndex(raw)
   names(raw)[1] <- "Coral_ID"
+  names(raw)[2] <- "MatchMaker_Index"
   raw[is.na(raw)] <- "?"
   handleError_ProhibitedData(raw, acceptableData = IUPAC)
   find_dups(raw)
-  return(raw)
+  index <- raw %>% select(Coral_ID, MatchMaker_Index)
+  return(list(raw, index))
 }

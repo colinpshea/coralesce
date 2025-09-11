@@ -27,12 +27,14 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
   #### Loop through all available data files
   for (i in 1:length(fileList)){
     a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
+    a1 <- a[[1]]
+    a2 <- a[[2]]
     b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))
     b1 <- b[[1]] # data frame with colonies that DO NOT have NA values at all loci
     b2 <- b[[2]] # data frame with colonies that DO have NA values at all loci
     c <- determineAllAlleleMatches(dataset = b1)
     d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPairwiseAlleleMatches = getPairwiseAlleleMatches)
-    d2 <- d1$genetAssignment %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
+    d2 <- d1$genetAssignment %>% add_row(b2) %>% left_join(a2, by = Coral_ID) %>% arrange(MatchMaker_Index) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
     write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
     if (getPairwiseAlleleMatches==TRUE){write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
     }
