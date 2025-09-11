@@ -26,7 +26,7 @@ runKinship <- function(subset = FALSE, targetN = NULL){
   
   #### Loop through all available data files
   for (i in 1:length(fileList)){
-    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]])) 
+    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
     b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
