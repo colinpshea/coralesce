@@ -8,6 +8,16 @@ handleError_CoralID <- function(dataset) {
                                                   ")}
 }
 
+#' Notify user that `MatchMaker_Index` field name had to be changed.
+#' @description This function notifies users that the `MatchMaker_Index` column name was changed. 
+#' @param dataset A data frame with some sort of coral colony identifier (ideally named `MatchMaker_Index` and `Coral_ID`) and SNP genetic data (and perhaps other fields) in the remaining columns. The MatchMaker_Index is not used explicitly by MatchMakeR and is simply used for bookkeeping purposes in the database. 
+#' @returns This function returns a warning message notifying users that the MatchMakeR colony identifier field was changed to `MatchMaker_Index` prior to any genet assignment or kinship calculations. If the column is already called `MatchMaker_Index` then nothing happens and no warning message is issued.  
+#' @export
+handleError_MatchMakerIndex <- function(dataset) {
+  if (!("MatchMaker_Index" %in% names(dataset))) {message("The MatchMaker index colony identifier field was manually renamed MatchMaker_Index prior to genet assignment and/or kinship calculations.
+                                                  ")}
+}
+
 #' Notify user that colonies with no valid SNP data were found. 
 #' @description This function finds colonies with all `NA` values, report with a message, and separates the `allNA` individuals from the rest of the data. These `allNA` individuals are appended to the genet classification file and assigned `genet = XXXX_NA`, `pctNULL = 100`, and `AdequateData = No`.
 #' @param dataset Takes a file with SNP data with a `Coral_ID` column as the first column and SNP data in the remaining columns. 

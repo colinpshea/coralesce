@@ -7,9 +7,9 @@
 #' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding percent match and percent not null values. The default value is `FALSE`.
 #' @returns This function returns up to two objects depending on user inputs: 
 #' 
-#' The first object, `genetAssignment` is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
+#' The first object, `genetAssignment` is a data frame with a single row for each colony along with their Coral_ID, MatchMaker_Index number, genet number,  percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
 #' 
-#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files and are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
+#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files that are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
 #'  
 #' @importFrom stringr str_detect str_pad
 #' @export
@@ -27,16 +27,22 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
   #### Loop through all available data files
   for (i in 1:length(fileList)){
     a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))
+    a1 <- a[[1]] # data frame with processed SNP data
+    a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
+    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))
     b1 <- b[[1]] # data frame with colonies that DO NOT have NA values at all loci
     b2 <- b[[2]] # data frame with colonies that DO have NA values at all loci
     c <- determineAllAlleleMatches(dataset = b1)
     d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPairwiseAlleleMatches = getPairwiseAlleleMatches)
-    d2 <- d1$genetAssignment %>% add_row(b2) %>% arrange(genet, Coral_ID) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0)))
-    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
-    if (getPairwiseAlleleMatches==TRUE){write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
-    }
+    d2 <- d1$genetAssignment %>% add_row(b2) %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0))) %>% select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
   }
-  if (getPairwiseAlleleMatches==TRUE){ return(list(genetAssignments = d2, pairwiseAlleleMatches = d1))}
-  if (getPairwiseAlleleMatches==FALSE){ return(list(genetAssignments = d2))}
+  if (getPairwiseAlleleMatches==TRUE){
+    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
+    write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
+    return(list(genetAssignments = d2, pairwiseAlleleMatches = d1$pairwiseAlleleMatches))
+    }
+  if (getPairwiseAlleleMatches==FALSE){
+    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
+    return(list(genetAssignments = d2))
+    }
 }

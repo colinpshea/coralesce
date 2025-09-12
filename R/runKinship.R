@@ -7,7 +7,7 @@
 #' 
 #' The first object, `PopAvgMKGD` is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship). 
 #' 
-#' The second object, `MK_init`, is a data frame with a row for each coral colony and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
+#' The second object, `MK_init`, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
 #' 
 #' The third object, `MK_final` is simular to `MK_init` except it only has `targetN` rows/individuals. 
 #'  
@@ -26,19 +26,25 @@ runKinship <- function(subset = FALSE, targetN = NULL){
   
   #### Loop through all available data files
   for (i in 1:length(fileList)){
-    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]])) 
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a))[[1]]
+    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
+    a1 <- a[[1]] # data frame with processed SNP data
+    a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
+    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))[[1]]
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
     if (subset==FALSE){
-    write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d$MK_init, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
+      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
+      write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
+      return(list(PopAvgMKGD = d$PopAvgMKGD, kinship_init = d1))
     }
     if (subset==TRUE){
-    write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d$MK_init, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d$MK_final, paste0(resultsLocation,"/","kinship_targetN_", paste0(fileList[[i]])), row.names = F)
+      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      d2 <- d$MK_final %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
+      write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
+      write.csv(d2, paste0(resultsLocation,"/","kinship_targetN_", paste0(fileList[[i]])), row.names = F)
+      return(list(PopAvgMKGD = d$PopAvgMKGD, kinship_init = d1, kinship_targetN = d2))
     }
   }
-  return(list(kinshipCalculations = d))
 }
