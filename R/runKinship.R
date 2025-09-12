@@ -33,14 +33,14 @@ runKinship <- function(subset = FALSE, targetN = NULL){
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
     if (subset==FALSE){
-      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
       write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
       write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
       return(list(PopAvgMKGD = d$PopAvgMKGD, kinship_init = d1))
     }
     if (subset==TRUE){
-      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
-      d2 <- d$MK_final %>% left_join(a2, by = "Coral_ID") %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      d2 <- d$MK_final %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
       write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
       write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
       write.csv(d2, paste0(resultsLocation,"/","kinship_targetN_", paste0(fileList[[i]])), row.names = F)
