@@ -29,7 +29,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
     a1 <- a[[1]] # data frame with processed SNP data
     a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))
+    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))[[1]]
     b1 <- b[[1]] # data frame with colonies that DO NOT have NA values at all loci
     b2 <- b[[2]] # data frame with colonies that DO have NA values at all loci
     c <- determineAllAlleleMatches(dataset = b1)
