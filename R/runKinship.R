@@ -27,9 +27,10 @@ runKinship <- function(subset = FALSE, targetN = NULL){
   #### Loop through all available data files
   for (i in 1:length(fileList)){
     a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
-    a1 <- a[[1]] # data frame with Coral_ID and MatchMaker_Index
-    a2 <- a[[2]] # data frame with processed SNP data
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))[[1]]
+    a1 <- a[[1]] # data frame with processed SNP data
+    a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
+#    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))[[1]]
+    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))
     c <- omitInvariantLoci(b)
     d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
     d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
