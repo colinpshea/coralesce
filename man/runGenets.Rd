@@ -2,7 +2,7 @@
 % Please edit documentation in R/runGenets.R
 \name{runGenets}
 \alias{runGenets}
-\title{Calculate genet assignments and pariwise comparisons in a single function}
+\title{Calculate genet assignments and pairwise comparisons in a single function}
 \usage{
 runGenets(
   PctMatchThreshold = NULL,

@@ -16,9 +16,9 @@ This function returns up to three objects depending on user inputs:
 
 The first object, \code{PopAvgMKGD} is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship).
 
-The second object, \code{MK_init}, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
+The second object, \code{kinship_init}, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
 
-The third object, \code{MK_final} is simular to \code{MK_init} except it only has \code{targetN} rows/individuals.
+The third object, \code{kinship_targetN} is similar to \code{kinship_init} except it only has \code{targetN} rows/individuals.
 }
 \description{
 This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save results to the \code{Results} folder. To read in the data, this function passes the \code{Data} path to \code{readGeneticData()} as the \code{fileloc} argument. If there is more than one file in \code{Data}, the function will cycle through each file and save results to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.
