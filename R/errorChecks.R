@@ -14,7 +14,7 @@ handleError_CoralID <- function(dataset) {
 #' @returns This function returns a warning message notifying users that the MatchMakeR colony identifier field was changed to `MatchMaker_Index` prior to any genet assignment or kinship calculations. If the column is already called `MatchMaker_Index` then nothing happens and no warning message is issued.  
 #' @export
 handleError_MatchMakerIndex <- function(dataset) {
-  if (!("MatchMaker_Index" %in% names(dataset))) {message("The MatchMaker_Index colony identifier field was manually renamed MatchMaker_Index prior to genet assignment and/or kinship calculations.
+  if (!("MatchMaker_Index" %in% names(dataset))) {message("The MatchMaker index colony identifier field was manually renamed MatchMaker_Index prior to genet assignment and/or kinship calculations.
                                                   ")}
 }
 

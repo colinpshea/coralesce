@@ -7,7 +7,7 @@
 #' 
 #' The first object, `PopAvgMKGD` is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship). 
 #' 
-#' The second object, `MK_init`, is a data frame with a row for each coral colony and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
+#' The second object, `MK_init`, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
 #' 
 #' The third object, `MK_final` is simular to `MK_init` except it only has `targetN` rows/individuals. 
 #'  
