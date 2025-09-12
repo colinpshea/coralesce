@@ -1,6 +1,6 @@
 Package: MatchMakeR
 Title: Group coral colonies based on genetic relatedness
-Version: 1.0.0.1
+Version: 1.0.0.2
 Authors@R: c(
     person("Shea", "Colin", email="Colin.Shea@MyFWC.com", role = c("aut", "cre")),
     person("Gentry", "Lauren", email="Lauren.Gentry@MyFWC.com", role="aut"),
