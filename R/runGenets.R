@@ -39,7 +39,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
   }
   if (getPairwiseAlleleMatches==TRUE){
-    return(list(genetAssignments = d2, pairwiseAlleleMatches = d1))
+    return(list(genetAssignments = d2, pairwiseAlleleMatches = d1$pairwiseAlleleMatches))
     }
   if (getPairwiseAlleleMatches==FALSE){
     return(list(genetAssignments = d2))
