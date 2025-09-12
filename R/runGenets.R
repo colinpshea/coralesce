@@ -1,4 +1,4 @@
-#' Calculate genet assignments and pariwise comparisons in a single function
+#' Calculate genet assignments and pairwise comparisons in a single function
 #'
 #' @description This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. To read in the data, this function passes the `Data` path to `readGeneticData()` as the `fileloc` argument. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
 #' 
