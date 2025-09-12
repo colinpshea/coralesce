@@ -35,13 +35,14 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getP
     c <- determineAllAlleleMatches(dataset = b1)
     d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPairwiseAlleleMatches = getPairwiseAlleleMatches)
     d2 <- d1$genetAssignment %>% add_row(b2) %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0))) %>% select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
-    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
   }
   if (getPairwiseAlleleMatches==TRUE){
+    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
+    write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
     return(list(genetAssignments = d2, pairwiseAlleleMatches = d1$pairwiseAlleleMatches))
     }
   if (getPairwiseAlleleMatches==FALSE){
+    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
     return(list(genetAssignments = d2))
     }
 }
