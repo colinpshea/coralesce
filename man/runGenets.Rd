@@ -20,9 +20,9 @@ runGenets(
 \value{
 This function returns up to two objects depending on user inputs:
 
-The first object, \code{genetAssignment} is a data frame with a single row for each colony along with their genet number, percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined \code{PctMatchThreshold} and \code{PctNotNullThreshold} values.
+The first object, \code{genetAssignment} is a data frame with a single row for each colony along with their Coral_ID, MatchMaker_Index number, genet number,  percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined \code{PctMatchThreshold} and \code{PctNotNullThreshold} values.
 
-The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files and are only saved to the working directory if \code{getPairwiseAlleleMatches = TRUE}.
+The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files that are only saved to the working directory if \code{getPairwiseAlleleMatches = TRUE}.
 }
 \description{
 This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save results to the \code{Results} folder. To read in the data, this function passes the \code{Data} path to \code{readGeneticData()} as the \code{fileloc} argument. If there is more than one file in \code{Data}, this function will cycle through each file and save results for each data file to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.
