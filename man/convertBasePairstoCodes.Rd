@@ -2,16 +2,24 @@
 % Please edit documentation in R/convertBasePairstoCodes.R
 \name{convertBasePairstoCodes}
 \alias{convertBasePairstoCodes}
-\title{Convert base pairs to single character IUPAC codes}
+\title{Convert base-pair genotypes to single-letter IUPAC codes}
 \usage{
 convertBasePairstoCodes(initdata)
 }
 \arguments{
-\item{initdata}{A data frame containing a column \code{Coral_ID} with unique value per row, as well as at least one column containing base pair data with at least one value matching valid allele data in the \code{IUPAC} table.}
+\item{initdata}{A data frame with a \code{Coral_ID} column and one or more columns
+of paired-allele SNP data. Non-conforming columns (e.g., site name, an
+invalid base pair, or the bookkeeping \code{MatchMaker_Index}) are dropped here;
+they are reported separately by \code{\link[=handleError_ProhibitedData]{handleError_ProhibitedData()}}.}
 }
 \value{
-This function returns a data frame identical to the input data frame except the paired alleles (e.g., G:) are replace by single allele codes (e.g., G). Note that only "allowable data" are included in the resulting data frame, and any columns not adhering to the data formatting requirements are omitted by \code{checkforAllowableData()} and listed in a warning issued by \code{handleError_ProhibitedData()}.
+A wide data frame with \code{Coral_ID} and one single-letter-code column
+per valid locus.
 }
 \description{
-This function replaces the base pairs with \code{IUPAC} codes and converts the data to wide format so that there is a column per locus. If any invalid characters are present in a column, then the entire column is deleted, a warning is issued, and the column names are reported.
+Keeps only \code{Coral_ID} and columns whose values are all valid
+allele pairs (per the \code{IUPAC} table), translates the paired alleles (e.g.,
+\code{G:G}) to single-letter IUPAC codes (e.g., \code{G}), and returns the result in
+wide format (one column per locus). Missing markers (\code{"?"}) are converted
+to \code{NA}.
 }

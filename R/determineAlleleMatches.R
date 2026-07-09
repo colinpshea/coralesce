@@ -1,15 +1,19 @@
-#' Assess matching of alleles, comparing to selves and other colonies.
-#' @description For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies `classifyAllelePairs()`, one column or locus at a time, by looping sequentially through all of `2:ncol(dataset)` loci. This function includes allele matches at each locus for colonies compared to themselves and compared to other colonies and is specifically used for genet assignment, which requires both types of comparisons. 
-#' @param dataset A data frame with `Coral_ID` as the first column and single-letter `IUPAC` allele data for `nrow(dataset)` colonies at each of `2:ncol(dataset)` loci. 
-#' @returns This function returns a data frame with six columns: `coral1` (name of coral 1), `coral2` (name of coral 2), `allele1` (allele for coral 1 at that locus), `allele2` (allele for coral 2 at that locus), `locus` (the locus name), and match (are the `IUPAC` alleles the same: `TRUE` or `FALSE`). All possible pairwise comparisons with selves and others are included here. The resulting file is used by `groupByGenets()`, which assigns colonies to genets. 
+#' Assess allele matches across all loci (self and other comparisons)
+#'
+#' @description Applies [classifyAllelePairs()] to every locus
+#'   (`2:ncol(dataset)`) and stacks the results. Includes both self- and
+#'   other-comparisons, as required for genet assignment via [groupByGenets()].
+#' @param dataset A data frame with `Coral_ID` in column 1 and single-letter
+#'   `IUPAC` allele data in the remaining columns.
+#' @returns A data frame with columns `coral1`, `coral2`, `allele1`, `allele2`,
+#'   `locus`, and `match`, covering all pairwise comparisons (self and other) at
+#'   every locus.
 #' @export
-determineAllAlleleMatches <- function(dataset){
-  A <- list()
-  for (j in 2:ncol(dataset)){
-    A[[j]] <- classifyAllelePairs(
-      dataset = dataset,
-      locus = j
-    )
+determineAllAlleleMatches <- function(dataset) {
+  if (ncol(dataset) < 2) {
+    stop("`dataset` must have Coral_ID plus at least one locus column.")
   }
-  do.call(rbind.data.frame, A)
+  do.call(rbind, lapply(2:ncol(dataset), function(j) {
+    classifyAllelePairs(dataset, locus = j, include_self = TRUE)
+  }))
 }

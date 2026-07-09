@@ -1,54 +1,82 @@
-#' Determine if individuals come from the same genet.
-#' @description This function compares alleles at loci among colonies and calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses `returnGenetIdentity()` for the genet classification.
-#' 
-#' @param CoralAlleleData Raw coral data (rows = coral colonies and columns = SNP data at loci; with one-letter codes for allele combinations and `NA` for `?` or blank values). This is used to append the colony-specific `pctNull` values to the genet assignment file created by this function.
-#' @param AlleleMatchResults data set with results of pairwise matching of alleles at each locus for all individuals and loci
-#' @param PctMatchThreshold Defaults to `NULL` but must be specified (can be specified in `runGenets()` wrapper function)
-#' @param PctNotNullThreshold Defaults to `NULL` but must be specified (can be specified in `runGenets()` wrapper function)
-#' @param getPairwiseAlleleMatches Do you want the function to return all pairwise comparisons of colonies? The default is `FALSE`.
-#' @returns This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when `getPairwiseAlleleMatches = TRUE`).
-#' @importFrom dplyr arrange if_else n rename add_row distinct
+#' Assign colonies to genets from pairwise allele matches
+#'
+#' @description For every pairwise comparison of colonies, computes the percent
+#'   of loci that match and the percent of loci with scorable data, applies the
+#'   user thresholds to decide which pairs are clones with adequate data, and
+#'   assigns colonies to genets via [returnGenetIdentity()]. Colonies whose
+#'   self-comparison falls below the data threshold are flagged
+#'   `AdequateData = No` and carried through with `genet = NA`.
+#' @param CoralAlleleData Wide single-letter allele data (`Coral_ID` plus one
+#'   column per locus); used to attach each colony's `pctNull`.
+#' @param AlleleMatchResults Pairwise allele-match results from
+#'   [determineAllAlleleMatches()].
+#' @param PctMatchThreshold Minimum percent allele match for a pair to be called
+#'   a clone. Required.
+#' @param PctNotNullThreshold Minimum percent of scorable loci required to trust
+#'   a comparison. Required.
+#' @param getPairwiseAlleleMatches Logical; if `TRUE`, also return the full
+#'   pairwise comparison table. Default `FALSE`.
+#' @returns A list with `genetAssignment` (columns `Coral_ID`, `genet`,
+#'   `pctNull`, `AdequateData`) and `pairwiseAlleleMatches` (the pairwise table,
+#'   or `NULL`).
+#' @importFrom dplyr select filter mutate if_else left_join arrange rename bind_rows
+#' @importFrom tidyr pivot_wider
+#' @importFrom magrittr %>%
 #' @export
-groupByGenets <- function(CoralAlleleData, AlleleMatchResults, PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE) {
-  
-  CoralAlleleData$pctNull <- 100 - apply(subset(CoralAlleleData, select = -Coral_ID), 1, calcPercentNotNull)
-  
+groupByGenets <- function(CoralAlleleData, AlleleMatchResults,
+                          PctMatchThreshold = NULL, PctNotNullThreshold = NULL,
+                          getPairwiseAlleleMatches = FALSE) {
+
+  if (is.null(PctMatchThreshold) || is.null(PctNotNullThreshold)) {
+    stop("Both PctMatchThreshold and PctNotNullThreshold must be supplied.",
+         call. = FALSE)
+  }
+
+  # Percent of loci with no data, per colony.
+  CoralAlleleData$pctNull <-
+    100 - apply(subset(CoralAlleleData, select = -Coral_ID), 1, calcPercentNotNull)
   CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
-  temp <- AlleleMatchResults %>% mutate(CoralPair = interaction(coral1, coral2)) %>% select(CoralPair, coral1, coral2, locus, match) %>% arrange(CoralPair, locus) %>% pivot_wider(names_from = locus, values_from = match)
-  
-  temp$pctMatch = rowMeans(temp[, 4:(ncol(temp))], na.rm = T)*100
-  
-  temp$pctNotNull <- apply(subset(temp, select = -c(CoralPair, coral1, coral2, pctMatch)), 1, calcPercentNotNull)
-  
-  temp %<>% mutate(PartOfGenet = ifelse(pctMatch >= PctMatchThreshold, "Yes", "No")) %>%
-    select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet)
-  
-  PartOfGenet_No <- temp %>% filter(PartOfGenet == "No")
-  
-  PartOfGenet_Yes <- temp %>% filter(PartOfGenet == "Yes") %>% 
-    mutate(flag = if_else(coral1 != coral2 & pctNotNull < PctNotNullThreshold, "drop", "keep")) %>%
-    filter(flag == "keep") %>% select(coral1, coral2, CoralPair, pctMatch, pctNotNull, PartOfGenet) %>%
-    mutate(AdequateData = if_else(coral1 == coral2 & pctNotNull < PctNotNullThreshold, "No", "Yes"))
-  
-  finalYesClonesAdequateYes <- PartOfGenet_Yes %>% filter(AdequateData == "Yes") %>% mutate(obs = 1:n())
-  
-  finalYesClonesAdequateNo <- PartOfGenet_Yes %>% filter(AdequateData == "No") %>%
-    mutate(genet = NA, pctNull = 100 - pctNotNull) %>%
+
+  # One row per colony pair; locus matches spread across columns.
+  temp <- AlleleMatchResults %>%
+    select(coral1, coral2, locus, match) %>%
+    arrange(coral1, coral2, locus) %>%
+    pivot_wider(names_from = locus, values_from = match)
+
+  locusCols       <- setdiff(names(temp), c("coral1", "coral2"))
+  temp$pctMatch   <- rowMeans(as.matrix(temp[, locusCols]), na.rm = TRUE) * 100
+  temp$pctNotNull <- apply(temp[, locusCols], 1, calcPercentNotNull)
+
+  temp <- temp %>%
+    mutate(PartOfGenet = if_else(pctMatch >= PctMatchThreshold, "Yes", "No")) %>%
+    select(coral1, coral2, pctMatch, pctNotNull, PartOfGenet)
+
+  # Keep clone pairs; drop cross-pairs with too little data; flag self-pairs
+  # that lack adequate data.
+  clones <- temp %>%
+    filter(PartOfGenet == "Yes") %>%
+    mutate(flag = if_else(coral1 != coral2 & pctNotNull < PctNotNullThreshold,
+                          "drop", "keep")) %>%
+    filter(flag == "keep") %>%
+    mutate(AdequateData = if_else(coral1 == coral2 & pctNotNull < PctNotNullThreshold,
+                                  "No", "Yes")) %>%
+    select(coral1, coral2, pctMatch, pctNotNull, PartOfGenet, AdequateData)
+
+  adequateYes <- clones %>% filter(AdequateData == "Yes")
+
+  adequateNo <- clones %>%
+    filter(AdequateData == "No") %>%
+    mutate(genet = NA_integer_, pctNull = 100 - pctNotNull) %>%
     select(coral1, genet, pctNull, AdequateData) %>%
     rename(Coral_ID = coral1)
-  
-  groupedGenets <- returnGenetIdentity(finalYesClonesAdequateYes)
-  
-  genetAssignment <- finalYesClonesAdequateYes %>%
-    left_join(groupedGenets, by = "obs") %>% 
-    select(coral1, coral2, genet, AdequateData) %>%
-    pivot_longer(-c(genet, AdequateData), names_to = NULL, values_to = "Coral_ID") %>% 
-    select(Coral_ID, genet, AdequateData) %>%
-    distinct(.) %>%  
-    arrange(genet) %>% 
+
+  genetAssignment <- returnGenetIdentity(adequateYes) %>%
+    mutate(AdequateData = "Yes") %>%
+    arrange(genet) %>%
     left_join(CoralAlleleData, by = "Coral_ID") %>%
-    select(Coral_ID, genet, pctNull, AdequateData) %>% 
-    add_row(finalYesClonesAdequateNo)
-  if (getPairwiseAlleleMatches==TRUE) {return(list(genetAssignment = genetAssignment, pairwiseAlleleMatches = temp))}
-  if (getPairwiseAlleleMatches==FALSE) {return(list(genetAssignment = genetAssignment, pairwiseAlleleMatches = NULL))}
-  }
+    select(Coral_ID, genet, pctNull, AdequateData) %>%
+    bind_rows(adequateNo)
+
+  pairwise <- if (isTRUE(getPairwiseAlleleMatches)) temp else NULL
+  list(genetAssignment = genetAssignment, pairwiseAlleleMatches = pairwise)
+}

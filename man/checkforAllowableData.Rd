@@ -2,16 +2,19 @@
 % Please edit documentation in R/checkforAllowableData.R
 \name{checkforAllowableData}
 \alias{checkforAllowableData}
-\title{Filter valid base pair combinations}
+\title{Flag values that are valid IUPAC allele pairs}
 \usage{
-checkforAllowableData(dataset)
+checkforAllowableData(x)
 }
 \arguments{
-\item{dataset}{A data frame, where the first column named \code{Coral_ID} uniquely identifies the colony in each row, and the second through last column each contain allele data for a single locus. The dataset may also contain additional variables such as site name etc. that are ultimately removed; the use is notified of such columns being removed by \code{handleError_ProhibitedData()} in \code{readGeneticData()}.}
+\item{x}{A vector of values to test (typically one column of the input data).}
 }
 \value{
-The supplied dataset with only SNP data and a column named \code{Coral_ID}.
+A logical vector the same length as \code{x}, \code{TRUE} where the value is a
+valid allele pair in \code{IUPAC$Allelepairs}.
 }
 \description{
-This function is used to only select columns that contain allowable characters; specifically, the allele pairs listed in the \code{IUPAC} table.
+Tests, element by element, whether the supplied values are
+allowable allele pairs as listed in the \code{IUPAC} reference table. Used to
+identify which columns of an input data set contain valid SNP data.
 }

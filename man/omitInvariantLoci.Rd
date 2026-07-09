@@ -2,16 +2,20 @@
 % Please edit documentation in R/omitInvariantLoci.R
 \name{omitInvariantLoci}
 \alias{omitInvariantLoci}
-\title{Identify and omit invariant loci for subsequent kinship calculations.}
+\title{Remove invariant loci}
 \usage{
 omitInvariantLoci(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with \code{1:nrow(dataset)} individual colonies as rows and loci with SNP data in \code{2:ncol(dataset)} columns.}
+\item{dataset}{A data frame with \code{Coral_ID} in column 1 and single-letter
+allele codes in the remaining columns.}
 }
 \value{
-This function returns the supplied data frame with invariant loci (i.e., columns) removed. This is done for subsequent kinship calculations that must exclude invariant loci (see \code{runKinship()} and \code{kinshipCalcsNoInvar()}).
+The input data frame with invariant loci removed.
 }
 \description{
-This function omits invariant loci for subsequent population- and individual-level kinship calculations.
+Drops loci (columns) that carry only a single distinct allele
+across colonies, as required before kinship calculations. All-\code{NA} loci are
+retained (they contribute nothing to kinship because such comparisons are
+never fully scorable) to preserve the original behaviour.
 }

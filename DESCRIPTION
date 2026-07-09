@@ -1,30 +1,35 @@
 Package: MatchMakeR
-Title: Group coral colonies based on genetic relatedness
-Version: 1.0.0.2
+Title: Group Coral Colonies Based on Genetic Relatedness
+Version: 1.1.0
 Authors@R: c(
-    person("Shea", "Colin", email="Colin.Shea@MyFWC.com", role = c("aut", "cre")),
-    person("Gentry", "Lauren", email="Lauren.Gentry@MyFWC.com", role="aut"),
-    person("Sauby", "Kristen", email="Kristen.Sauby@MyFWC.com", role="aut"))
-Description: What the package does (one paragraph). ADD INFO FROM AGENDA.
-License: use_mit_license()
+    person("Colin", "Shea", email = "Colin.Shea@MyFWC.com", role = c("aut", "cre")),
+    person("Lauren", "Gentry", email = "Lauren.Gentry@MyFWC.com", role = "aut"),
+    person("Kristen", "Sauby", email = "Kristen.Sauby@MyFWC.com", role = "aut"))
+Description: Assigns coral colonies to clonal groups (genets) from single
+    nucleotide polymorphism (SNP) data by comparing alleles at each locus across
+    all pairwise combinations of colonies, and computes individual- and
+    population-level mean kinship and gene diversity (excluding invariant loci).
+    Wrapper functions read genotype CSV files from a 'Data' folder and write
+    results to a 'Results' folder.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Depends:
+    R (>= 3.5.0)
+Imports:
+    dplyr,
+    igraph,
+    magrittr,
+    stringi,
+    stringr,
+    tidyr,
+    utils
 Suggests:
-    quarto,
     knitr,
+    quarto,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 LazyData: true
-Imports:
-    Rdpack
-    ,Matrix
-    ,igraph
-    ,magrittr
-    ,matrixStats
-    ,purrr
-    ,stringi
-    ,stringr
-Depends: dplyr, tidyr
 VignetteBuilder: knitr, quarto

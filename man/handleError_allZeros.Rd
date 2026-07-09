@@ -2,16 +2,22 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_allZeros}
 \alias{handleError_allZeros}
-\title{Notify user that colonies with no valid SNP data were found.}
+\title{Identify colonies with no valid SNP data}
 \usage{
 handleError_allZeros(dataset)
 }
 \arguments{
-\item{dataset}{Takes a file with SNP data with a \code{Coral_ID} column as the first column and SNP data in the remaining columns.}
+\item{dataset}{A data frame with \code{Coral_ID} in column 1 and single-letter
+allele codes in the remaining columns.}
 }
 \value{
-This function returns a data frame of colonies with all NA values, which is then evaluated by \code{isolateAllNAColonies()}. If this is \code{NULL}, then nothing happens, but if a data frame with at least one observation is returned, then \code{isolateAllNAColonies()} will remove the offending individuals and append their data to the genet assignment table. If any \code{allNA} colonies are identified, this function also issues a warning message notifying users of the identity of the offending colonies.
+A data frame of the all-\code{NA} colonies (with \code{genet} and
+\code{AdequateData} columns added), or \code{NULL} if there are none.
 }
 \description{
-This function finds colonies with all \code{NA} values, report with a message, and separates the \code{allNA} individuals from the rest of the data. These \code{allNA} individuals are appended to the genet classification file and assigned \code{genet = XXXX_NA}, \code{pctNULL = 100}, and \code{AdequateData = No}.
+Finds colonies that are \code{NA} at every locus. Such colonies
+cannot be assigned a genet from data and are handled separately: they are
+appended to the genet-assignment output with \code{genet = XXXX_NA},
+\code{pctNull = 100}, and \code{AdequateData = No}. Emits a message listing the
+affected colonies when any are found.
 }

@@ -2,18 +2,24 @@
 % Please edit documentation in R/errorChecks.R
 \name{handleError_ProhibitedData}
 \alias{handleError_ProhibitedData}
-\title{Notify user that non-conforming fields were found and omitted.}
+\title{Report columns that do not hold valid SNP data}
 \usage{
-handleError_ProhibitedData(dataset, acceptableData)
+handleError_ProhibitedData(dataset, acceptableData = IUPAC)
 }
 \arguments{
-\item{dataset}{A data frame to be tested with a \code{Coral_ID} column and SNP data, along with other fields such as site name etc.}
+\item{dataset}{A data frame with \code{Coral_ID}, \code{MatchMaker_Index}, SNP data, and
+possibly other fields.}
 
-\item{acceptableData}{A data frame with acceptable data that is allowable; here, these are \code{IUPAC} SNP data.}
+\item{acceptableData}{A reference table of allowable allele pairs (defaults to
+the package \code{IUPAC} table); must contain an \code{Allelepairs} column.}
 }
 \value{
-This function returns a warning message notifying users of the presence and identity of columns in their data that do not adhere to formatting requirements. This is used in conjunction with \code{checkforAllowableData()}, which uses this function and also omits the offending columns.
+Invisibly \code{NULL}; called for its message side effect.
 }
 \description{
-This function notifies users that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the \code{IUPAC} reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
+Checks every column other than the \code{Coral_ID} and
+\code{MatchMaker_Index} keys and reports (via message) any whose values are not
+all valid \code{IUPAC} allele pairs (e.g., a site-name column or an invalid base
+pair). Reporting only; the offending columns are actually dropped by
+\code{\link[=convertBasePairstoCodes]{convertBasePairstoCodes()}}.
 }

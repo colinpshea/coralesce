@@ -2,18 +2,28 @@
 % Please edit documentation in R/classifyAllelePairs.R
 \name{classifyAllelePairs}
 \alias{classifyAllelePairs}
-\title{Classify allele pairs}
+\title{Classify allele pairs at a single locus}
 \usage{
-classifyAllelePairs(dataset, locus)
+classifyAllelePairs(dataset, locus, include_self = TRUE)
 }
 \arguments{
-\item{dataset}{A data frame, where the first column is named \code{Coral_ID} that uniquely identifies each row (colony), and the second through last column each contain allele data for a single locus.}
+\item{dataset}{A data frame with \code{Coral_ID} in column 1 and single-letter
+\code{IUPAC} allele data for one locus per remaining column.}
 
-\item{locus}{The column number containing allele data for a single locus.}
+\item{locus}{The column index of the locus to classify.}
+
+\item{include_self}{Logical; include self-comparisons (default \code{TRUE}).}
 }
 \value{
-This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: \code{TRUE} or \code{FALSE}). All possible pairwise comparisons with selves and others are included here, and the resulting file is used by \code{determineAlleleMatches()} for subsequent genet assignments.
+A data frame with columns \code{coral1}, \code{coral2}, \code{allele1}, \code{allele2},
+\code{locus}, and \code{match} (\code{TRUE}/\code{FALSE}, or \code{NA} when either allele is
+missing).
 }
 \description{
-This function creates a data frame of all possible pairwise combinations of individuals and determines, for each locus, whether two individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies. This function works on one locus (i.e., column) at a time.
+Builds all pairwise combinations of colonies at one locus and
+flags, for each pair, whether the two colonies share the same allele. By
+default comparisons of each colony with itself are included (needed for
+genet assignment); set \code{include_self = FALSE} to return only comparisons
+with other colonies (used for kinship). Operates on one locus (column) at
+a time.
 }

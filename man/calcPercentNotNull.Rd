@@ -7,11 +7,13 @@
 calcPercentNotNull(x)
 }
 \arguments{
-\item{x}{Any data frame, matrix, vector.}
+\item{x}{A vector, matrix, or data frame.}
 }
 \value{
-This function takes data (a vector, data frame, or matrix) and calculates the percentage of observations that are not \code{NA} or \code{NULL} values. This is used to calculate the percentage of loci with valid SNP data.
+A single numeric value: the percentage of non-\code{NA} values in \code{x}.
 }
 \description{
-This function calculates the percentage of columns (loci) that are not \code{NA} or \code{NULL} values i.e., that have valid SNP data.
+Calculates the percentage of values in \code{x} that are not \code{NA}
+(i.e., that carry valid SNP data). Used to summarise the proportion of loci
+with usable data for a colony or a pairwise comparison.
 }

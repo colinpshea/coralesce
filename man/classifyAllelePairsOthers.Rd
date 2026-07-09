@@ -2,18 +2,22 @@
 % Please edit documentation in R/classifyAllelePairsOthers.R
 \name{classifyAllelePairsOthers}
 \alias{classifyAllelePairsOthers}
-\title{Classify allele pairs}
+\title{Classify allele pairs at a single locus (excluding self-comparisons)}
 \usage{
 classifyAllelePairsOthers(dataset, locus)
 }
 \arguments{
-\item{dataset}{A data frame, where the first is named \code{Coral_ID} that uniquely identifies each row (colony), and the second through last column each contain allele data for a single locus.}
+\item{dataset}{A data frame with \code{Coral_ID} in column 1 and single-letter
+\code{IUPAC} allele data for one locus per remaining column.}
 
-\item{locus}{The column number containing allele data for a single locus.}
+\item{locus}{The column index of the locus to classify.}
 }
 \value{
-This function returns a data frame with six columns: \code{coral1} (name of coral 1), \code{coral2} (name of coral 2), \code{allele1} (allele for coral 1 at that locus), \code{allele2} (allele for coral 2 at that locus), \code{locus} (the locus name), and match (are the \code{IUPAC} alleles the same: \code{TRUE} or \code{FALSE}). All possible pairwise comparisons others (not selves) are included here, and the resulting file is used by \code{kinshipCalcsNoInvar()} which calculates kinship and gene diversity for all colonies and subsets of colonies.
+A data frame with columns \code{coral1}, \code{coral2}, \code{allele1}, \code{allele2},
+\code{locus}, and \code{match}; self-comparisons are omitted.
 }
 \description{
-This function creates a data frame of all possible pairwise combinations of individuals and determines, for each  single locus, whether two individuals have the same allele or not. This function only returns comparisons for colonies with other colonies and not with themselves (\code{classifyAllelePairs()} does both for the genet assignment procedure). This function works on one locus (i.e., column) at a time.
+Convenience wrapper around \code{\link[=classifyAllelePairs]{classifyAllelePairs()}} that returns
+only comparisons of each colony with other colonies (no self-comparisons).
+Used by the kinship pipeline, which must exclude within-colony comparisons.
 }

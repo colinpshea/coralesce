@@ -1,41 +1,51 @@
-#' Classify allele pairs
-#' @description This function creates a data frame of all possible pairwise combinations of individuals and determines, for each locus, whether two individuals have the same allele or not. Comparisons are made for each colony with themselves AND with all other colonies. This function works on one locus (i.e., column) at a time. 
-#' @param dataset A data frame, where the first column is named `Coral_ID` that uniquely identifies each row (colony), and the second through last column each contain allele data for a single locus.
-#' @param locus The column number containing allele data for a single locus.
-#' @returns This function returns a data frame with six columns: `coral1` (name of coral 1), `coral2` (name of coral 2), `allele1` (allele for coral 1 at that locus), `allele2` (allele for coral 2 at that locus), `locus` (the locus name), and match (are the `IUPAC` alleles the same: `TRUE` or `FALSE`). All possible pairwise comparisons with selves and others are included here, and the resulting file is used by `determineAlleleMatches()` for subsequent genet assignments. 
-#' @importFrom magrittr %>% %<>%
+#' Classify allele pairs at a single locus
+#'
+#' @description Builds all pairwise combinations of colonies at one locus and
+#'   flags, for each pair, whether the two colonies share the same allele. By
+#'   default comparisons of each colony with itself are included (needed for
+#'   genet assignment); set `include_self = FALSE` to return only comparisons
+#'   with other colonies (used for kinship). Operates on one locus (column) at
+#'   a time.
+#' @param dataset A data frame with `Coral_ID` in column 1 and single-letter
+#'   `IUPAC` allele data for one locus per remaining column.
+#' @param locus The column index of the locus to classify.
+#' @param include_self Logical; include self-comparisons (default `TRUE`).
+#' @returns A data frame with columns `coral1`, `coral2`, `allele1`, `allele2`,
+#'   `locus`, and `match` (`TRUE`/`FALSE`, or `NA` when either allele is
+#'   missing).
 #' @export
-classifyAllelePairs <- function(dataset, locus){
-  locus_data <- data.frame(
-    dataset[,c(1,locus)]
+classifyAllelePairs <- function(dataset, locus, include_self = TRUE) {
+  locus_name <- names(dataset)[locus]
+  ids        <- as.character(dataset[[1]])
+  alleles    <- dataset[[locus]]
+
+  # Cross comparisons (unordered pairs of distinct colonies).
+  if (length(ids) >= 2) {
+    cp    <- t(utils::combn(ids, 2))
+    pairs <- data.frame(coral1 = cp[, 1], coral2 = cp[, 2],
+                        stringsAsFactors = FALSE)
+  } else {
+    pairs <- data.frame(coral1 = character(0), coral2 = character(0),
+                        stringsAsFactors = FALSE)
+  }
+
+  # Self comparisons.
+  if (isTRUE(include_self)) {
+    pairs <- rbind(pairs,
+                   data.frame(coral1 = ids, coral2 = ids,
+                              stringsAsFactors = FALSE))
+  }
+
+  a <- alleles[match(pairs$coral1, ids)]
+  b <- alleles[match(pairs$coral2, ids)]
+
+  data.frame(
+    coral1  = pairs$coral1,
+    coral2  = pairs$coral2,
+    allele1 = a,
+    allele2 = b,
+    locus   = locus_name,
+    match   = a == b,          # NA when either allele is missing
+    stringsAsFactors = FALSE
   )
-  possible_combos_others <- data.frame(
-    Coral_ID = t(combn(dataset$Coral_ID,2))
-  )
-  possible_combos_selves <- data.frame(
-    Coral_ID.1 = dataset$Coral_ID,
-    Coral_ID.2 = dataset$Coral_ID
-  )
-  possible_combos <- possible_combos_others %>%
-    rbind(possible_combos_selves) %>%
-    merge(locus_data, by.x="Coral_ID.1", by.y="Coral_ID") %>%
-    mutate(locus=names(.)[3]) %>%
-    merge(locus_data, by.x="Coral_ID.2", by.y="Coral_ID")
-  names(possible_combos) <-c(
-    "coral2",
-    "coral1",
-    "allele1",
-    "locus",
-    "allele2"
-  )
-  possible_combos %<>%
-    select(coral1, coral2, allele1, allele2, locus) %>%
-    mutate(
-      match = ifelse(
-        allele1==allele2,
-        TRUE,
-        FALSE
-      )
-    )
-  return(possible_combos)
 }

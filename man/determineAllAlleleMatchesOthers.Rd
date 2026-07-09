@@ -2,16 +2,20 @@
 % Please edit documentation in R/determineAlleleMatchesOthers.R
 \name{determineAllAlleleMatchesOthers}
 \alias{determineAllAlleleMatchesOthers}
-\title{Assess matching of alleles, comparing only to other colonies.}
+\title{Assess allele matches across all loci (other comparisons only)}
 \usage{
 determineAllAlleleMatchesOthers(dataset)
 }
 \arguments{
-\item{dataset}{A data frame, where the first column named \code{Coral_ID} that uniquely identifies each of \code{nrow(dataset)} colonies, and the second through last column each contain single-letter \code{IUPAC} allele data at \code{2:ncol(dataset)} loci.}
+\item{dataset}{A data frame with \code{Coral_ID} in column 1 and single-letter
+\code{IUPAC} allele data in the remaining columns.}
 }
 \value{
-This function, like \code{determineAlleleMatches()} which uses \code{classifyAllelePairs()} for the genet assignment procedure, uses \code{classifyAllelePairsOthers()} to create and return a data frame with all possible comparisons of alleles at loci for all colonies; here, however, comparisons of colonies with themselves are excluded as those comparisons are not relevant for kinship calculations.
+A data frame with columns \code{coral1}, \code{coral2}, \code{allele1}, \code{allele2},
+\code{locus}, and \code{match} for all comparisons of colonies with other colonies.
 }
 \description{
-For each pairwise combination of individuals, this function classifies allele pairs at each locus as either matching or not. This function applies the classifyAllelePairs function, one column or locus at a time, by looping sequentially through all of \code{n:ncol(dataset)} loci. This function ignores allele matches of colonies with themselves i.e., it only compares and assess allele matches at an individual's loci to those of other colonies, and is specifically used for kinship calculations using \code{kinshipCalcsNoInvar()}, which requires only comparisons of colonies with other colonies, not themselves.
+Applies \code{\link[=classifyAllelePairsOthers]{classifyAllelePairsOthers()}} to every locus
+(\code{2:ncol(dataset)}) and stacks the results. Excludes self-comparisons, as
+required for kinship via \code{\link[=kinshipCalcsNoInvar]{kinshipCalcsNoInvar()}}.
 }

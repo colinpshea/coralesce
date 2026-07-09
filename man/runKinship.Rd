@@ -2,24 +2,27 @@
 % Please edit documentation in R/runKinship.R
 \name{runKinship}
 \alias{runKinship}
-\title{Run all kinship calculations in a single function}
+\title{Run kinship calculations for every data file in the working directory}
 \usage{
 runKinship(subset = FALSE, targetN = NULL)
 }
 \arguments{
-\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
+\item{subset}{Logical; if \code{TRUE}, also compute the \code{targetN}-colony summary.
+Requires \code{targetN}. Default \code{FALSE}.}
 
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is \verb{< nrow(dataset)}, then kinship is recalculated, removing the individual with the highest average kinship, one individual at a time, until \code{targetN} individuals with the lowest average kinship remain.}
+\item{targetN}{Number of least-related colonies to retain when
+\code{subset = TRUE}. Must be >= 2.}
 }
 \value{
-This function returns up to three objects depending on user inputs:
-
-The first object, \code{PopAvgMKGD} is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship).
-
-The second object, \code{kinship_init}, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
-
-The third object, \code{kinship_targetN} is similar to \code{kinship_init} except it only has \code{targetN} rows/individuals.
+Invisibly, a list with \code{PopAvgMKGD} and \code{kinship_init} (each a named
+list of per-file data frames) and, when \code{subset = TRUE}, \code{kinship_targetN}.
+\verb{kinship_*} data frames have columns \code{Coral_ID}, \code{MatchMaker_Index},
+\code{ind_mean_kinship}.
 }
 \description{
-This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save results to the \code{Results} folder. To read in the data, this function passes the \code{Data} path to \code{readGeneticData()} as the \code{fileloc} argument. If there is more than one file in \code{Data}, the function will cycle through each file and save results to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.
+Wrapper that reads each genotype CSV in a \code{Data} folder and
+computes individual- and population-level mean kinship and gene diversity
+(excluding invariant loci), writing results to a \code{Results} folder. Requires
+\code{Data} and \code{Results} folders in the working directory. All CSV files in
+\code{Data} are processed; results are keyed by input file name.
 }

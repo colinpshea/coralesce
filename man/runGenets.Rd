@@ -2,7 +2,7 @@
 % Please edit documentation in R/runGenets.R
 \name{runGenets}
 \alias{runGenets}
-\title{Calculate genet assignments and pairwise comparisons in a single function}
+\title{Assign genets for every data file in the working directory}
 \usage{
 runGenets(
   PctMatchThreshold = NULL,
@@ -11,19 +11,26 @@ runGenets(
 )
 }
 \arguments{
-\item{PctMatchThreshold}{The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.}
+\item{PctMatchThreshold}{Minimum percent allele match across loci for two
+colonies to be called a match/clone. Required.}
 
-\item{PctNotNullThreshold}{The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ \code{PctMatchThreshold}), \code{PctNotNullThreshold} is the minimum allowable percentage of loci with valid (i.e., not \code{NULL} or \code{NA}) allele data for making a genet assignment. Individuals with values \verb{≥ PctNotNullThreshold} that are determined to be matches (with themselves or others) are classified as \code{AdequateData = No} and appended to the genet assignment file with \code{genet = XXXX_NA}, where \code{XXXX} is the 4-letter species code.}
+\item{PctNotNullThreshold}{Minimum percent of loci with valid data required to
+trust a comparison. Required.}
 
-\item{getPairwiseAlleleMatches}{Set to \code{TRUE} if you want to return a data frame with all pairwise comparisons and their corresponding percent match and percent not null values. The default value is \code{FALSE}.}
+\item{getPairwiseAlleleMatches}{Logical; if \code{TRUE}, also write and return the
+full pairwise comparison table for each file. Default \code{FALSE}.}
 }
 \value{
-This function returns up to two objects depending on user inputs:
-
-The first object, \code{genetAssignment} is a data frame with a single row for each colony along with their Coral_ID, MatchMaker_Index number, genet number,  percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined \code{PctMatchThreshold} and \code{PctNotNullThreshold} values.
-
-The second object, \code{pairwiseAlleleMatches}, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files that are only saved to the working directory if \code{getPairwiseAlleleMatches = TRUE}.
+Invisibly, a list with \code{genetAssignments} (a named list of
+per-file genet-assignment data frames) and, when
+\code{getPairwiseAlleleMatches = TRUE}, \code{pairwiseAlleleMatches} (a named list of
+per-file pairwise tables). Each genet-assignment data frame has columns
+\code{Coral_ID}, \code{MatchMaker_Index}, \code{genet}, \code{pctNull}, \code{AdequateData}.
 }
 \description{
-This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you \strong{MUST} have folders called \code{Data} and \code{Results} in your working directory. This function will look for a genetics data file in \code{Data} and save the results to the \code{Results} folder. To read in the data, this function passes the \code{Data} path to \code{readGeneticData()} as the \code{fileloc} argument. If there is more than one file in \code{Data}, this function will cycle through each file and save results for each data file to the \code{Results} folder; the file name for each file in the \code{Results} folder will include the name of the original data file.
+Wrapper that reads each genotype CSV in a \code{Data} folder, assigns
+colonies to genets, and writes a \verb{genetAssignment_<file>.csv} to a \code{Results}
+folder (optionally also a \verb{pairwiseAlleleMatches_<file>.csv}). Requires
+\code{Data} and \code{Results} folders in the working directory. All CSV files in
+\code{Data} are processed; results are keyed by input file name.
 }

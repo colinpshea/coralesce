@@ -2,18 +2,18 @@
 % Please edit documentation in R/errorChecks.R
 \name{find_dups}
 \alias{find_dups}
-\title{Notify user that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted.}
+\title{Stop if any colony has multiple rows of SNP data}
 \usage{
 find_dups(df)
 }
 \arguments{
-\item{dataset}{A data frame to be tested with a \code{Coral_ID} column and SNP data, along with other fields such as site name etc.}
-
-\item{acceptableData}{A data frame with acceptable data that is allowable; here, these are \code{IUPAC} SNP data.}
+\item{df}{A data frame with a \code{Coral_ID} column.}
 }
 \value{
-This function returns a warning message notifying users of the presence and identity of columns in their data that do not adhere to formatting requirements. This is used in conjunction with \code{handleError_ProhibitedData()} in the \code{readGeneticData()}, which uses this function and also omits the offending columns.
+Invisibly \code{df} if all \code{Coral_ID}s are unique; otherwise an error.
 }
 \description{
-This function notifies users that that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted because downstream functions involve a pivot that requires unique row (colony) names. The process is stopped and the offending colonies are identified for the user.
+Downstream reshaping requires one row per colony. This check
+stops with an informative error, listing the duplicated \code{Coral_ID}s, if any
+colony appears more than once.
 }

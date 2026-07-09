@@ -2,16 +2,24 @@
 % Please edit documentation in R/returnGenetIdentity.R
 \name{returnGenetIdentity}
 \alias{returnGenetIdentity}
-\title{Determine the genet identity of each coral colony based on pairwise comparisons of SNPs}
+\title{Assign colonies to genets from clonal pairings}
 \usage{
-returnGenetIdentity(obs)
+returnGenetIdentity(clonePairs)
 }
 \arguments{
-\item{obs}{a data frame created by \code{groupByGenets()} that has eight columns: \code{coral1}, \code{coral2}, \code{CoralPair}, \code{pctMatch}, \code{pctNotNull}, \code{PartOfGenet}, \code{AdequateData}, and \code{obs}. \code{coral1} identifies the first coral in the pair, \code{coral2} identifies the second coral in the pair, and \code{CoralPair} identifies the pair, taking the format of the first coral identity concatenated together with the second coral identity, separated by a period. \code{pctMatch} and \code{pctNotNull} summarize the alleles for the comparison being made, \code{PartOfGenet} means \code{pctMatch} exceeds a threshold for identifying individuals as a match or clone, \code{AdequateData} characterizes the frequency of \code{NULL} or \code{NA} values, and \code{obs} is simply a sequential observation number that is used to group genets.}
+\item{clonePairs}{A data frame of clone pairings with (at least) \code{coral1} and
+\code{coral2} columns, as produced within \code{\link[=groupByGenets]{groupByGenets()}}. Self-pairs
+(\code{coral1 == coral2}) are used to register singleton colonies.}
 }
 \value{
-This function returns a data frame with each colony assigned to a numeric genet number. Multiple colonies can belong to the same genet, but all corals are compared to themselves; hence, each colony is classified as a clone of itself by default, provided it had adequate SNP data. and they therefore occupy their own genet and are unrelated to any other colonies. Colonies previously determined to have insufficient data for this classification are not included in this analysis and are instead added to the genet assignment data frame at a later step with \code{genet = XXXX_NA}, where \code{XXXX} is the 4-letter species code.
+A data frame with columns \code{Coral_ID} and \code{genet} (an integer genet
+label), one row per colony.
 }
 \description{
-This function assigns coral colonies to genets based on all possible comparisons (i.e., comparing colonies to themselves and other colonies) genetic similarity of SNPs at each of N loci.
+Given the set of colony pairs judged to be clones (matching above
+threshold, with adequate data), assigns each colony to a genet. Colonies are
+nodes and clonal pairings are edges; each connected component is one genet.
+A colony that clones with no other colony forms its own single-member genet.
+The colony graph is built directly from the \code{coral1}/\code{coral2} columns, so
+colony identifiers may contain any characters (including periods).
 }

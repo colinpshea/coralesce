@@ -2,16 +2,23 @@
 % Please edit documentation in R/isolateAllNAColonies.R
 \name{isolateAllNAColonies}
 \alias{isolateAllNAColonies}
-\title{Isolate all NA colonies}
+\title{Separate colonies with no valid SNP data from the rest}
 \usage{
 isolateAllNAColonies(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with a unique \code{Coral_ID} for each of \code{nrow(dataset)} colonies as the first columns and \code{2:ncol(dataset)} additional columns that have valid \code{IUPAC-allele} codes (i.e., G, not G:G) representing SNP data at each of \code{2:ncol(dataset)} loci. This function is used in conjunction with \code{convertBasePairstoCodes()} during initial processing.}
+\item{dataset}{A wide data frame with a unique \code{Coral_ID} in column 1 and
+single-letter \code{IUPAC} allele codes in the remaining columns (as produced by
+\code{\link[=convertBasePairstoCodes]{convertBasePairstoCodes()}}).}
 }
 \value{
-This function returns two objects: (1) if such individuals are present, a data frame called \code{allNA} is returned with the identify of \code{allNA} colonies, and (2) a version of the input data frame that excludes any \code{allNA} colonies. If there are no \code{allNA} colonies, then the original data frame is returned and the \code{allNA} data frame is a \code{NULL} object. Additionally, if \code{allNA} individuals are present, their identifies will be listed in a warning message issues by \code{handleError_allZeros()}.
+A list of two elements: \verb{[[1]]} the data with all-\code{NA} colonies
+removed, and \verb{[[2]]} a data frame of the all-\code{NA} colonies (columns
+\code{Coral_ID}, \code{genet}, \code{pctNull}, \code{AdequateData}), or \code{NULL} if there are none.
 }
 \description{
-This function determines whether any colonies have \code{NA} values at all loci, in which case they are isolated in a new data frame called \code{allNA}. The remaining data frame contains colonies with SNP data at, at the very least, one locus.
+Splits the input into (1) colonies that have at least one scored
+locus and (2) colonies that are \code{NA} at every locus. The latter are
+identified by \code{\link[=handleError_allZeros]{handleError_allZeros()}} and returned with \code{pctNull = 100} for
+later appending to the genet-assignment output.
 }

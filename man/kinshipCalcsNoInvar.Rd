@@ -2,20 +2,30 @@
 % Please edit documentation in R/kinshipCalcsNoInvar.R
 \name{kinshipCalcsNoInvar}
 \alias{kinshipCalcsNoInvar}
-\title{Calculate population- and individual-level kinship (and gene diversity)}
+\title{Population- and individual-level kinship and gene diversity}
 \usage{
 kinshipCalcsNoInvar(dataset, subset = FALSE, targetN = NULL)
 }
 \arguments{
-\item{dataset}{A data frame with \code{Coral_ID} column as unique identifier (rows) and loci as columns; this is a data frame resulting from the  \code{convertBasePairstoCodes()} function.}
+\item{dataset}{Wide single-letter allele data (\code{Coral_ID} plus one column per
+locus) from \code{\link[=convertBasePairstoCodes]{convertBasePairstoCodes()}}.}
 
-\item{subset}{Do you want to subset the data and calculate kinship for the \code{targetN} least related colonies in the data set? The default value is FALSE, in which case \code{targetN} is ignored and defaults to NULL. If \code{subset = TRUE} then you MUST enter a value for \code{targetN}; otherwise the function will quit and print an error message.}
+\item{subset}{Logical; if \code{TRUE}, also compute the \code{targetN}-colony summary.
+Requires \code{targetN}. Default \code{FALSE}.}
 
-\item{targetN}{The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as \code{NULL} or if its value is greater than or equal to \code{nrow(dataset)} i.e., the number of individuals in a data set. If this value is < \code{nrow(dataset)}, then kinship is recalculated repeatedly, removing the individual with the highest average kinship, one-by-one, until \code{targetN} individuals with the lowest average kinship remain.}
+\item{targetN}{Number of least-related colonies to retain when
+\code{subset = TRUE}. Must be >= 2.}
 }
 \value{
-This function returns three objects, \code{PopAvgMKGD}, \code{MK_init}, and \code{MK_final}. \code{PopAvgMKGD} contains the population-level average kinship and gene diversity; \code{MK_init} contains average kinship for each individual in dataset (i.e., \code{now(dataset)} individuals), and \code{MK_final} contains average kinship for the \code{targetN} individuals with the lowest average kinship.
+A list with \code{PopAvgMKGD} (population mean kinship and gene diversity),
+\code{MK_init} (individual mean kinship for all colonies), and \code{MK_final}
+(individual mean kinship for the retained colonies, or \code{NULL} when
+\code{subset = FALSE}).
 }
 \description{
-This function calculates population- and individual-level mean kinship and gene diversity (1 - kinship) across all individuals and loci. These calculations exclude invariant loci and are based on all possible among-locus pairwise comparisons at each of \code{N} loci. Within-individual comparisons (i.e., comparisons of individuals with themselves) are also excluded from these calculations. Optionally, individual-level kinship can be calculated for a subset of individuals using the \code{targetN} argument.
+Calculates individual- and population-level mean kinship and gene
+diversity (\code{1 - kinship}) across all colonies and loci, excluding invariant
+loci and within-colony comparisons. Optionally restricts the population
+summary to the \code{targetN} least related colonies by iteratively removing the
+colony with the highest mean kinship until \code{targetN} remain.
 }

@@ -1,50 +1,94 @@
-#' Run all kinship calculations in a single function
+#' Run kinship calculations for every data file in the working directory
 #'
-#' @description This wrapper function calculates pairwise kinship across all individuals and loci. Average kinship is calculated at the individual and population level, and both calculations exclude invariant loci. For this function to work properly, you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save results to the `Results` folder. To read in the data, this function passes the `Data` path to `readGeneticData()` as the `fileloc` argument. If there is more than one file in `Data`, the function will cycle through each file and save results to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
-#' @param subset Do you want to subset the data and calculate kinship for the `targetN` least related colonies in the data set? The default value is FALSE, in which case `targetN` is ignored and defaults to NULL. If `subset = TRUE` then you MUST enter a value for `targetN`; otherwise the function will quit and print an error message.
-#' @param targetN The desired number of individuals over which population-average kinship and gene diversity are calculated. This is ignored if left as `NULL` or if its value is greater than or equal to `nrow(dataset)` i.e., the number of individuals in a data set. If this value is `< nrow(dataset)`, then kinship is recalculated, removing the individual with the highest average kinship, one individual at a time, until `targetN` individuals with the lowest average kinship remain.
-#' @returns This function returns up to three objects depending on user inputs: 
-#' 
-#' The first object, `PopAvgMKGD` is a data frame with a single row and two values, population-level mean kinship and gene diversity (1 - population-level mean kinship). 
-#' 
-#' The second object, `kinship_init`, is a data frame with a row for each coral colony, a Coral_ID column, a MatchMakerIndex column, and a kinship column that's an average of pairwise kinship for that individual across all other individuals and all loci (i.e., individual-level mean kinship).
-#' 
-#' The third object, `kinship_targetN` is similar to `kinship_init` except it only has `targetN` rows/individuals. 
-#'  
+#' @description Wrapper that reads each genotype CSV in a `Data` folder and
+#'   computes individual- and population-level mean kinship and gene diversity
+#'   (excluding invariant loci), writing results to a `Results` folder. Requires
+#'   `Data` and `Results` folders in the working directory. All CSV files in
+#'   `Data` are processed; results are keyed by input file name.
+#' @param subset Logical; if `TRUE`, also compute the `targetN`-colony summary.
+#'   Requires `targetN`. Default `FALSE`.
+#' @param targetN Number of least-related colonies to retain when
+#'   `subset = TRUE`. Must be >= 2.
+#' @returns Invisibly, a list with `PopAvgMKGD` and `kinship_init` (each a named
+#'   list of per-file data frames) and, when `subset = TRUE`, `kinship_targetN`.
+#'   `kinship_*` data frames have columns `Coral_ID`, `MatchMaker_Index`,
+#'   `ind_mean_kinship`.
+#' @importFrom dplyr left_join arrange select
 #' @importFrom stringr str_detect
+#' @importFrom magrittr %>%
+#' @importFrom utils write.csv
 #' @export
-runKinship <- function(subset = FALSE, targetN = NULL){
-  #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
-  folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
-  
-  #### Specify locations of data and results folders
-  dataLocation <- folderPaths[which(str_detect(folderPaths, "Data")==TRUE)]
-  resultsLocation <- folderPaths[which(str_detect(folderPaths, "Results")==TRUE)]
-  
-  #### Create a list of file names to be processed for genet assignment/kinship etc. If there is more than one file, they will each be processed separately.  
-  fileList <- as.list(list.files(path = dataLocation, pattern = "\\.csv$"))
-  
-  #### Loop through all available data files
-  for (i in 1:length(fileList)){
-    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
-    a1 <- a[[1]] # data frame with processed SNP data
-    a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))[[1]]
-    c <- omitInvariantLoci(b)
-    d <- kinshipCalcsNoInvar(dataset = c, targetN = targetN, subset = subset)
-    if (subset==FALSE){
-      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
-      write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
-      write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
-      return(list(PopAvgMKGD = d$PopAvgMKGD, kinship_init = d1))
-    }
-    if (subset==TRUE){
-      d1 <- d$MK_init %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
-      d2 <- d$MK_final %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
-      write.csv(d$PopAvgMKGD, paste0(resultsLocation,"/","popAvgMKGD_", paste0(fileList[[i]])), row.names = F)
-      write.csv(d1, paste0(resultsLocation,"/","kinship_Init_", paste0(fileList[[i]])), row.names = F)
-      write.csv(d2, paste0(resultsLocation,"/","kinship_targetN_", paste0(fileList[[i]])), row.names = F)
-      return(list(PopAvgMKGD = d$PopAvgMKGD, kinship_init = d1, kinship_targetN = d2))
+runKinship <- function(subset = FALSE, targetN = NULL) {
+
+  loc             <- locateDataResults()
+  dataLocation    <- loc$data
+  resultsLocation <- loc$results
+
+  fileList <- list.files(path = dataLocation, pattern = "\\.csv$")
+  if (length(fileList) == 0) {
+    warning("No .csv files found in the Data folder: ", dataLocation)
+    return(invisible(list(PopAvgMKGD = list(), kinship_init = list())))
+  }
+
+  popResults    <- vector("list", length(fileList))
+  initResults   <- vector("list", length(fileList))
+  targetResults <- vector("list", length(fileList))
+  names(popResults)    <- fileList
+  names(initResults)   <- fileList
+  names(targetResults) <- fileList
+
+  for (f in fileList) {
+    dat <- readGeneticData(fileloc = file.path(dataLocation, f))
+    snp   <- dat[[1]]
+    index <- dat[[2]]
+
+    withData <- isolateAllNAColonies(convertBasePairstoCodes(initdata = snp))[[1]]
+    reduced  <- omitInvariantLoci(withData)
+    k <- kinshipCalcsNoInvar(dataset = reduced, targetN = targetN, subset = subset)
+
+    initTbl <- k$MK_init %>%
+      left_join(index, by = "Coral_ID") %>%
+      arrange(MatchMaker_Index) %>%
+      select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+
+    write.csv(k$PopAvgMKGD,
+              file.path(resultsLocation, paste0("popAvgMKGD_", f)), row.names = FALSE)
+    write.csv(initTbl,
+              file.path(resultsLocation, paste0("kinship_Init_", f)), row.names = FALSE)
+    popResults[[f]]  <- k$PopAvgMKGD
+    initResults[[f]] <- initTbl
+
+    if (isTRUE(subset)) {
+      finalTbl <- k$MK_final %>%
+        left_join(index, by = "Coral_ID") %>%
+        arrange(MatchMaker_Index) %>%
+        select(Coral_ID, MatchMaker_Index, ind_mean_kinship)
+      write.csv(finalTbl,
+                file.path(resultsLocation, paste0("kinship_targetN_", f)),
+                row.names = FALSE)
+      targetResults[[f]] <- finalTbl
     }
   }
+
+  out <- list(PopAvgMKGD = popResults, kinship_init = initResults)
+  if (isTRUE(subset)) out$kinship_targetN <- targetResults
+  invisible(out)
+}
+
+# Internal helper (not exported): locate the single Data and Results folders in
+# the working directory, erroring clearly if they are missing or ambiguous.
+locateDataResults <- function() {
+  folderPaths <- list.dirs(path = getwd(), full.names = TRUE, recursive = FALSE)
+  dataLocation    <- folderPaths[stringr::str_detect(basename(folderPaths), "Data")]
+  resultsLocation <- folderPaths[stringr::str_detect(basename(folderPaths), "Results")]
+
+  if (length(dataLocation) != 1) {
+    stop("Expected exactly one 'Data' folder in the working directory; found ",
+         length(dataLocation), ".", call. = FALSE)
+  }
+  if (length(resultsLocation) != 1) {
+    stop("Expected exactly one 'Results' folder in the working directory; found ",
+         length(resultsLocation), ".", call. = FALSE)
+  }
+  list(data = dataLocation, results = resultsLocation)
 }

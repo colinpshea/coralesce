@@ -1,48 +1,84 @@
-#' Calculate genet assignments and pairwise comparisons in a single function
+#' Assign genets for every data file in the working directory
 #'
-#' @description This wrapper function assigns colonies to genets and (optionally) summarizes pairwise comparisons of alleles for all possible pairwise comparisons. Note that for this function to work properly (or at all), you **MUST** have folders called `Data` and `Results` in your working directory. This function will look for a genetics data file in `Data` and save the results to the `Results` folder. To read in the data, this function passes the `Data` path to `readGeneticData()` as the `fileloc` argument. If there is more than one file in `Data`, this function will cycle through each file and save results for each data file to the `Results` folder; the file name for each file in the `Results` folder will include the name of the original data file. 
-#' 
-#' @param PctMatchThreshold The desired threshold for percent match of alleles across all loci between individuals for identifying pairings as matches or clones.
-#' @param PctNotNullThreshold The desired threshold for the percentage of valid SNP data across all loci. Given two individuals are determined to be a match (i.e., percent match of alleles ≥ `PctMatchThreshold`), `PctNotNullThreshold` is the minimum allowable percentage of loci with valid (i.e., not `NULL` or `NA`) allele data for making a genet assignment. Individuals with values `≥ PctNotNullThreshold` that are determined to be matches (with themselves or others) are classified as `AdequateData = No` and appended to the genet assignment file with `genet = XXXX_NA`, where `XXXX` is the 4-letter species code.
-#' @param getPairwiseAlleleMatches Set to `TRUE` if you want to return a data frame with all pairwise comparisons and their corresponding percent match and percent not null values. The default value is `FALSE`.
-#' @returns This function returns up to two objects depending on user inputs: 
-#' 
-#' The first object, `genetAssignment` is a data frame with a single row for each colony along with their Coral_ID, MatchMaker_Index number, genet number,  percent null values across all of their loci, and whether or not the data were adequate for assigning them to a genet. Data adequacy is defined by the user-defined `PctMatchThreshold` and `PctNotNullThreshold` values. 
-#' 
-#' The second object, `pairwiseAlleleMatches`, containing ALL possible pairwise comparisons (each colony with itself and other colonies) at each locus, calculating percent match and percent not null. These are typically very large files that are only saved to the working directory if `getPairwiseAlleleMatches = TRUE`. 
-#'  
+#' @description Wrapper that reads each genotype CSV in a `Data` folder, assigns
+#'   colonies to genets, and writes a `genetAssignment_<file>.csv` to a `Results`
+#'   folder (optionally also a `pairwiseAlleleMatches_<file>.csv`). Requires
+#'   `Data` and `Results` folders in the working directory. All CSV files in
+#'   `Data` are processed; results are keyed by input file name.
+#' @param PctMatchThreshold Minimum percent allele match across loci for two
+#'   colonies to be called a match/clone. Required.
+#' @param PctNotNullThreshold Minimum percent of loci with valid data required to
+#'   trust a comparison. Required.
+#' @param getPairwiseAlleleMatches Logical; if `TRUE`, also write and return the
+#'   full pairwise comparison table for each file. Default `FALSE`.
+#' @returns Invisibly, a list with `genetAssignments` (a named list of
+#'   per-file genet-assignment data frames) and, when
+#'   `getPairwiseAlleleMatches = TRUE`, `pairwiseAlleleMatches` (a named list of
+#'   per-file pairwise tables). Each genet-assignment data frame has columns
+#'   `Coral_ID`, `MatchMaker_Index`, `genet`, `pctNull`, `AdequateData`.
+#' @importFrom dplyr bind_rows left_join arrange mutate select
 #' @importFrom stringr str_detect str_pad
+#' @importFrom magrittr %>%
+#' @importFrom utils write.csv
 #' @export
-runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL, getPairwiseAlleleMatches = FALSE){
-  #### Determine folder paths - just set the working directory to the right place and this will work fine: we're just looking for the names of all the folders in the working directory here. 
-  folderPaths <- list.dirs(path = paste0(getwd()), full.names = TRUE, recursive = F)
-  
-  #### Specify locations of data and results folders 
-  dataLocation <- folderPaths[which(str_detect(folderPaths, "Data")==TRUE)]
-  resultsLocation <- folderPaths[which(str_detect(folderPaths, "Results")==TRUE)]
-  
-  #### Create a list of file names to be processed for genet assignment/kinship etc. If there is more than one file, they will each be processed separately, and if there's only one file this does nothing special.  
-  fileList <- as.list(list.files(path = dataLocation, pattern = "\\.csv$"))
-  
-  #### Loop through all available data files
-  for (i in 1:length(fileList)){
-    a <- readGeneticData(fileloc = paste0(dataLocation,"/", fileList[[i]]))
-    a1 <- a[[1]] # data frame with processed SNP data
-    a2 <- a[[2]] # data frame with Coral_ID and MatchMaker_Index
-    b <- isolateAllNAColonies(convertBasePairstoCodes(initdata = a1))
-    b1 <- b[[1]] # data frame with colonies that DO NOT have NA values at all loci
-    b2 <- b[[2]] # data frame with colonies that DO have NA values at all loci
-    c <- determineAllAlleleMatches(dataset = b1)
-    d1 <- groupByGenets(CoralAlleleData = b1, AlleleMatchResults = c, PctMatchThreshold = PctMatchThreshold, PctNotNullThreshold = PctNotNullThreshold, getPairwiseAlleleMatches = getPairwiseAlleleMatches)
-    d2 <- d1$genetAssignment %>% add_row(b2) %>% left_join(a2, by = "Coral_ID") %>% arrange(as.integer(MatchMaker_Index)) %>% mutate(genet = paste0(substr(fileList[[i]], start = 1, stop = 4), "_", str_pad(genet, 5, side = "left", pad = 0))) %>% select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
+runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL,
+                      getPairwiseAlleleMatches = FALSE) {
+
+  loc             <- locateDataResults()
+  dataLocation    <- loc$data
+  resultsLocation <- loc$results
+
+  fileList <- list.files(path = dataLocation, pattern = "\\.csv$")
+  if (length(fileList) == 0) {
+    warning("No .csv files found in the Data folder: ", dataLocation)
+    return(invisible(list(genetAssignments = list())))
   }
-  if (getPairwiseAlleleMatches==TRUE){
-    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
-    write.csv(d1$pairwiseAlleleMatches, paste0(resultsLocation,"/","pairwiseAlleleMatches_", paste0(fileList[[i]])), row.names = F)
-    return(list(genetAssignments = d2, pairwiseAlleleMatches = d1$pairwiseAlleleMatches))
+
+  genetResults    <- vector("list", length(fileList))
+  pairwiseResults <- vector("list", length(fileList))
+  names(genetResults)    <- fileList
+  names(pairwiseResults) <- fileList
+
+  for (f in fileList) {
+    dat <- readGeneticData(fileloc = file.path(dataLocation, f))
+    snp   <- dat[[1]]     # cleaned genotype data
+    index <- dat[[2]]     # Coral_ID + MatchMaker_Index
+
+    split   <- isolateAllNAColonies(convertBasePairstoCodes(initdata = snp))
+    withData <- split[[1]]
+    noData   <- split[[2]]
+
+    matches <- determineAllAlleleMatches(dataset = withData)
+    gg <- groupByGenets(
+      CoralAlleleData          = withData,
+      AlleleMatchResults       = matches,
+      PctMatchThreshold        = PctMatchThreshold,
+      PctNotNullThreshold      = PctNotNullThreshold,
+      getPairwiseAlleleMatches = getPairwiseAlleleMatches
+    )
+
+    speciesCode <- substr(f, 1, 4)
+    assignment <- gg$genetAssignment %>%
+      bind_rows(noData) %>%
+      left_join(index, by = "Coral_ID") %>%
+      arrange(MatchMaker_Index) %>%
+      mutate(genet = paste0(speciesCode, "_", str_pad(genet, 5, "left", "0"))) %>%
+      select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
+
+    write.csv(assignment,
+              file.path(resultsLocation, paste0("genetAssignment_", f)),
+              row.names = FALSE)
+    genetResults[[f]] <- assignment
+
+    if (isTRUE(getPairwiseAlleleMatches)) {
+      write.csv(gg$pairwiseAlleleMatches,
+                file.path(resultsLocation, paste0("pairwiseAlleleMatches_", f)),
+                row.names = FALSE)
+      pairwiseResults[[f]] <- gg$pairwiseAlleleMatches
     }
-  if (getPairwiseAlleleMatches==FALSE){
-    write.csv(d2, paste0(resultsLocation,"/","genetAssignment_", paste0(fileList[[i]])), row.names = F)
-    return(list(genetAssignments = d2))
-    }
+  }
+
+  out <- list(genetAssignments = genetResults)
+  if (isTRUE(getPairwiseAlleleMatches)) out$pairwiseAlleleMatches <- pairwiseResults
+  invisible(out)
 }

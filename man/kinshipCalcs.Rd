@@ -2,16 +2,21 @@
 % Please edit documentation in R/kinshipCalcs.R
 \name{kinshipCalcs}
 \alias{kinshipCalcs}
-\title{Calculate pairwise kinship for all possible pairwise comparisons.}
+\title{Calculate pairwise kinship across all comparisons}
 \usage{
 kinshipCalcs(dataset)
 }
 \arguments{
-\item{dataset}{A data frame with \code{Coral_ID} column as unique identifier for \code{1:nrow(dataset)} colonies and SNP data at \code{2:ncol(dataset)} loci; this is a data frame resulting from \code{convertBasePairstoCodes()}.}
+\item{dataset}{A pairwise allele-match table (columns \code{coral1}, \code{coral2},
+\code{allele1}, \code{allele2}, \code{locus}, \code{match}) from
+\code{\link[=determineAllAlleleMatchesOthers]{determineAllAlleleMatchesOthers()}}.}
 }
 \value{
-This function calculates pairwise kinship for all possible comparisons of alleles among individuals. Note that these are simply kinship calculations and this function does \emph{not} exclude invariant loci (\code{kinshipCalcsNoInvar()} uses \code{omitInvariantLoci()}and \code{kinshipCalcs()}).
+A data frame with \code{coral1}, \code{coral2}, \code{totalProbLoci},
+\code{totalScorable}, and \code{avg_kinship} for each colony pair.
 }
 \description{
-This function calculates pairwise kinship based on all alleles present at all possible combinations of colonies and loci.
+Calculates pairwise kinship for each colony pair from their
+allele dosages at every fully scorable locus. This function does \emph{not}
+exclude invariant loci; \code{\link[=kinshipCalcsNoInvar]{kinshipCalcsNoInvar()}} handles that.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/groupByGenets.R
 \name{groupByGenets}
 \alias{groupByGenets}
-\title{Determine if individuals come from the same genet.}
+\title{Assign colonies to genets from pairwise allele matches}
 \usage{
 groupByGenets(
   CoralAlleleData,
@@ -13,19 +13,31 @@ groupByGenets(
 )
 }
 \arguments{
-\item{CoralAlleleData}{Raw coral data (rows = coral colonies and columns = SNP data at loci; with one-letter codes for allele combinations and \code{NA} for \verb{?} or blank values). This is used to append the colony-specific \code{pctNull} values to the genet assignment file created by this function.}
+\item{CoralAlleleData}{Wide single-letter allele data (\code{Coral_ID} plus one
+column per locus); used to attach each colony's \code{pctNull}.}
 
-\item{AlleleMatchResults}{data set with results of pairwise matching of alleles at each locus for all individuals and loci}
+\item{AlleleMatchResults}{Pairwise allele-match results from
+\code{\link[=determineAllAlleleMatches]{determineAllAlleleMatches()}}.}
 
-\item{PctMatchThreshold}{Defaults to \code{NULL} but must be specified (can be specified in \code{runGenets()} wrapper function)}
+\item{PctMatchThreshold}{Minimum percent allele match for a pair to be called
+a clone. Required.}
 
-\item{PctNotNullThreshold}{Defaults to \code{NULL} but must be specified (can be specified in \code{runGenets()} wrapper function)}
+\item{PctNotNullThreshold}{Minimum percent of scorable loci required to trust
+a comparison. Required.}
 
-\item{getPairwiseAlleleMatches}{Do you want the function to return all pairwise comparisons of colonies? The default is \code{FALSE}.}
+\item{getPairwiseAlleleMatches}{Logical; if \code{TRUE}, also return the full
+pairwise comparison table. Default \code{FALSE}.}
 }
 \value{
-This function returns up to two objects: one is a data frame with final genet assignments, and the other is an optional data frame with all possible pairwise allele matches (returned when \code{getPairwiseAlleleMatches = TRUE}).
+A list with \code{genetAssignment} (columns \code{Coral_ID}, \code{genet},
+\code{pctNull}, \code{AdequateData}) and \code{pairwiseAlleleMatches} (the pairwise table,
+or \code{NULL}).
 }
 \description{
-This function compares alleles at loci among colonies and calculates the percentage match and percentage not null and uses this information to determine if the pairwise comparison indicates that the two individuals are from the same genet. Uses \code{returnGenetIdentity()} for the genet classification.
+For every pairwise comparison of colonies, computes the percent
+of loci that match and the percent of loci with scorable data, applies the
+user thresholds to decide which pairs are clones with adequate data, and
+assigns colonies to genets via \code{\link[=returnGenetIdentity]{returnGenetIdentity()}}. Colonies whose
+self-comparison falls below the data threshold are flagged
+\code{AdequateData = No} and carried through with \code{genet = NA}.
 }

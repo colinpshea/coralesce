@@ -2,22 +2,26 @@
 % Please edit documentation in R/readGeneticData.R
 \name{readGeneticData}
 \alias{readGeneticData}
-\title{Read in genetic SNP data format for analysis}
+\title{Read and validate a genetic SNP data file}
 \usage{
 readGeneticData(fileloc)
 }
 \arguments{
-\item{fileloc}{The location of the data file, specified as a path (see documentation for \code{runGenets()} and \code{runKinship()} for information about \code{fileloc}).
-
-Note that if using this function on its own outside of the \code{runGenets()} or \code{runKinship()} wrapper functions, you must specify the path to the genetics data file manually e.g.,
-
-\code{readGeneticData(fileloc = paste0(getwd(),"/Data/", paste0(list.files(paste0(getwd(),"/Data/")))))}
-
-if the genetics data are located (as they should be) in a working directory folder called \code{Data}.}
+\item{fileloc}{Path to the CSV data file. When calling this function outside
+\code{\link[=runGenets]{runGenets()}} / \code{\link[=runKinship]{runKinship()}}, supply the full path yourself, e.g.
+\code{readGeneticData(file.path(getwd(), "Data", "myfile.csv"))}.}
 }
 \value{
-This function returns a data frame with only: \code{Coral_ID} as column 1 and the remaining columns as loci with valid SNP data (here, valid SNP data are those allele combinations listed in the \code{IUPAC} table); columns with prohibited data are removed via \code{handleError_ProhibitedData()}, which identifies and removes such columns, if present, and reports their names in a warning message.
+A list of two data frames: \verb{[[1]]} the cleaned genotype data
+(\code{Coral_ID}, \code{MatchMaker_Index}, and SNP columns), and \verb{[[2]]} an index of
+\code{Coral_ID} and integer \code{MatchMaker_Index}.
 }
 \description{
-With the \code{fileloc} specified, one can import the initial data that's got paired alleles (e.g., C:G, A:T, etc.) along with a \code{Coral_ID} columns and any other columns like site name. This function names the first column \code{Coral_ID} and ensures that R interprets \code{T} as a character rather than the logical \code{TRUE}. The function also omits any potential white space (e.g., " C:T" or "C: T"). Lastly, \code{NA} values are converted to \verb{?} because we need to keep track of allele combos that couldn't be compared, and \code{NA} could be problematic when converting allele pairs to single letters using the \code{IUPAC} table.
+Reads a genotype CSV of paired alleles (e.g., \code{C:G}, \code{A:T}) with
+\code{Coral_ID} and \code{MatchMaker_Index} as the first two columns. Values are read
+as character (so \code{T} is not treated as \code{TRUE}), internal whitespace is
+stripped, the input-column contract is enforced by
+\code{\link[=handleError_ColumnContract]{handleError_ColumnContract()}}, and \code{MatchMaker_Index} is converted to
+integer. Missing SNP values are recorded as \code{"?"} so unscored allele combos
+can be tracked through the \code{IUPAC} translation.
 }

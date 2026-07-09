@@ -1,61 +1,129 @@
-#' Notify user that `Coral_ID` field name had to be changed.
-#' @description This function notifies users that the `Coral_ID` column name was changed. 
-#' @param dataset A data frame with some sort of coral colony identifier (ideally named `Coral_ID`) and SNP genetic data (and perhaps other fields) in the remaining columns.
-#' @returns This function returns a warning message notifying users that the colony identifier field was changed to `Coral_ID` prior to any genet assignment or kinship calculations. If the column is already called `Coral_ID` then nothing happens and no warning message is issued.  
+#' Validate the required input-column contract
+#'
+#' @description Enforces the input format the rest of MatchMakeR relies on:
+#'   column 1 must be named `Coral_ID`, column 2 must be named
+#'   `MatchMaker_Index`, and every `MatchMaker_Index` value must be a whole
+#'   number (no missing values). If any condition fails, the function stops with
+#'   an informative message rather than silently renaming or coercing columns.
+#'   `MatchMaker_Index` is used only for bookkeeping (ordering output back to the
+#'   database); it is not used in any genetic calculation.
+#' @param dataset A data frame read from the input CSV, before any processing.
+#' @returns Invisibly returns `dataset` if the contract is satisfied; otherwise
+#'   throws an error.
 #' @export
-handleError_CoralID <- function(dataset) {
-  if (!("Coral_ID" %in% names(dataset))) {message("The colony identifier field was manually renamed Coral_ID prior to genet assignment and/or kinship calculations.
-                                                  ")}
-}
+handleError_ColumnContract <- function(dataset) {
+  nm <- names(dataset)
 
-#' Notify user that `MatchMaker_Index` field name had to be changed.
-#' @description This function notifies users that the `MatchMaker_Index` column name was changed. 
-#' @param dataset A data frame with some sort of coral colony identifier (ideally named `MatchMaker_Index` and `Coral_ID`) and SNP genetic data (and perhaps other fields) in the remaining columns. The MatchMaker_Index is not used explicitly by MatchMakeR and is simply used for bookkeeping purposes in the database. 
-#' @returns This function returns a warning message notifying users that the MatchMakeR colony identifier field was changed to `MatchMaker_Index` prior to any genet assignment or kinship calculations. If the column is already called `MatchMaker_Index` then nothing happens and no warning message is issued.  
-#' @export
-handleError_MatchMakerIndex <- function(dataset) {
-  if (!("MatchMaker_Index" %in% names(dataset))) {message("The MatchMaker index colony identifier field was manually renamed MatchMaker_Index prior to genet assignment and/or kinship calculations.
-                                                  ")}
-}
-
-#' Notify user that colonies with no valid SNP data were found. 
-#' @description This function finds colonies with all `NA` values, report with a message, and separates the `allNA` individuals from the rest of the data. These `allNA` individuals are appended to the genet classification file and assigned `genet = XXXX_NA`, `pctNULL = 100`, and `AdequateData = No`.
-#' @param dataset Takes a file with SNP data with a `Coral_ID` column as the first column and SNP data in the remaining columns. 
-#' @returns This function returns a data frame of colonies with all NA values, which is then evaluated by `isolateAllNAColonies()`. If this is `NULL`, then nothing happens, but if a data frame with at least one observation is returned, then `isolateAllNAColonies()` will remove the offending individuals and append their data to the genet assignment table. If any `allNA` colonies are identified, this function also issues a warning message notifying users of the identity of the offending colonies. 
-#' @export
-handleError_allZeros <- function(dataset){
-  testData <- dataset
-  testData$allNA <- rowSums(is.na(testData[,2:ncol(testData)]))==length(2:ncol(testData))
-  allNA <- testData %>% filter(allNA==TRUE) %>% mutate(genet = NA, AdequateData = "No") 
-  if (nrow(allNA) > 0) {message("At least one colony has NA values at all loci. These colonies have been added to the genetAssignment data frame and have been assigned genet = XXXX_NA, pctNull = 100, and AdequateData = No.
-                                ")
+  if (length(nm) < 2) {
+    stop("The input must have at least two columns: 'Coral_ID' (column 1) and ",
+         "'MatchMaker_Index' (column 2).", call. = FALSE)
   }
-  if (nrow(allNA) > 0) {message(cat("The offending colonies are:", allNA$Coral_ID, sep = "\n"))
+  if (nm[1] != "Coral_ID") {
+    stop("Column 1 must be named 'Coral_ID' but is named '", nm[1], "'. ",
+         "Rename the first column to 'Coral_ID' and re-run.", call. = FALSE)
   }
-  return(allNA)
+  if (nm[2] != "MatchMaker_Index") {
+    stop("Column 2 must be named 'MatchMaker_Index' but is named '", nm[2], "'. ",
+         "This column must be an integer whose values match groupings present in ",
+         "'Coral_ID'. Make 'MatchMaker_Index' the second column and re-run.",
+         call. = FALSE)
+  }
+
+  idx <- dataset[[2]]
+  num <- suppressWarnings(as.numeric(idx))
+  ok  <- !is.na(num) & num == floor(num)
+  if (!all(ok)) {
+    bad <- unique(idx[!ok])
+    stop("'MatchMaker_Index' must contain only whole numbers with no missing ",
+         "values. Offending entries: ", paste(bad, collapse = ", "), ". ",
+         "Clean 'MatchMaker_Index' and re-run.", call. = FALSE)
+  }
+
+  invisible(dataset)
 }
 
-#' Notify user that non-conforming fields were found and omitted. 
-#' @description This function notifies users that non-conforming fields/columns such as site name or, more importantly, allele pairs that are not included in the `IUPAC` reference file, were omitted from the data set. This function omits the offending columns and reports a message that they were removed along with their names.
-#' @param dataset A data frame to be tested with a `Coral_ID` column and SNP data, along with other fields such as site name etc. 
-#' @param acceptableData A data frame with acceptable data that is allowable; here, these are `IUPAC` SNP data. 
-#' @returns This function returns a warning message notifying users of the presence and identity of columns in their data that do not adhere to formatting requirements. This is used in conjunction with `checkforAllowableData()`, which uses this function and also omits the offending columns.
+#' Identify colonies with no valid SNP data
+#'
+#' @description Finds colonies that are `NA` at every locus. Such colonies
+#'   cannot be assigned a genet from data and are handled separately: they are
+#'   appended to the genet-assignment output with `genet = XXXX_NA`,
+#'   `pctNull = 100`, and `AdequateData = No`. Emits a message listing the
+#'   affected colonies when any are found.
+#' @param dataset A data frame with `Coral_ID` in column 1 and single-letter
+#'   allele codes in the remaining columns.
+#' @returns A data frame of the all-`NA` colonies (with `genet` and
+#'   `AdequateData` columns added), or `NULL` if there are none.
 #' @export
-handleError_ProhibitedData <- function(dataset, acceptableData) {
-  if (sum(colSums(apply(dataset[,2:ncol(dataset)], 2, checkforAllowableData)) < nrow(dataset)) > 0) {
-    message("Columns other than Coral_ID that do not adhere to the required base pair format (e.g., a site name column or an invalid base pair) were removed prior to genet assignment and/or kinship calculations.
-            ")
-    message(cat("The offending columns are:", names(dataset[2:ncol(dataset)])[colSums(apply(dataset[2:ncol(dataset)], 2, checkforAllowableData)) != nrow(dataset)], sep = "\n"))
-  }
+handleError_allZeros <- function(dataset) {
+  snp        <- dataset[, -1, drop = FALSE]
+  allNArows  <- rowSums(is.na(snp)) == ncol(snp)
+  allNA      <- dataset[allNArows, , drop = FALSE]
+
+  if (nrow(allNA) == 0) return(NULL)
+
+  allNA$genet        <- NA_integer_
+  allNA$AdequateData <- "No"
+
+  message("At least one colony has NA at all loci. These colonies were added to ",
+          "the genet assignment with genet = XXXX_NA, pctNull = 100, and ",
+          "AdequateData = No.")
+  message("Offending colonies:\n", paste(allNA$Coral_ID, collapse = "\n"))
+  allNA
 }
 
-#' Notify user that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted. 
-#' @description This function notifies users that that at least one colony has multiple entries (i.e., rows) of SNP data, which is not permitted because downstream functions involve a pivot that requires unique row (colony) names. The process is stopped and the offending colonies are identified for the user.  
-#' @param dataset A data frame to be tested with a `Coral_ID` column and SNP data, along with other fields such as site name etc. 
-#' @param acceptableData A data frame with acceptable data that is allowable; here, these are `IUPAC` SNP data. 
-#' @returns This function returns a warning message notifying users of the presence and identity of columns in their data that do not adhere to formatting requirements. This is used in conjunction with `handleError_ProhibitedData()` in the `readGeneticData()`, which uses this function and also omits the offending columns.
+#' Report columns that do not hold valid SNP data
+#'
+#' @description Checks every column other than the `Coral_ID` and
+#'   `MatchMaker_Index` keys and reports (via message) any whose values are not
+#'   all valid `IUPAC` allele pairs (e.g., a site-name column or an invalid base
+#'   pair). Reporting only; the offending columns are actually dropped by
+#'   [convertBasePairstoCodes()].
+#' @param dataset A data frame with `Coral_ID`, `MatchMaker_Index`, SNP data, and
+#'   possibly other fields.
+#' @param acceptableData A reference table of allowable allele pairs (defaults to
+#'   the package `IUPAC` table); must contain an `Allelepairs` column.
+#' @returns Invisibly `NULL`; called for its message side effect.
 #' @export
-find_dups <- function(df){
-  IDs <- df %>% group_by(Coral_ID) %>% summarise(N = n()) %>% filter(N>1) %>% pull(Coral_ID)
-  if(length(IDs)>0) {stop(cat("At least one colony has multiple versions of SNP data which is not permitted. Contact the coral section to see if these are ramets or re-samples that can be re-named. The offending colonies are:", IDs, sep = "\n"))}
+handleError_ProhibitedData <- function(dataset, acceptableData = IUPAC) {
+  candidates <- setdiff(names(dataset), c("Coral_ID", "MatchMaker_Index"))
+  if (length(candidates) == 0) return(invisible(NULL))
+
+  allowable <- vapply(dataset[candidates],
+                      function(col) all(col %in% acceptableData$Allelepairs),
+                      logical(1))
+  offenders <- candidates[!allowable]
+
+  if (length(offenders) > 0) {
+    message("Columns that do not match the required IUPAC base-pair format ",
+            "(e.g., a site-name column or an invalid base pair) were removed ",
+            "prior to genet and/or kinship calculations.")
+    message("Offending columns:\n", paste(offenders, collapse = "\n"))
+  }
+  invisible(NULL)
+}
+
+#' Stop if any colony has multiple rows of SNP data
+#'
+#' @description Downstream reshaping requires one row per colony. This check
+#'   stops with an informative error, listing the duplicated `Coral_ID`s, if any
+#'   colony appears more than once.
+#' @param df A data frame with a `Coral_ID` column.
+#' @returns Invisibly `df` if all `Coral_ID`s are unique; otherwise an error.
+#' @importFrom dplyr group_by summarise filter pull n
+#' @importFrom magrittr %>%
+#' @export
+find_dups <- function(df) {
+  dups <- df %>%
+    group_by(Coral_ID) %>%
+    summarise(N = n(), .groups = "drop") %>%
+    filter(N > 1) %>%
+    pull(Coral_ID)
+
+  if (length(dups) > 0) {
+    stop("At least one colony has multiple rows of SNP data, which is not ",
+         "permitted. Contact the coral section to check whether these are ramets ",
+         "or re-samples that can be renamed. Offending colonies:\n",
+         paste(dups, collapse = "\n"), call. = FALSE)
+  }
+  invisible(df)
 }
