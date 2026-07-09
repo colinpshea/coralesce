@@ -13,5 +13,5 @@ utils::globalVariables(c(
   "coral1", "coral2", "allele1", "allele2", "locus", "match",
   "pctMatch", "pctNotNull", "pctNull", "PartOfGenet", "AdequateData",
   "genet", "flag", "avg_kinship", "ind_mean_kinship", "N", "NumAlleles",
-  "multProbSum"
+  "multProbSum", "totalProbLoci", "totalScorable"
 ))
