@@ -26,9 +26,13 @@ kinshipCalcs <- function(dataset) {
     Y = c(A = 0,   C = 0.5, G = 0,   T = 0.5),
     K = c(A = 0,   C = 0,   G = 0.5, T = 0.5)
   )
-
-  p1 <- dosage[dataset$allele1, , drop = FALSE]
-  p2 <- dosage[dataset$allele2, , drop = FALSE]
+  
+  lookup <- function(codes) {
+    idx <- match(codes, rownames(dosage))
+    dosage[idx, , drop = FALSE]
+  }
+  p1 <- lookup(dataset$allele1)
+  p2 <- lookup(dataset$allele2)
 
   dataset$NumAlleles  <- 4 - 2 * rowSums(is.na(dataset[, c("allele1", "allele2")]))
   dataset$multProbSum <- rowSums(p1 * p2)   # sum over A/C/G/T of the dosage products
