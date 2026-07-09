@@ -1,4 +1,4 @@
 library(testthat)
-library(MatchMakeR)
+library(coralesce)
 
-test_check("MatchMakeR")
+test_check("coralesce")
