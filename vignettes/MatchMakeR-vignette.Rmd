@@ -1,8 +1,8 @@
 ---
-title: "coralesce-vignette"
+title: "MatchMakeR-vignette"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{coralesce-vignette}
+  %\VignetteIndexEntry{MatchMakeR-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,5 +15,5 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(coralesce)
+library(MatchMakeR)
 ```
