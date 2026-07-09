@@ -1,4 +1,4 @@
-Package: Coralesce
+Package: coralesce
 Title: Group Coral Colonies Based on Genetic Relatedness
 Version: 1.0.0
 Authors@R: c(
