@@ -39,7 +39,7 @@ computeKinship <- function(data, subset = FALSE, targetN = NULL) {
   if (!("Coral_ID" %in% names(data))) {
     stop("`data` must contain a `Coral_ID` column.", call. = FALSE)
   }
-
+  find_dups(data)
   # Record missing values as "?" so partially-scored loci survive the IUPAC
   # translation (matches readGeneticData()'s handling). Keys are left alone.
   alleleCols <- setdiff(names(data), c("Coral_ID", "MatchMaker_Index"))

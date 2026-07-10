@@ -48,6 +48,7 @@ computeGenets <- function(data, PctMatchThreshold = NULL, PctNotNullThreshold = 
   if (!("Coral_ID" %in% names(data))) {
     stop("`data` must contain a `Coral_ID` column.", call. = FALSE)
   }
+  find_dups(data)
   if (is.null(PctMatchThreshold) || is.null(PctNotNullThreshold)) {
     stop("Both PctMatchThreshold and PctNotNullThreshold must be supplied.",
          call. = FALSE)
