@@ -29,3 +29,7 @@ loci and within-colony comparisons. Optionally restricts the population
 summary to the \code{targetN} least related colonies by iteratively removing the
 colony with the highest mean kinship until \code{targetN} remain.
 }
+\seealso{
+\code{\link[=runKinship]{runKinship()}} for notes on how clonal replicates (ramets) are
+handled and what \code{PopAvgGD} represents.
+}

@@ -13,6 +13,18 @@
 #'   list of per-file data frames) and, when `subset = TRUE`, `kinship_targetN`.
 #'   `kinship_*` data frames have columns `Coral_ID`, `MatchMaker_Index`,
 #'   `ind_mean_kinship`.
+#' @details
+#' Kinship and gene diversity are computed across all colonies in the input,
+#' including multiple ramets (physical fragments) of the same genet. This is
+#' intentional: every colony is treated as an individually eligible candidate
+#' (e.g., for breeding or outplanting), so clonal replicates are retained rather
+#' than collapsed to one representative per genet. Consequently, `PopAvgGD`
+#' describes the genetic diversity of the *eligible colony pool*, not a
+#' clone-corrected, genet-level population estimate. When `subset = TRUE`, the
+#' routine preferentially sheds genetically redundant colonies but keeps a
+#' representative of each clonal group. If a clone-corrected population estimate
+#' is needed instead, collapse colonies to one representative per genet (e.g.,
+#' using the genet assignments from [runGenets()]) before running kinship.
 #' @importFrom dplyr left_join arrange select
 #' @importFrom stringr str_detect
 #' @importFrom magrittr %>%

@@ -15,6 +15,8 @@
 #'   `MK_init` (individual mean kinship for all colonies), and `MK_final`
 #'   (individual mean kinship for the retained colonies, or `NULL` when
 #'   `subset = FALSE`).
+#' @seealso [runKinship()] for notes on how clonal replicates (ramets) are
+#'   handled and what `PopAvgGD` represents.
 #' @importFrom dplyr select group_by summarise arrange desc slice pull filter
 #' @importFrom tidyr pivot_longer
 #' @importFrom magrittr %>%

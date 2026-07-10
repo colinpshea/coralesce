@@ -26,3 +26,16 @@ computes individual- and population-level mean kinship and gene diversity
 \code{Data} and \code{Results} folders in the working directory. All CSV files in
 \code{Data} are processed; results are keyed by input file name.
 }
+\details{
+Kinship and gene diversity are computed across all colonies in the input,
+including multiple ramets (physical fragments) of the same genet. This is
+intentional: every colony is treated as an individually eligible candidate
+(e.g., for breeding or outplanting), so clonal replicates are retained rather
+than collapsed to one representative per genet. Consequently, \code{PopAvgGD}
+describes the genetic diversity of the \emph{eligible colony pool}, not a
+clone-corrected, genet-level population estimate. When \code{subset = TRUE}, the
+routine preferentially sheds genetically redundant colonies but keeps a
+representative of each clonal group. If a clone-corrected population estimate
+is needed instead, collapse colonies to one representative per genet (e.g.,
+using the genet assignments from \code{\link[=runGenets]{runGenets()}}) before running kinship.
+}
