@@ -48,7 +48,7 @@ For the wrapper functions to work properly, you'll need to:
 1.  Choose a location for storing the genetic data for each species.
 2.  Create folders in that location for each species.
 3.  In each species' folder, there must be two additional folders, one called **Data** and another called **Results**. The **Results** folder starts empty; the **Data** folder holds a `.csv` of that species' SNP data. The folder-name matching is case-insensitive, so `Data`/`DATA`/`data` all work.
-4.  You don't need to import the data files yourself — `runGenets` and `runKinship` read them automatically, provided the working directory is set to the focal species' folder.
+4.  You don't need to import the data files yourself: `runGenets` and `runKinship` read them automatically provided the working directory is set to the focal species' folder.
 5.  If there is more than one `.csv` in **Data**, both wrappers loop through the files, analyze each separately, and write uniquely named results to **Results**.
 
 If you don't have it installed already, you can install **coralesce** from its R-universe repository:
@@ -80,6 +80,8 @@ Below is the `IUPAC` table, which becomes available when the package is loaded.
 datatable(IUPAC, options = list(pageLength = -1, dom = "t"))
 ```
 
+ 
+
 ## The input data format {#sec-input-format}
 
 Both wrappers read `.csv` files from the **Data** folder automatically, but let's look at an example to see how the data must be formatted.
@@ -99,9 +101,11 @@ Here, rows are individual colonies and columns are `Coral_ID`, `MatchMaker_Index
 datatable(check, options = list(pageLength = -1, dom = "t"))
 ```
 
-## Assigning colonies to genets {#sec-assigning-colonies-to-genets}
+##   {#sec-assigning-colonies-to-genets}
 
-`runGenets` assigns each coral colony to a genet — either with other colonies or, at minimum, as the sole member of its own genet. Two colonies are grouped into the same genet if (a) the percentage of loci whose alleles match is ≥ a user-defined threshold (`PctMatchThreshold`) and (b) the percentage of loci with valid SNP data across the compared colonies is ≥ a second user-defined threshold (`PctNotNullThreshold`).
+## Assigning colonies to genets
+
+`runGenets` assigns each coral colony to a genet, either with other colonies or, at minimum, as the sole member of its own genet. Two colonies are grouped into the same genet if (a) the percentage of loci whose alleles match is ≥ a user-defined threshold (`PctMatchThreshold`) and (b) the percentage of loci with valid SNP data across the compared colonies is ≥ a second user-defined threshold (`PctNotNullThreshold`).
 
 To use `runGenets` properly:
 
@@ -122,6 +126,8 @@ ga <- genets$genetAssignments[[1]] %>% mutate(pctNull = round(pctNull, 2))
 datatable(ga, options = list(pageLength = -1, dom = "t"))
 ```
 
+ 
+
 Now the corresponding `pairwiseAlleleMatches` table (this list is absent if `getPairwiseAlleleMatches = FALSE`). It has five columns: `coral1` and `coral2` (the two colonies in the comparison), `pctMatch` (the percentage of loci whose SNPs matched), `pctNotNull` (the percentage of loci with valid data for that comparison), and `PartOfGenet` (`Yes`/`No`: are the two colonies in the same genet?).
 
 ```{r, warning=FALSE, comment=NA, echo=FALSE}
@@ -130,7 +136,9 @@ pw <- genets$pairwiseAlleleMatches[[1]] %>%
 datatable(pw)
 ```
 
-## Calculating individual- and population-level mean kinship and gene diversity {#sec-kinship}
+##   {#sec-kinship}
+
+## Calculating individual- and population-level mean kinship and gene diversity
 
 To use `runKinship` properly, make sure the working directory, **Data**, and **Results** folders are set up as above, then specify the arguments. By default `subset = FALSE` and `targetN = NULL`, so a bare `runKinship()` returns population-level mean kinship and gene diversity plus individual-level mean kinship for every colony.
 
@@ -152,6 +160,8 @@ pop <- kinships_nosubset$PopAvgMKGD[[1]] %>%
 datatable(pop, options = list(pageLength = -1, dom = "t"))
 ```
 
+ 
+
 Individual-level mean kinship is in `kinship_init` (one row per colony), written to **Results** with `kinship_Init` in the file name.
 
 ```{r, warning=FALSE, comment=NA, echo=FALSE}
@@ -159,6 +169,8 @@ mk_init <- kinships_nosubset$kinship_init[[1]] %>%
   mutate(ind_mean_kinship = round(ind_mean_kinship, 2))
 datatable(mk_init)
 ```
+
+ 
 
 Under the defaults there is no subset result, so `kinship_targetN` is absent:
 
@@ -190,7 +202,9 @@ mk_final <- kinships_subset$kinship_targetN[[1]] %>%
 datatable(mk_final)
 ```
 
-## Working in memory, and clone-corrected diversity {#sec-in-memory}
+##   {#sec-in-memory}
+
+## Working in memory, and clone-corrected diversity
 
 If your genotypes are already in R, you can skip the folders entirely. `computeGenets` and `computeKinship` are the in-memory counterparts of `runGenets` and `runKinship`: they take a data frame (same format as the input CSV) and return the same results, writing nothing.
 
@@ -202,7 +216,7 @@ ga_mem <- computeGenets(check, PctMatchThreshold = 99, PctNotNullThreshold = 78)
 computeKinship(check)$PopAvgMKGD
 ```
 
-By default, kinship and gene diversity are computed over **all** colonies, including multiple ramets (physical fragments) of the same genet — appropriate when every colony is an eligible candidate for breeding or outplanting. If instead you want a **clone-corrected** estimate — one colony per genet, the standard population-genetics view — use `collapseToGenets` to reduce the data to a single representative per genet (the colony with the most data), then run kinship on that:
+By default, kinship and gene diversity are computed over **all** colonies, including multiple ramets (physical fragments) of the same genet — appropriate when every colony is an eligible candidate for breeding or outplanting. If instead you want a **clone-corrected** estimate (i.e., one colony per genet), which might be more in line with the standard population-genetics view, use `collapseToGenets` to reduce the data to a single representative per genet (the colony with the most data), then run kinship on that:
 
 ```{r, warning=FALSE, comment=NA}
 reduced <- collapseToGenets(check, ga_mem)   # one colony per genet
@@ -225,13 +239,13 @@ try(runKinship(subset = TRUE, targetN = 1))    # targetN must be >= 2
 
 **Extraneous / invalid columns.** Any column other than the two keys that does not contain valid paired-allele data (e.g., a site-name column, or an invalid base pair) is reported and dropped before analysis, with a message listing the offending columns. If a locus you expected shows up as offending, check that column in your data.
 
-**Duplicated colonies.** If the same `Coral_ID` appears in more than one row, `runGenets` and `runKinship` stop with an error listing the duplicated colonies — every colony must be uniquely named.
+**Duplicated colonies.** If the same `Coral_ID` appears in more than one row, `runGenets` and `runKinship` stop with an error listing the duplicated colonies. Every colony must be uniquely named.
 
 **Colonies with no SNP data.** Colonies that are `NA`/blank/`?` at every locus are flagged and added to the genet assignment with `genet = XXXX_NA` (where `XXXX` is the 4-letter species code), `pctNull = 100`, and `AdequateData = No`, so they can be filtered out easily. A message lists any such colonies.
 
 ## Tips for one or multiple species
 
-Keeping a small R script in each species' folder makes batch runs easy — set the working directory to that folder and call `runGenets` / `runKinship`. In RStudio you can run each as a background job (Source → Source as Background Job), which runs in a clean session with that folder as the working directory, so you can process several species at once without cross-contaminating results.
+Keeping a small R script in each species' folder makes batch runs easy: set the working directory to that folder and call `runGenets` / `runKinship`. In RStudio you can run each as a background job (Source → Source as Background Job), which runs in a clean session with that folder as the working directory, so you can process several species at once without cross-contaminating results.
 
 ```{=html}
 <!--
