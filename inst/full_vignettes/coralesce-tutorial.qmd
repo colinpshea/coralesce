@@ -10,6 +10,7 @@ editor: visual
 embed-resources: true
 ---
 
+```{=html}
 <!--
   NOTE: This tutorial demonstrates the folder-based wrapper functions
   (runGenets / runKinship), which read a `Data` folder and write a `Results`
@@ -19,6 +20,7 @@ embed-resources: true
   the resulting HTML as a STATIC vignette via R.rsp::asis. See the notes at the
   end of this file.
 -->
+```
 
 ## What does coralesce do?
 
@@ -231,6 +233,7 @@ try(runKinship(subset = TRUE, targetN = 1))    # targetN must be >= 2
 
 Keeping a small R script in each species' folder makes batch runs easy — set the working directory to that folder and call `runGenets` / `runKinship`. In RStudio you can run each as a background job (Source → Source as Background Job), which runs in a clean session with that folder as the working directory, so you can process several species at once without cross-contaminating results.
 
+```{=html}
 <!--
   ============================================================================
   SHIPPING THIS AS A STATIC (PRE-RENDERED) VIGNETTE
@@ -252,3 +255,4 @@ Keeping a small R script in each species' folder makes batch runs easy — set t
      by R, so you must re-render it by hand to keep it in sync.
   ============================================================================
 -->
+```
