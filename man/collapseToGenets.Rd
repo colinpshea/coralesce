@@ -24,10 +24,16 @@ and \code{genet} columns (and, ideally, \code{pctNull}), as returned per file by
 \code{pctNull}); \code{"first"} keeps the first colony listed. \code{"most_data"} falls
 back to \code{"first"} if no \code{pctNull} column is present.}
 
-\item{drop_unassigned}{Logical. Colonies without a real genet (missing genet,
-or a placeholder genet label ending in \code{NA} — i.e., inadequate-data or
-all-\code{NA} colonies) are not clonal duplicates of one another. If \code{FALSE}
-(default) each is retained as its own unit; if \code{TRUE} they are dropped.}
+\item{drop_unassigned}{Logical. "Unassigned" colonies are those with no real
+genet -- i.e. colonies with inadequate data (their self-comparison fell
+below the \code{PctNotNull} threshold) or all-\code{NA} colonies, carrying a missing
+or \code{NA}-suffixed genet label. Because they were never placed in a genet,
+they are not clonal duplicates of one another. The default (\code{FALSE}) retains
+each as its own unit, so no colonies are silently discarded; this suits
+eligible-pool questions (every colony is a real candidate). Set \code{TRUE} to
+drop them for a cleaner genet-level population estimate, where these
+low-data, unplaceable colonies would otherwise add noise. Note that \code{TRUE}
+removes rows, so the result will have fewer colonies than the input.}
 }
 \value{
 A subset of \code{dataset} containing one row per genet plus (unless
