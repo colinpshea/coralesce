@@ -19,10 +19,16 @@
 #'   `"most_data"` (default) keeps the colony with the most scored loci (lowest
 #'   `pctNull`); `"first"` keeps the first colony listed. `"most_data"` falls
 #'   back to `"first"` if no `pctNull` column is present.
-#' @param drop_unassigned Logical. Colonies without a real genet (missing genet,
-#'   or a placeholder genet label ending in `NA` — i.e., inadequate-data or
-#'   all-`NA` colonies) are not clonal duplicates of one another. If `FALSE`
-#'   (default) each is retained as its own unit; if `TRUE` they are dropped.
+#' @param drop_unassigned Logical. "Unassigned" colonies are those with no real
+#'   genet -- i.e. colonies with inadequate data (their self-comparison fell
+#'   below the `PctNotNull` threshold) or all-`NA` colonies, carrying a missing
+#'   or `NA`-suffixed genet label. Because they were never placed in a genet,
+#'   they are not clonal duplicates of one another. The default (`FALSE`) retains
+#'   each as its own unit, so no colonies are silently discarded; this suits
+#'   eligible-pool questions (every colony is a real candidate). Set `TRUE` to
+#'   drop them for a cleaner genet-level population estimate, where these
+#'   low-data, unplaceable colonies would otherwise add noise. Note that `TRUE`
+#'   removes rows, so the result will have fewer colonies than the input.
 #' @returns A subset of `dataset` containing one row per genet plus (unless
 #'   dropped) each unassigned colony. Column structure and order are unchanged.
 #' @seealso [runGenets()] to produce `genetAssignment`; [runKinship()] and
