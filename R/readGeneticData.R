@@ -38,7 +38,10 @@ readGeneticData <- function(fileloc) {
   }
 
   handleError_ProhibitedData(raw, acceptableData = IUPAC)
+  
   find_dups(raw)
+  
+  flagPossibleReplicates(raw)
 
   index <- raw %>% select(Coral_ID, MatchMaker_Index)
   list(raw, index)
