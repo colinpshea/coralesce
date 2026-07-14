@@ -182,8 +182,6 @@ is.null(kinships_nosubset$kinship_targetN)
 
 Setting `subset = TRUE` and a `targetN` also returns individual-level mean kinship for the `targetN` *least closely-related colonies*. Colonies are removed one at a time (the highest-mean-kinship colony each round) until `targetN` remain.
 
-Because kinship must be recomputed every time a colony is removed, the smaller `targetN` is relative to the starting number of colonies, the longer this runs. **`runKinship` with many colonies and a small `targetN` can take a long time.**
-
 Here we target 50% of the colonies (`targetN` must be ≥ 2):
 
 ```{r, warning=FALSE, comment=NA}
