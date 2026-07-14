@@ -1,3 +1,9 @@
+# coralesce 1.0.3
+
+* Optimized kinshipCalcsNoInvar() by simply recalculating mean kinship after dropping individual with highest kinship rather than recalculating pairwise kinship over again
+
+* Bumped to 1.0.3
+
 # coralesce 1.0.2
 
 * Added a standalone vignette (html file)

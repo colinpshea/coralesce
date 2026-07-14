@@ -1,6 +1,6 @@
 Package: coralesce
 Title: Group Coral Colonies Based on Genetic Relatedness
-Version: 1.0.1
+Version: 1.0.3
 Authors@R: c(
     person("Colin", "Shea", email = "Colin.Shea@MyFWC.com", role = c("aut", "cre")),
     person("Lauren", "Gentry", email = "Lauren.Gentry@MyFWC.com", role = "aut"),

@@ -34,6 +34,9 @@ kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL) {
     stop("When subset = TRUE, targetN must be >= 2.", call. = FALSE)
   }
 
+  # Invariant loci are removed ONCE, here, from the full data set. The loci used
+  # for kinship are therefore fixed for the whole function, including every
+  # iteration of the subset loop below.
   dat1 <- omitInvariantLoci(dataset)
   kin  <- kinshipCalcs(determineAllAlleleMatchesOthers(dat1))
 
@@ -44,11 +47,23 @@ kinshipCalcsNoInvar <- function(dataset, subset = FALSE, targetN = NULL) {
 
   MK_final <- NULL
   if (subset) {
-    highest <- character(0)                       # nothing removed yet
-    while (nrow(dat1) > targetN) {
-      dat1    <- dat1 %>% filter(!(Coral_ID %in% highest))
-      kin     <- kinshipCalcs(determineAllAlleleMatchesOthers(dat1))
-      highest <- indMeanKinship(kin) %>% slice(1) %>% pull(Coral_ID)
+    # A pairwise kinship value depends only on the two colonies' genotypes and
+    # the (fixed) set of loci -- NOT on which other colonies are present. So the
+    # pairwise table computed above is reused: each round we simply drop the rows
+    # involving the removed colony and re-average, rather than recomputing every
+    # pairwise comparison from the genotypes. Results are identical; this is
+    # roughly an order of magnitude faster, and the saving grows with the number
+    # of colonies removed.
+    #
+    # IMPORTANT: this shortcut is valid ONLY because omitInvariantLoci() is
+    # called once, above, outside the loop. If invariant loci were ever
+    # re-omitted as colonies are dropped, the locus set (and hence the pairwise
+    # values) could change each round and the table WOULD need rebuilding.
+    remaining <- unique(c(kin$coral1, kin$coral2))
+    while (length(remaining) > targetN) {
+      highest   <- indMeanKinship(kin) %>% slice(1) %>% pull(Coral_ID)
+      remaining <- setdiff(remaining, highest)
+      kin       <- kin %>% filter(coral1 %in% remaining, coral2 %in% remaining)
     }
     MK_final <- indMeanKinship(kin)
   }
