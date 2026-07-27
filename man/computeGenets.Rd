@@ -35,7 +35,8 @@ pairwise comparison table. Default \code{FALSE}.}
 \value{
 If \code{getPairwiseAlleleMatches = FALSE}, a genet-assignment data frame
 with columns \code{Coral_ID}, (\code{MatchMaker_Index} if supplied,) \code{genet},
-\code{pctNull}, \code{AdequateData}. If \code{TRUE}, a list of that data frame plus the
+\code{pctNull}, \code{pctNotNull}, \code{AdequateData}. If \code{TRUE}, a list of that data
+frame plus the
 pairwise table.
 }
 \description{

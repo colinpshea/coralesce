@@ -1,3 +1,25 @@
+# coralesce 1.0.4
+
+## New features
+
+* Genet-assignment tables now report `pctNotNull` alongside `pctNull`, so
+  the output matches the polarity of the `PctNotNullThreshold` argument
+  (`pctNotNull = 100 - pctNull`). Reported by both `runGenets()` and
+  `computeGenets()`.
+
+* `flagPossibleReplicates()` detects colonies whose IDs appear to be
+  re-runs/replicates of one another (one ID contained in another) and emits a
+  non-blocking message, so duplicate samples that would inflate genet counts
+  can be reviewed before analysis. Wired into `readGeneticData()`.
+
+## Improvements
+
+* The `runKinship()` / `computeKinship()` subset routine is dramatically faster
+  (~330× on a 581-colony dataset): the pairwise kinship table is now built once
+  and filtered each iteration rather than recomputed from genotypes. Results are
+  numerically identical.
+
+
 # coralesce 1.0.3
 
 * Optimized kinshipCalcsNoInvar() by simply recalculating mean kinship after dropping individual with highest kinship rather than recalculating pairwise kinship over again

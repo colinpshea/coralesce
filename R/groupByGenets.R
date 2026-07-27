@@ -17,7 +17,8 @@
 #' @param getPairwiseAlleleMatches Logical; if `TRUE`, also return the full
 #'   pairwise comparison table. Default `FALSE`.
 #' @returns A list with `genetAssignment` (columns `Coral_ID`, `genet`,
-#'   `pctNull`, `AdequateData`) and `pairwiseAlleleMatches` (the pairwise table,
+#'   `pctNull`, `pctNotNull`, `AdequateData`) and `pairwiseAlleleMatches` (the
+#'   pairwise table,
 #'   or `NULL`).
 #' @importFrom dplyr select filter mutate if_else left_join arrange rename bind_rows
 #' @importFrom tidyr pivot_wider
@@ -35,7 +36,8 @@ groupByGenets <- function(CoralAlleleData, AlleleMatchResults,
   # Percent of loci with no data, per colony.
   CoralAlleleData$pctNull <-
     100 - apply(subset(CoralAlleleData, select = -Coral_ID), 1, calcPercentNotNull)
-  CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull)
+  CoralAlleleData$pctNotNull <- 100 - CoralAlleleData$pctNull
+  CoralAlleleData <- CoralAlleleData %>% select(Coral_ID, pctNull, pctNotNull)
 
   # One row per colony pair; locus matches spread across columns.
   temp <- AlleleMatchResults %>%
@@ -67,14 +69,14 @@ groupByGenets <- function(CoralAlleleData, AlleleMatchResults,
   adequateNo <- clones %>%
     filter(AdequateData == "No") %>%
     mutate(genet = NA_integer_, pctNull = 100 - pctNotNull) %>%
-    select(coral1, genet, pctNull, AdequateData) %>%
+    select(coral1, genet, pctNull, pctNotNull, AdequateData) %>%
     rename(Coral_ID = coral1)
 
   genetAssignment <- returnGenetIdentity(adequateYes) %>%
     mutate(AdequateData = "Yes") %>%
     arrange(genet) %>%
     left_join(CoralAlleleData, by = "Coral_ID") %>%
-    select(Coral_ID, genet, pctNull, AdequateData) %>%
+    select(Coral_ID, genet, pctNull, pctNotNull, AdequateData) %>%
     bind_rows(adequateNo)
 
   pairwise <- if (isTRUE(getPairwiseAlleleMatches)) temp else NULL

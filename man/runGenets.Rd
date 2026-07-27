@@ -25,7 +25,7 @@ Invisibly, a list with \code{genetAssignments} (a named list of
 per-file genet-assignment data frames) and, when
 \code{getPairwiseAlleleMatches = TRUE}, \code{pairwiseAlleleMatches} (a named list of
 per-file pairwise tables). Each genet-assignment data frame has columns
-\code{Coral_ID}, \code{MatchMaker_Index}, \code{genet}, \code{pctNull}, \code{AdequateData}.
+\code{Coral_ID}, \code{MatchMaker_Index}, \code{genet}, \code{pctNull}, \code{pctNotNull}, \code{AdequateData}.
 }
 \description{
 Wrapper that reads each genotype CSV in a \code{Data} folder, assigns

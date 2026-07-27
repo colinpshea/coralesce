@@ -15,7 +15,7 @@
 #'   per-file genet-assignment data frames) and, when
 #'   `getPairwiseAlleleMatches = TRUE`, `pairwiseAlleleMatches` (a named list of
 #'   per-file pairwise tables). Each genet-assignment data frame has columns
-#'   `Coral_ID`, `MatchMaker_Index`, `genet`, `pctNull`, `AdequateData`.
+#'   `Coral_ID`, `MatchMaker_Index`, `genet`, `pctNull`, `pctNotNull`, `AdequateData`.
 #' @importFrom dplyr bind_rows left_join arrange mutate select
 #' @importFrom stringr str_detect str_pad
 #' @importFrom magrittr %>%
@@ -63,7 +63,7 @@ runGenets <- function(PctMatchThreshold = NULL, PctNotNullThreshold = NULL,
       left_join(index, by = "Coral_ID") %>%
       arrange(MatchMaker_Index) %>%
       mutate(genet = paste0(speciesCode, "_", str_pad(genet, 5, "left", "0"))) %>%
-      select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
+      select(Coral_ID, MatchMaker_Index, genet, pctNull, pctNotNull, AdequateData)
 
     write.csv(assignment,
               file.path(resultsLocation, paste0("genetAssignment_", f)),

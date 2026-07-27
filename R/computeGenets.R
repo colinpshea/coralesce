@@ -26,7 +26,8 @@
 #'   pairwise comparison table. Default `FALSE`.
 #' @returns If `getPairwiseAlleleMatches = FALSE`, a genet-assignment data frame
 #'   with columns `Coral_ID`, (`MatchMaker_Index` if supplied,) `genet`,
-#'   `pctNull`, `AdequateData`. If `TRUE`, a list of that data frame plus the
+#'   `pctNull`, `pctNotNull`, `AdequateData`. If `TRUE`, a list of that data
+#'   frame plus the
 #'   pairwise table.
 #' @seealso [runGenets()] for the folder-based workflow; [collapseToGenets()] to
 #'   reduce to one colony per genet; [computeKinship()] for the kinship pipeline.
@@ -102,10 +103,10 @@ computeGenets <- function(data, PctMatchThreshold = NULL, PctNotNullThreshold = 
     assignment <- assignment %>%
       left_join(index, by = "Coral_ID") %>%
       arrange(MatchMaker_Index) %>%
-      select(Coral_ID, MatchMaker_Index, genet, pctNull, AdequateData)
+      select(Coral_ID, MatchMaker_Index, genet, pctNull, pctNotNull, AdequateData)
   } else {
     assignment <- assignment %>%
-      select(Coral_ID, genet, pctNull, AdequateData)
+      select(Coral_ID, genet, pctNull, pctNotNull, AdequateData)
   }
 
   if (isTRUE(getPairwiseAlleleMatches)) {

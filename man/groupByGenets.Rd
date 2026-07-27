@@ -30,7 +30,8 @@ pairwise comparison table. Default \code{FALSE}.}
 }
 \value{
 A list with \code{genetAssignment} (columns \code{Coral_ID}, \code{genet},
-\code{pctNull}, \code{AdequateData}) and \code{pairwiseAlleleMatches} (the pairwise table,
+\code{pctNull}, \code{pctNotNull}, \code{AdequateData}) and \code{pairwiseAlleleMatches} (the
+pairwise table,
 or \code{NULL}).
 }
 \description{

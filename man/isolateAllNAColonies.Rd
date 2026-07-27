@@ -14,7 +14,8 @@ single-letter \code{IUPAC} allele codes in the remaining columns (as produced by
 \value{
 A list of two elements: \verb{[[1]]} the data with all-\code{NA} colonies
 removed, and \verb{[[2]]} a data frame of the all-\code{NA} colonies (columns
-\code{Coral_ID}, \code{genet}, \code{pctNull}, \code{AdequateData}), or \code{NULL} if there are none.
+\code{Coral_ID}, \code{genet}, \code{pctNull}, \code{pctNotNull}, \code{AdequateData}), or \code{NULL} if
+there are none.
 }
 \description{
 Splits the input into (1) colonies that have at least one scored

@@ -9,7 +9,8 @@
 #'   [convertBasePairstoCodes()]).
 #' @returns A list of two elements: `[[1]]` the data with all-`NA` colonies
 #'   removed, and `[[2]]` a data frame of the all-`NA` colonies (columns
-#'   `Coral_ID`, `genet`, `pctNull`, `AdequateData`), or `NULL` if there are none.
+#'   `Coral_ID`, `genet`, `pctNull`, `pctNotNull`, `AdequateData`), or `NULL` if
+#'   there are none.
 #' @importFrom dplyr mutate select filter
 #' @importFrom magrittr %>%
 #' @export
@@ -18,8 +19,8 @@ isolateAllNAColonies <- function(dataset) {
   if (is.null(allNA)) return(list(dataset, NULL))
 
   allNA <- allNA %>%
-    mutate(pctNull = 100) %>%
-    select(Coral_ID, genet, pctNull, AdequateData)
+    mutate(pctNull = 100, pctNotNull = 0) %>%
+    select(Coral_ID, genet, pctNull, pctNotNull, AdequateData)
 
   dataset <- dataset %>% filter(!(Coral_ID %in% allNA$Coral_ID))
   list(dataset, allNA)
